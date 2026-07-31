@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package paginator;
 
-option go_package = "github.com/siti-nabila/grpc-contracts/pb/paginator";
+option go_package = "github.com/siti-nabila/api-contracts/pb/paginator";
 
 message PageQuery {
   int32 page = 1;

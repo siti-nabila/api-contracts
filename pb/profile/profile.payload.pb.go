@@ -217,7 +217,7 @@ const file_profile_profile_payload_proto_rawDesc = "" +
 	"\aaddress\x18\x02 \x01(\tR\aaddress\x12\x14\n" +
 	"\x05phone\x18\x03 \x01(\tR\x05phone\"=\n" +
 	"\x0fProfileResponse\x12*\n" +
-	"\aprofile\x18\x01 \x01(\v2\x10.profile.ProfileR\aprofileB2Z0github.com/siti-nabila/grpc-contracts/pb/profileb\x06proto3"
+	"\aprofile\x18\x01 \x01(\v2\x10.profile.ProfileR\aprofileB1Z/github.com/siti-nabila/api-contracts/pb/profileb\x06proto3"
 
 var (
 	file_profile_profile_payload_proto_rawDescOnce sync.Once

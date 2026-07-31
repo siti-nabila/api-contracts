@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package user;
 
-option go_package = "github.com/siti-nabila/grpc-contracts/pb/user";
+option go_package = "github.com/siti-nabila/api-contracts/pb/user";
 
 import "user/user.payload.proto";
 import "google/protobuf/empty.proto";

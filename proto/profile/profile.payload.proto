@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package profile;
 
-option go_package = "github.com/siti-nabila/grpc-contracts/pb/profile";
+option go_package = "github.com/siti-nabila/api-contracts/pb/profile";
 
 message Profile {
   uint64 id = 1;
