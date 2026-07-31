@@ -7,8 +7,8 @@
 package user
 
 import (
-	paginator "github.com/siti-nabila/grpc-contracts/pb/paginator"
-	profile "github.com/siti-nabila/grpc-contracts/pb/profile"
+	paginator "github.com/siti-nabila/api-contracts/pb/paginator"
+	profile "github.com/siti-nabila/api-contracts/pb/profile"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -1015,7 +1015,7 @@ const file_user_user_payload_proto_rawDesc = "" +
 	"created_to\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedTo\x12\x1d\n" +
 	"\n" +
 	"role_codes\x18\x03 \x03(\x04R\troleCodes\x12\x1a\n" +
-	"\bstatuses\x18\x04 \x03(\tR\bstatusesB/Z-github.com/siti-nabila/grpc-contracts/pb/userb\x06proto3"
+	"\bstatuses\x18\x04 \x03(\tR\bstatusesB.Z,github.com/siti-nabila/api-contracts/pb/userb\x06proto3"
 
 var (
 	file_user_user_payload_proto_rawDescOnce sync.Once

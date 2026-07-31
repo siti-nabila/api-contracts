@@ -1,0 +1,45 @@
+errors:
+  already_exists:
+    code: EX
+    http_status: 409
+    en: Already exists.
+    id: Sudah ada.
+
+  not_found:
+    code: NF
+    http_status: 404
+    en: Data not found.
+    id: Data tidak ditemukan.
+
+  password_mismatch:
+    code: PM
+    http_status: 400
+    grpc_code: FAILED_PRECONDITION
+    en: Wrong password.
+    id: Password salah.
+
+  required:
+    en: is required
+    id: harus diisi
+
+  min_length:
+    en: minimum length is %d
+    id: minimal panjang karakter adalah %d
+
+  max_length:
+    en: maximum length is %d
+    id: maksimal panjang karakter adalah %d
+
+  alpha_only:
+    en: must be alphabetical
+    id: harus berupa huruf alfabet
+
+  invalid_email:
+    en: email is invalid
+    id: email tidak valid
+
+  generate_token:
+    code: GT
+    http_status: 500
+    en: Failed generating token.
+    id: Gagal membuat token.

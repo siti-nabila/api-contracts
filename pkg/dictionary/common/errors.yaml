@@ -1,0 +1,42 @@
+errors:
+  bad_request:
+    code: BR
+    http_status: 400
+    en: Bad request.
+    id: Permintaan tidak valid.
+
+  not_found:
+    code: NF
+    http_status: 404
+    en: Data not found.
+    id: Data tidak ditemukan.
+
+  unauthorized:
+    code: UA
+    http_status: 401
+    en: Unauthorized.
+    id: Tidak terautentikasi.
+
+  forbidden:
+    code: FB
+    http_status: 403
+    en: Forbidden.
+    id: Akses ditolak.
+
+  service_unavailable:
+    code: SU
+    http_status: 503
+    en: Service unavailable.
+    id: Layanan tidak tersedia.
+
+  deadline_exceeded:
+    code: TO
+    http_status: 504
+    en: Request timeout.
+    id: Waktu permintaan habis.
+
+  internal_server_error:
+    code: IS
+    http_status: 500
+    en: Internal server error.
+    id: Terjadi kesalahan pada server.

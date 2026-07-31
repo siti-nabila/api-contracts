@@ -31,7 +31,7 @@ const file_user_user_service_proto_rawDesc = "" +
 	"\x05Login\x12\x11.user.AuthRequest\x1a\x17.user.UserTokenResponse\x12,\n" +
 	"\x02Me\x12\x16.google.protobuf.Empty\x1a\x0e.user.UserData\x12<\n" +
 	"\tListUsers\x12\x16.user.ListUsersRequest\x1a\x17.user.ListUsersResponse\x12/\n" +
-	"\x06TesRPC\x12\x16.google.protobuf.Empty\x1a\r.user.TestRPCB/Z-github.com/siti-nabila/grpc-contracts/pb/userb\x06proto3"
+	"\x06TesRPC\x12\x16.google.protobuf.Empty\x1a\r.user.TestRPCB.Z,github.com/siti-nabila/api-contracts/pb/userb\x06proto3"
 
 var file_user_user_service_proto_goTypes = []any{
 	(*AuthRequest)(nil),       // 0: user.AuthRequest

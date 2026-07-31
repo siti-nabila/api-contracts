@@ -393,7 +393,7 @@ const file_paginator_paginator_payload_proto_rawDesc = "" +
 	"\x12SEARCH_MODE_PREFIX\x10\x02\x12\x19\n" +
 	"\x15SEARCH_MODE_FULL_TEXT\x10\x03\x12\x17\n" +
 	"\x13SEARCH_MODE_TRIGRAM\x10\x04\x12!\n" +
-	"\x1dSEARCH_MODE_FULL_TEXT_TRIGRAM\x10\x05B4Z2github.com/siti-nabila/grpc-contracts/pb/paginatorb\x06proto3"
+	"\x1dSEARCH_MODE_FULL_TEXT_TRIGRAM\x10\x05B3Z1github.com/siti-nabila/api-contracts/pb/paginatorb\x06proto3"
 
 var (
 	file_paginator_paginator_payload_proto_rawDescOnce sync.Once

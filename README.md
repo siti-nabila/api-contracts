@@ -18,9 +18,9 @@ go mod tidy
 ## Consume from Go
 
 ```bash
-go get github.com/siti-nabila/grpc-contracts
+go get github.com/siti-nabila/api-contracts
 ```
 
 ```go
-import userpb "github.com/siti-nabila/grpc-contracts/pb/user"
+import userpb "github.com/siti-nabila/api-contracts/pb/user"
 ```
