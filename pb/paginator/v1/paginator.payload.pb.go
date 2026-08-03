@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v6.33.4
-// source: paginator/paginator.payload.proto
+// source: paginator/v1/paginator.payload.proto
 
-package paginator
+package paginatorv1
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -63,11 +63,11 @@ func (x SearchMode) String() string {
 }
 
 func (SearchMode) Descriptor() protoreflect.EnumDescriptor {
-	return file_paginator_paginator_payload_proto_enumTypes[0].Descriptor()
+	return file_paginator_v1_paginator_payload_proto_enumTypes[0].Descriptor()
 }
 
 func (SearchMode) Type() protoreflect.EnumType {
-	return &file_paginator_paginator_payload_proto_enumTypes[0]
+	return &file_paginator_v1_paginator_payload_proto_enumTypes[0]
 }
 
 func (x SearchMode) Number() protoreflect.EnumNumber {
@@ -76,7 +76,7 @@ func (x SearchMode) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use SearchMode.Descriptor instead.
 func (SearchMode) EnumDescriptor() ([]byte, []int) {
-	return file_paginator_paginator_payload_proto_rawDescGZIP(), []int{0}
+	return file_paginator_v1_paginator_payload_proto_rawDescGZIP(), []int{0}
 }
 
 type PageQuery struct {
@@ -93,7 +93,7 @@ type PageQuery struct {
 
 func (x *PageQuery) Reset() {
 	*x = PageQuery{}
-	mi := &file_paginator_paginator_payload_proto_msgTypes[0]
+	mi := &file_paginator_v1_paginator_payload_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -105,7 +105,7 @@ func (x *PageQuery) String() string {
 func (*PageQuery) ProtoMessage() {}
 
 func (x *PageQuery) ProtoReflect() protoreflect.Message {
-	mi := &file_paginator_paginator_payload_proto_msgTypes[0]
+	mi := &file_paginator_v1_paginator_payload_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -118,7 +118,7 @@ func (x *PageQuery) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PageQuery.ProtoReflect.Descriptor instead.
 func (*PageQuery) Descriptor() ([]byte, []int) {
-	return file_paginator_paginator_payload_proto_rawDescGZIP(), []int{0}
+	return file_paginator_v1_paginator_payload_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *PageQuery) GetPage() int32 {
@@ -177,7 +177,7 @@ type PageMeta struct {
 
 func (x *PageMeta) Reset() {
 	*x = PageMeta{}
-	mi := &file_paginator_paginator_payload_proto_msgTypes[1]
+	mi := &file_paginator_v1_paginator_payload_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -189,7 +189,7 @@ func (x *PageMeta) String() string {
 func (*PageMeta) ProtoMessage() {}
 
 func (x *PageMeta) ProtoReflect() protoreflect.Message {
-	mi := &file_paginator_paginator_payload_proto_msgTypes[1]
+	mi := &file_paginator_v1_paginator_payload_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -202,7 +202,7 @@ func (x *PageMeta) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PageMeta.ProtoReflect.Descriptor instead.
 func (*PageMeta) Descriptor() ([]byte, []int) {
-	return file_paginator_paginator_payload_proto_rawDescGZIP(), []int{1}
+	return file_paginator_v1_paginator_payload_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *PageMeta) GetPage() int32 {
@@ -257,7 +257,7 @@ type Sort struct {
 
 func (x *Sort) Reset() {
 	*x = Sort{}
-	mi := &file_paginator_paginator_payload_proto_msgTypes[2]
+	mi := &file_paginator_v1_paginator_payload_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -269,7 +269,7 @@ func (x *Sort) String() string {
 func (*Sort) ProtoMessage() {}
 
 func (x *Sort) ProtoReflect() protoreflect.Message {
-	mi := &file_paginator_paginator_payload_proto_msgTypes[2]
+	mi := &file_paginator_v1_paginator_payload_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -282,7 +282,7 @@ func (x *Sort) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Sort.ProtoReflect.Descriptor instead.
 func (*Sort) Descriptor() ([]byte, []int) {
-	return file_paginator_paginator_payload_proto_rawDescGZIP(), []int{2}
+	return file_paginator_v1_paginator_payload_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *Sort) GetField() string {
@@ -303,14 +303,14 @@ type Search struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Fields        []string               `protobuf:"bytes,1,rep,name=fields,proto3" json:"fields,omitempty"`
 	Keyword       string                 `protobuf:"bytes,2,opt,name=keyword,proto3" json:"keyword,omitempty"`
-	Mode          SearchMode             `protobuf:"varint,3,opt,name=mode,proto3,enum=paginator.SearchMode" json:"mode,omitempty"`
+	Mode          SearchMode             `protobuf:"varint,3,opt,name=mode,proto3,enum=paginator.v1.SearchMode" json:"mode,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Search) Reset() {
 	*x = Search{}
-	mi := &file_paginator_paginator_payload_proto_msgTypes[3]
+	mi := &file_paginator_v1_paginator_payload_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -322,7 +322,7 @@ func (x *Search) String() string {
 func (*Search) ProtoMessage() {}
 
 func (x *Search) ProtoReflect() protoreflect.Message {
-	mi := &file_paginator_paginator_payload_proto_msgTypes[3]
+	mi := &file_paginator_v1_paginator_payload_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -335,7 +335,7 @@ func (x *Search) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Search.ProtoReflect.Descriptor instead.
 func (*Search) Descriptor() ([]byte, []int) {
-	return file_paginator_paginator_payload_proto_rawDescGZIP(), []int{3}
+	return file_paginator_v1_paginator_payload_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *Search) GetFields() []string {
@@ -359,17 +359,17 @@ func (x *Search) GetMode() SearchMode {
 	return SearchMode_SEARCH_MODE_UNSPECIFIED
 }
 
-var File_paginator_paginator_payload_proto protoreflect.FileDescriptor
+var File_paginator_v1_paginator_payload_proto protoreflect.FileDescriptor
 
-const file_paginator_paginator_payload_proto_rawDesc = "" +
+const file_paginator_v1_paginator_payload_proto_rawDesc = "" +
 	"\n" +
-	"!paginator/paginator.payload.proto\x12\tpaginator\"\xb6\x01\n" +
+	"$paginator/v1/paginator.payload.proto\x12\fpaginator.v1\"\xbc\x01\n" +
 	"\tPageQuery\x12\x12\n" +
 	"\x04page\x18\x01 \x01(\x05R\x04page\x12\x14\n" +
 	"\x05limit\x18\x02 \x01(\x05R\x05limit\x12\x16\n" +
-	"\x06fields\x18\x03 \x03(\tR\x06fields\x12#\n" +
-	"\x04sort\x18\x04 \x03(\v2\x0f.paginator.SortR\x04sort\x12)\n" +
-	"\x06search\x18\x05 \x01(\v2\x11.paginator.SearchR\x06search\x12\x17\n" +
+	"\x06fields\x18\x03 \x03(\tR\x06fields\x12&\n" +
+	"\x04sort\x18\x04 \x03(\v2\x12.paginator.v1.SortR\x04sort\x12,\n" +
+	"\x06search\x18\x05 \x01(\v2\x14.paginator.v1.SearchR\x06search\x12\x17\n" +
 	"\alast_id\x18\x06 \x01(\tR\x06lastId\"\xa1\x01\n" +
 	"\bPageMeta\x12\x12\n" +
 	"\x04page\x18\x01 \x01(\x05R\x04page\x12\x14\n" +
@@ -381,11 +381,11 @@ const file_paginator_paginator_payload_proto_rawDesc = "" +
 	"\bhas_prev\x18\x06 \x01(\bR\ahasPrev\"0\n" +
 	"\x04Sort\x12\x14\n" +
 	"\x05field\x18\x01 \x01(\tR\x05field\x12\x12\n" +
-	"\x04desc\x18\x02 \x01(\bR\x04desc\"e\n" +
+	"\x04desc\x18\x02 \x01(\bR\x04desc\"h\n" +
 	"\x06Search\x12\x16\n" +
 	"\x06fields\x18\x01 \x03(\tR\x06fields\x12\x18\n" +
-	"\akeyword\x18\x02 \x01(\tR\akeyword\x12)\n" +
-	"\x04mode\x18\x03 \x01(\x0e2\x15.paginator.SearchModeR\x04mode*\xb2\x01\n" +
+	"\akeyword\x18\x02 \x01(\tR\akeyword\x12,\n" +
+	"\x04mode\x18\x03 \x01(\x0e2\x18.paginator.v1.SearchModeR\x04mode*\xb2\x01\n" +
 	"\n" +
 	"SearchMode\x12\x1b\n" +
 	"\x17SEARCH_MODE_UNSPECIFIED\x10\x00\x12\x18\n" +
@@ -393,33 +393,33 @@ const file_paginator_paginator_payload_proto_rawDesc = "" +
 	"\x12SEARCH_MODE_PREFIX\x10\x02\x12\x19\n" +
 	"\x15SEARCH_MODE_FULL_TEXT\x10\x03\x12\x17\n" +
 	"\x13SEARCH_MODE_TRIGRAM\x10\x04\x12!\n" +
-	"\x1dSEARCH_MODE_FULL_TEXT_TRIGRAM\x10\x05B3Z1github.com/siti-nabila/api-contracts/pb/paginatorb\x06proto3"
+	"\x1dSEARCH_MODE_FULL_TEXT_TRIGRAM\x10\x05BBZ@github.com/siti-nabila/api-contracts/pb/paginator/v1;paginatorv1b\x06proto3"
 
 var (
-	file_paginator_paginator_payload_proto_rawDescOnce sync.Once
-	file_paginator_paginator_payload_proto_rawDescData []byte
+	file_paginator_v1_paginator_payload_proto_rawDescOnce sync.Once
+	file_paginator_v1_paginator_payload_proto_rawDescData []byte
 )
 
-func file_paginator_paginator_payload_proto_rawDescGZIP() []byte {
-	file_paginator_paginator_payload_proto_rawDescOnce.Do(func() {
-		file_paginator_paginator_payload_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_paginator_paginator_payload_proto_rawDesc), len(file_paginator_paginator_payload_proto_rawDesc)))
+func file_paginator_v1_paginator_payload_proto_rawDescGZIP() []byte {
+	file_paginator_v1_paginator_payload_proto_rawDescOnce.Do(func() {
+		file_paginator_v1_paginator_payload_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_paginator_v1_paginator_payload_proto_rawDesc), len(file_paginator_v1_paginator_payload_proto_rawDesc)))
 	})
-	return file_paginator_paginator_payload_proto_rawDescData
+	return file_paginator_v1_paginator_payload_proto_rawDescData
 }
 
-var file_paginator_paginator_payload_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_paginator_paginator_payload_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
-var file_paginator_paginator_payload_proto_goTypes = []any{
-	(SearchMode)(0),   // 0: paginator.SearchMode
-	(*PageQuery)(nil), // 1: paginator.PageQuery
-	(*PageMeta)(nil),  // 2: paginator.PageMeta
-	(*Sort)(nil),      // 3: paginator.Sort
-	(*Search)(nil),    // 4: paginator.Search
+var file_paginator_v1_paginator_payload_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_paginator_v1_paginator_payload_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_paginator_v1_paginator_payload_proto_goTypes = []any{
+	(SearchMode)(0),   // 0: paginator.v1.SearchMode
+	(*PageQuery)(nil), // 1: paginator.v1.PageQuery
+	(*PageMeta)(nil),  // 2: paginator.v1.PageMeta
+	(*Sort)(nil),      // 3: paginator.v1.Sort
+	(*Search)(nil),    // 4: paginator.v1.Search
 }
-var file_paginator_paginator_payload_proto_depIdxs = []int32{
-	3, // 0: paginator.PageQuery.sort:type_name -> paginator.Sort
-	4, // 1: paginator.PageQuery.search:type_name -> paginator.Search
-	0, // 2: paginator.Search.mode:type_name -> paginator.SearchMode
+var file_paginator_v1_paginator_payload_proto_depIdxs = []int32{
+	3, // 0: paginator.v1.PageQuery.sort:type_name -> paginator.v1.Sort
+	4, // 1: paginator.v1.PageQuery.search:type_name -> paginator.v1.Search
+	0, // 2: paginator.v1.Search.mode:type_name -> paginator.v1.SearchMode
 	3, // [3:3] is the sub-list for method output_type
 	3, // [3:3] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
@@ -427,27 +427,27 @@ var file_paginator_paginator_payload_proto_depIdxs = []int32{
 	0, // [0:3] is the sub-list for field type_name
 }
 
-func init() { file_paginator_paginator_payload_proto_init() }
-func file_paginator_paginator_payload_proto_init() {
-	if File_paginator_paginator_payload_proto != nil {
+func init() { file_paginator_v1_paginator_payload_proto_init() }
+func file_paginator_v1_paginator_payload_proto_init() {
+	if File_paginator_v1_paginator_payload_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_paginator_paginator_payload_proto_rawDesc), len(file_paginator_paginator_payload_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_paginator_v1_paginator_payload_proto_rawDesc), len(file_paginator_v1_paginator_payload_proto_rawDesc)),
 			NumEnums:      1,
 			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_paginator_paginator_payload_proto_goTypes,
-		DependencyIndexes: file_paginator_paginator_payload_proto_depIdxs,
-		EnumInfos:         file_paginator_paginator_payload_proto_enumTypes,
-		MessageInfos:      file_paginator_paginator_payload_proto_msgTypes,
+		GoTypes:           file_paginator_v1_paginator_payload_proto_goTypes,
+		DependencyIndexes: file_paginator_v1_paginator_payload_proto_depIdxs,
+		EnumInfos:         file_paginator_v1_paginator_payload_proto_enumTypes,
+		MessageInfos:      file_paginator_v1_paginator_payload_proto_msgTypes,
 	}.Build()
-	File_paginator_paginator_payload_proto = out.File
-	file_paginator_paginator_payload_proto_goTypes = nil
-	file_paginator_paginator_payload_proto_depIdxs = nil
+	File_paginator_v1_paginator_payload_proto = out.File
+	file_paginator_v1_paginator_payload_proto_goTypes = nil
+	file_paginator_v1_paginator_payload_proto_depIdxs = nil
 }

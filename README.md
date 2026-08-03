@@ -4,9 +4,9 @@ Shared Protocol Buffer contracts and generated Go clients for Siti Nabila's gRPC
 
 ## Packages
 
-- `pb/user`: authentication and user service contract
-- `pb/profile`: profile messages
-- `pb/paginator`: pagination messages
+- `pb/user/v1`: authentication and user service contract
+- `pb/profile/v1`: profile messages
+- `pb/paginator/v1`: pagination messages
 
 ## Generate
 
@@ -22,5 +22,5 @@ go get github.com/siti-nabila/api-contracts
 ```
 
 ```go
-import userpb "github.com/siti-nabila/api-contracts/pb/user"
+import userv1 "github.com/siti-nabila/api-contracts/pb/user/v1"
 ```

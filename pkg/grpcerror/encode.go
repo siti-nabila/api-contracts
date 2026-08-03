@@ -27,13 +27,11 @@ func Encode(err error, language locale.Language) error {
 		return encodeGRPCStatus(grpcStatus.Code(), language)
 	}
 
-	var fieldErrors dictionary.FieldErrors
-	if errors.As(err, &fieldErrors) {
+	if fieldErrors, ok := errors.AsType[dictionary.FieldErrors](err); ok {
 		return encodeFieldErrors(fieldErrors, language)
 	}
 
-	var applicationError *dictionary.Error
-	if errors.As(err, &applicationError) {
+	if applicationError, ok := errors.AsType[*dictionary.Error](err); ok {
 		return encodeApplicationError(applicationError, language)
 	}
 
