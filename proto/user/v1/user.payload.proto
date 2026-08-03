@@ -1,11 +1,11 @@
 syntax = "proto3";
 
-package user;
+package user.v1;
 
-option go_package = "github.com/siti-nabila/api-contracts/pb/user";
+option go_package = "github.com/siti-nabila/api-contracts/pb/user/v1;userv1";
 
-import "profile/profile.payload.proto";
-import "paginator/paginator.payload.proto";
+import "profile/v1/profile.payload.proto";
+import "paginator/v1/paginator.payload.proto";
 import "google/protobuf/timestamp.proto";
 
 message User {
@@ -36,7 +36,7 @@ message UserData {
 
 message UserDataOld {
   UserResponse user = 1;
-  profile.Profile profile = 2;
+  profile.v1.Profile profile = 2;
 }
 
 message AuthRequest {
@@ -71,7 +71,7 @@ message TestRPC {
 }
 
 message ListUsersRequest {
-  paginator.PageQuery query = 1;
+  paginator.v1.PageQuery query = 1;
   UserFilter filter = 2;
 }
 

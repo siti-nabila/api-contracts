@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package paginator;
+package paginator.v1;
 
-option go_package = "github.com/siti-nabila/api-contracts/pb/paginator";
+option go_package = "github.com/siti-nabila/api-contracts/pb/paginator/v1;paginatorv1";
 
 message PageQuery {
   int32 page = 1;

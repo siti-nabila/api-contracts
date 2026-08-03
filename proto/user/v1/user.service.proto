@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package user;
+package user.v1;
 
-option go_package = "github.com/siti-nabila/api-contracts/pb/user";
+option go_package = "github.com/siti-nabila/api-contracts/pb/user/v1;userv1";
 
-import "user/user.payload.proto";
+import "user/v1/user.payload.proto";
 import "google/protobuf/empty.proto";
 
 service UserService {
