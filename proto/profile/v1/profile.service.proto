@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package profile.v1;
+
+option go_package = "github.com/siti-nabila/api-contracts/pb/profile/v1;profilev1";
+
+import "profile/v1/profile.payload.proto";
+
+service ProfileService {
+  rpc UpdateProfile(ProfileRequest) returns (ProfileResponse);
+}

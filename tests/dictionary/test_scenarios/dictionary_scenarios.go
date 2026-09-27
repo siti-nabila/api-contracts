@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/siti-nabila/api-contracts/pkg/dictionary"
+	"github.com/siti-nabila/api-contracts/pkg/dictionary/common"
 	"github.com/siti-nabila/api-contracts/pkg/locale"
 	"github.com/siti-nabila/api-contracts/tests/dictionary/fixtures"
 	"github.com/siti-nabila/api-contracts/tests/shared/testutils"
@@ -18,6 +19,10 @@ func All() []testutils.Scenario {
 		{
 			Name: "loads valid yaml and resolves localized definition",
 			Run:  loadValidCatalog,
+		},
+		{
+			Name: "common registry exposes localized endpoint not found error",
+			Run:  exposeEndpointNotFoundError,
 		},
 		{
 			Name: "rejects unknown yaml field",
@@ -39,6 +44,30 @@ func All() []testutils.Scenario {
 			Name: "localizes concurrent requests without shared language state",
 			Run:  localizeConcurrently,
 		},
+	}
+}
+
+func exposeEndpointNotFoundError(t *testing.T) {
+	err := common.ErrEndpointNotFound
+
+	if err.Key() != "common.endpoint_not_found" {
+		t.Errorf("Key() = %q, want common.endpoint_not_found", err.Key())
+	}
+	if err.Code() != "NF" {
+		t.Errorf("Code() = %q, want NF", err.Code())
+	}
+	if err.HTTPStatus() != 404 {
+		t.Errorf("HTTPStatus() = %d, want 404", err.HTTPStatus())
+	}
+	if message := err.Message(locale.English); message != "Endpoint not found." {
+		t.Errorf("Message(en) = %q, want %q", message, "Endpoint not found.")
+	}
+	if message := err.Message(locale.Indonesian); message != "Endpoint tidak ditemukan." {
+		t.Errorf(
+			"Message(id) = %q, want %q",
+			message,
+			"Endpoint tidak ditemukan.",
+		)
 	}
 }
 

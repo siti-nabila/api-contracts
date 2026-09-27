@@ -14,6 +14,7 @@ var (
 
 	ErrBadRequest          = registry.MustNew("bad_request")
 	ErrNotFound            = registry.MustNew("not_found")
+	ErrEndpointNotFound    = registry.MustNew("endpoint_not_found")
 	ErrUnauthorized        = registry.MustNew("unauthorized")
 	ErrForbidden           = registry.MustNew("forbidden")
 	ErrServiceUnavailable  = registry.MustNew("service_unavailable")
