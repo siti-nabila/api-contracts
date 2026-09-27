@@ -7,15 +7,7 @@ const (
     http_status: 404
     en: Not found.
     id: Tidak ditemukan.
-`
-
-	OverrideCatalog = `errors:
-  state:
-    code: ST
-    http_status: 400
-    grpc_code: FAILED_PRECONDITION
-    en: Invalid state.
-    id: Status tidak valid.
+    zh: "未找到。"
 `
 
 	UnknownFieldCatalog = `errors:
@@ -23,14 +15,14 @@ const (
     code: NF
     http_status: 404
     en: Not found.
-    extra: invalid
+    invalid@locale: invalid
 `
 
-	InvalidGRPCCodeCatalog = `errors:
+	GRPCCodeCatalog = `errors:
   state:
     code: ST
     http_status: 400
-    grpc_code: SOMETHING_NEW
+    grpc_code: FAILED_PRECONDITION
     en: Invalid state.
 `
 )

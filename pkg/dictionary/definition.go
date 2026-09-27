@@ -1,9 +1,8 @@
 package dictionary
 
 import (
-	"fmt"
-
 	"github.com/siti-nabila/api-contracts/pkg/locale"
+	errorpackage "github.com/siti-nabila/error-package"
 	"google.golang.org/grpc/codes"
 )
 
@@ -11,9 +10,7 @@ type Definition struct {
 	key        string
 	code       string
 	httpStatus int
-	grpcCode   *codes.Code
-	english    string
-	indonesian string
+	messages   errorpackage.LocalizedMessages
 }
 
 func (definition Definition) Key() string {
@@ -28,23 +25,21 @@ func (definition Definition) HTTPStatus() int {
 	return definition.httpStatus
 }
 
+// GRPCCode is retained for source compatibility. gRPC mappings are no longer
+// loaded from dictionary YAML and therefore this method never reports an
+// override.
+// Deprecated: configure mappings with grpcerror.NewEncoder.
 func (definition Definition) GRPCCode() (codes.Code, bool) {
-	if definition.grpcCode == nil {
-		return codes.OK, false
-	}
-	return *definition.grpcCode, true
+	return codes.OK, false
 }
 
 func (definition Definition) Message(language locale.Language) string {
-	if language == locale.Indonesian && definition.indonesian != "" {
-		return definition.indonesian
-	}
-	return definition.english
+	return definition.messages.Message(errorpackage.LanguageCode(language))
 }
 
 type Error struct {
 	definition Definition
-	args       []any
+	messages   errorpackage.LocalizedMessages
 }
 
 func (err *Error) Error() string {
@@ -83,20 +78,15 @@ func (err *Error) HTTPStatus() int {
 	return err.definition.HTTPStatus()
 }
 
+// GRPCCode is retained for source compatibility.
+// Deprecated: configure mappings with grpcerror.NewEncoder.
 func (err *Error) GRPCCode() (codes.Code, bool) {
-	if err == nil {
-		return codes.OK, false
-	}
-	return err.definition.GRPCCode()
+	return codes.OK, false
 }
 
 func (err *Error) Message(language locale.Language) string {
 	if err == nil {
 		return ""
 	}
-	message := err.definition.Message(language)
-	if len(err.args) == 0 {
-		return message
-	}
-	return fmt.Sprintf(message, err.args...)
+	return err.messages.Message(errorpackage.LanguageCode(language))
 }

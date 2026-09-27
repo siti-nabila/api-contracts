@@ -2,7 +2,6 @@ package test_scenarios
 
 import (
 	"errors"
-	"strings"
 	"sync"
 	"testing"
 
@@ -11,7 +10,6 @@ import (
 	"github.com/siti-nabila/api-contracts/pkg/locale"
 	"github.com/siti-nabila/api-contracts/tests/dictionary/fixtures"
 	"github.com/siti-nabila/api-contracts/tests/shared/testutils"
-	"google.golang.org/grpc/codes"
 )
 
 func All() []testutils.Scenario {
@@ -25,16 +23,12 @@ func All() []testutils.Scenario {
 			Run:  exposeEndpointNotFoundError,
 		},
 		{
-			Name: "rejects unknown yaml field",
+			Name: "rejects invalid locale field",
 			Run:  rejectUnknownField,
 		},
 		{
-			Name: "uses optional grpc code override",
-			Run:  useGRPCCodeOverride,
-		},
-		{
-			Name: "rejects unsupported grpc code",
-			Run:  rejectUnsupportedGRPCCode,
+			Name: "rejects grpc code in yaml catalog",
+			Run:  rejectGRPCCode,
 		},
 		{
 			Name: "compares errors by service-qualified key",
@@ -90,8 +84,14 @@ func loadValidCatalog(t *testing.T) {
 	if message := definition.Message(locale.Indonesian); message != "Tidak ditemukan." {
 		t.Errorf("Message(id) = %q, want %q", message, "Tidak ditemukan.")
 	}
+	if message := definition.Message(locale.Chinese); message != "未找到。" {
+		t.Errorf("Message(zh) = %q, want %q", message, "未找到。")
+	}
+	if message := definition.Message(locale.Language("zh-CN")); message != "未找到。" {
+		t.Errorf("Message(zh-CN) = %q, want base-language fallback", message)
+	}
 	if _, overridden := definition.GRPCCode(); overridden {
-		t.Error("GRPCCode() reports an override for omitted grpc_code")
+		t.Error("GRPCCode() reports an override without a YAML transport mapping")
 	}
 }
 
@@ -102,32 +102,10 @@ func rejectUnknownField(t *testing.T) {
 	}
 }
 
-func useGRPCCodeOverride(t *testing.T) {
-	registry, err := dictionary.LoadYAML("auth", []byte(fixtures.OverrideCatalog))
-	if err != nil {
-		t.Fatalf("LoadYAML() error = %v", err)
-	}
-	definition, exists := registry.Lookup("auth.state")
-	if !exists {
-		t.Fatal("Lookup() did not find auth.state")
-	}
-
-	grpcCode, overridden := definition.GRPCCode()
-	if !overridden {
-		t.Fatal("GRPCCode() override = false, want true")
-	}
-	if grpcCode != codes.FailedPrecondition {
-		t.Errorf("GRPCCode() = %s, want %s", grpcCode, codes.FailedPrecondition)
-	}
-}
-
-func rejectUnsupportedGRPCCode(t *testing.T) {
-	_, err := dictionary.LoadYAML("auth", []byte(fixtures.InvalidGRPCCodeCatalog))
+func rejectGRPCCode(t *testing.T) {
+	_, err := dictionary.LoadYAML("auth", []byte(fixtures.GRPCCodeCatalog))
 	if err == nil {
-		t.Fatal("LoadYAML() error = nil, want unsupported grpc code error")
-	}
-	if !strings.Contains(err.Error(), "unsupported grpc_code") {
-		t.Errorf("LoadYAML() error = %q, want unsupported grpc_code", err)
+		t.Fatal("LoadYAML() error = nil, want grpc_code to be rejected")
 	}
 }
 

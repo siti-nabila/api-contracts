@@ -3,6 +3,8 @@ package locale
 import (
 	"context"
 	"strings"
+
+	errorpackage "github.com/siti-nabila/error-package"
 )
 
 type Language string
@@ -10,6 +12,7 @@ type Language string
 const (
 	English    Language = "en"
 	Indonesian Language = "id"
+	Chinese    Language = "zh"
 
 	DefaultLanguage = English
 	MetadataKey     = "x-language"
@@ -21,16 +24,11 @@ type contextKey struct{}
 func Parse(value string) Language {
 	first := strings.TrimSpace(strings.Split(value, ",")[0])
 	first = strings.TrimSpace(strings.Split(first, ";")[0])
-	first = strings.ToLower(first)
-
-	switch {
-	case first == string(Indonesian), strings.HasPrefix(first, "id-"):
-		return Indonesian
-	case first == string(English), strings.HasPrefix(first, "en-"):
-		return English
-	default:
+	parsed, err := errorpackage.ParseLanguageCode(first)
+	if err != nil {
 		return DefaultLanguage
 	}
+	return Language(parsed)
 }
 
 func NewContext(ctx context.Context, language string) context.Context {

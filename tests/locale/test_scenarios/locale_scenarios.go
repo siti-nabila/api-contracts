@@ -15,8 +15,12 @@ func All() []testutils.Scenario {
 			Run:  parseRegionalLanguage,
 		},
 		{
-			Name: "falls back to English for unsupported language",
-			Run:  fallbackLanguage,
+			Name: "preserves arbitrary regional language",
+			Run:  preserveArbitraryLanguage,
+		},
+		{
+			Name: "falls back to English for malformed language",
+			Run:  fallbackMalformedLanguage,
 		},
 		{
 			Name: "stores language in request context",
@@ -26,13 +30,19 @@ func All() []testutils.Scenario {
 }
 
 func parseRegionalLanguage(t *testing.T) {
-	if got := locale.Parse("id-ID,id;q=0.9,en;q=0.8"); got != locale.Indonesian {
-		t.Errorf("Parse() = %q, want %q", got, locale.Indonesian)
+	if got := locale.Parse("id-ID,id;q=0.9,en;q=0.8"); got != locale.Language("id-ID") {
+		t.Errorf("Parse() = %q, want id-ID", got)
 	}
 }
 
-func fallbackLanguage(t *testing.T) {
-	if got := locale.Parse("fr-FR"); got != locale.DefaultLanguage {
+func preserveArbitraryLanguage(t *testing.T) {
+	if got := locale.Parse("zh-CN,zh;q=0.9"); got != locale.Language("zh-CN") {
+		t.Errorf("Parse() = %q, want zh-CN", got)
+	}
+}
+
+func fallbackMalformedLanguage(t *testing.T) {
+	if got := locale.Parse("invalid@locale"); got != locale.DefaultLanguage {
 		t.Errorf("Parse() = %q, want default %q", got, locale.DefaultLanguage)
 	}
 }
