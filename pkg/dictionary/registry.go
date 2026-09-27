@@ -2,10 +2,11 @@ package dictionary
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/goccy/go-yaml"
-	"google.golang.org/grpc/codes"
+	errorpackage "github.com/siti-nabila/error-package"
 )
 
 type Registry struct {
@@ -14,15 +15,13 @@ type Registry struct {
 }
 
 type yamlCatalog struct {
-	Errors map[string]yamlDefinition `yaml:"errors"`
+	Errors map[string]map[string]string `yaml:"errors"`
 }
 
 type yamlDefinition struct {
-	Code       string `yaml:"code"`
-	HTTPStatus int    `yaml:"http_status"`
-	GRPCCode   string `yaml:"grpc_code"`
-	English    string `yaml:"en"`
-	Indonesian string `yaml:"id"`
+	Code       string
+	HTTPStatus int
+	Messages   map[string]string
 }
 
 func LoadYAML(service string, data []byte) (Registry, error) {
@@ -44,13 +43,44 @@ func LoadYAML(service string, data []byte) (Registry, error) {
 		definitions: make(map[string]Definition, len(catalog.Errors)),
 	}
 	for localKey, raw := range catalog.Errors {
-		definition, err := newDefinition(service, localKey, raw)
+		parsed, err := parseYAMLDefinition(service, localKey, raw)
+		if err != nil {
+			return Registry{}, err
+		}
+		definition, err := newDefinition(service, localKey, parsed)
 		if err != nil {
 			return Registry{}, err
 		}
 		registry.definitions[definition.Key()] = definition
 	}
 	return registry, nil
+}
+
+func parseYAMLDefinition(
+	service string,
+	localKey string,
+	fields map[string]string,
+) (yamlDefinition, error) {
+	definition := yamlDefinition{Messages: make(map[string]string)}
+	for field, value := range fields {
+		switch field {
+		case "code":
+			definition.Code = value
+		case "http_status":
+			status, err := strconv.Atoi(strings.TrimSpace(value))
+			if err != nil {
+				return yamlDefinition{}, fmt.Errorf(
+					"load %s.%s error dictionary: http_status must be an integer",
+					service,
+					strings.TrimSpace(localKey),
+				)
+			}
+			definition.HTTPStatus = status
+		default:
+			definition.Messages[field] = value
+		}
+	}
+	return definition, nil
 }
 
 func MustLoadYAML(service string, data []byte) Registry {
@@ -75,7 +105,10 @@ func (registry Registry) New(localKey string) (*Error, error) {
 			localKey,
 		)
 	}
-	return &Error{definition: definition}, nil
+	return &Error{
+		definition: definition,
+		messages:   definition.messages,
+	}, nil
 }
 
 func (registry Registry) MustNew(localKey string) *Error {
@@ -91,7 +124,16 @@ func (registry Registry) Newf(localKey string, args ...any) (*Error, error) {
 	if createErr != nil {
 		return nil, createErr
 	}
-	err.args = append([]any(nil), args...)
+	formatted, formatErr := err.messages.Format(args...)
+	if formatErr != nil {
+		return nil, fmt.Errorf(
+			"create %s error %q: %w",
+			registry.service,
+			localKey,
+			formatErr,
+		)
+	}
+	err.messages = formatted
 	return err, nil
 }
 
@@ -119,13 +161,6 @@ func newDefinition(
 			service,
 		)
 	}
-	if strings.TrimSpace(raw.English) == "" {
-		return Definition{}, fmt.Errorf(
-			"load %s.%s error dictionary: en must not be empty",
-			service,
-			localKey,
-		)
-	}
 	if raw.HTTPStatus < 0 || raw.HTTPStatus > 599 {
 		return Definition{}, fmt.Errorf(
 			"load %s.%s error dictionary: http_status must be between 0 and 599",
@@ -141,53 +176,24 @@ func newDefinition(
 		)
 	}
 
-	var grpcCode *codes.Code
-	if strings.TrimSpace(raw.GRPCCode) != "" {
-		parsed, err := parseGRPCCode(raw.GRPCCode)
-		if err != nil {
-			return Definition{}, fmt.Errorf(
-				"load %s.%s error dictionary: %w",
-				service,
-				localKey,
-				err,
-			)
-		}
-		grpcCode = &parsed
+	messages := make(map[errorpackage.LanguageCode]string, len(raw.Messages))
+	for language, message := range raw.Messages {
+		messages[errorpackage.LanguageCode(language)] = message
+	}
+	localizedMessages, err := errorpackage.NewLocalizedMessages(messages)
+	if err != nil {
+		return Definition{}, fmt.Errorf(
+			"load %s.%s error dictionary: %w",
+			service,
+			localKey,
+			err,
+		)
 	}
 
 	return Definition{
 		key:        service + "." + localKey,
 		code:       strings.TrimSpace(raw.Code),
 		httpStatus: raw.HTTPStatus,
-		grpcCode:   grpcCode,
-		english:    raw.English,
-		indonesian: raw.Indonesian,
+		messages:   localizedMessages,
 	}, nil
-}
-
-func parseGRPCCode(value string) (codes.Code, error) {
-	grpcCodes := map[string]codes.Code{
-		"CANCELED":            codes.Canceled,
-		"UNKNOWN":             codes.Unknown,
-		"INVALID_ARGUMENT":    codes.InvalidArgument,
-		"DEADLINE_EXCEEDED":   codes.DeadlineExceeded,
-		"NOT_FOUND":           codes.NotFound,
-		"ALREADY_EXISTS":      codes.AlreadyExists,
-		"PERMISSION_DENIED":   codes.PermissionDenied,
-		"RESOURCE_EXHAUSTED":  codes.ResourceExhausted,
-		"FAILED_PRECONDITION": codes.FailedPrecondition,
-		"ABORTED":             codes.Aborted,
-		"OUT_OF_RANGE":        codes.OutOfRange,
-		"UNIMPLEMENTED":       codes.Unimplemented,
-		"INTERNAL":            codes.Internal,
-		"UNAVAILABLE":         codes.Unavailable,
-		"DATA_LOSS":           codes.DataLoss,
-		"UNAUTHENTICATED":     codes.Unauthenticated,
-	}
-	normalized := strings.ToUpper(strings.TrimSpace(value))
-	code, exists := grpcCodes[normalized]
-	if !exists {
-		return codes.Unknown, fmt.Errorf("unsupported grpc_code %q", value)
-	}
-	return code, nil
 }

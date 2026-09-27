@@ -4,6 +4,7 @@ errors:
     http_status: 409
     en: Already exists.
     id: Sudah ada.
+    zh: "已存在。"
 
   not_found:
     code: NF
@@ -14,21 +15,23 @@ errors:
   password_mismatch:
     code: PM
     http_status: 400
-    grpc_code: FAILED_PRECONDITION
     en: Wrong password.
     id: Password salah.
 
   required:
     en: is required
     id: harus diisi
+    zh: "必填"
 
   min_length:
     en: minimum length is %d
     id: minimal panjang karakter adalah %d
+    zh: "最小长度为 %d"
 
   max_length:
     en: maximum length is %d
     id: maksimal panjang karakter adalah %d
+    zh: "最大长度为 %d"
 
   alpha_only:
     en: must be alphabetical
@@ -37,6 +40,7 @@ errors:
   invalid_email:
     en: email is invalid
     id: email tidak valid
+    zh: "邮箱格式无效"
 
   generate_token:
     code: GT
@@ -49,4 +53,3 @@ errors:
     http_status: 403
     en: Feature not allowed for you.
     id: Fitur tidak diizinkan untuk anda.
-

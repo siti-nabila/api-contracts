@@ -2,6 +2,8 @@ package dictionary
 
 import "google.golang.org/grpc/codes"
 
+// GRPCCodeFromHTTPStatus is retained for source compatibility.
+// Deprecated: HTTP and gRPC mappings are independent contracts.
 func GRPCCodeFromHTTPStatus(httpStatus int) codes.Code {
 	switch httpStatus {
 	case 400:
