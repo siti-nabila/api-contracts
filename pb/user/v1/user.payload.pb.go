@@ -175,7 +175,7 @@ type UserData struct {
 	Fullname      string                 `protobuf:"bytes,3,opt,name=fullname,proto3" json:"fullname,omitempty"`
 	Address       string                 `protobuf:"bytes,4,opt,name=address,proto3" json:"address,omitempty"`
 	Phone         string                 `protobuf:"bytes,5,opt,name=phone,proto3" json:"phone,omitempty"`
-	RoleIds       []uint64               `protobuf:"varint,6,rep,packed,name=role_ids,json=roleIds,proto3" json:"role_ids,omitempty"`
+	RoleCodes     []int32                `protobuf:"varint,6,rep,packed,name=role_codes,json=roleCodes,proto3" json:"role_codes,omitempty"`
 	RoleNames     []string               `protobuf:"bytes,7,rep,name=role_names,json=roleNames,proto3" json:"role_names,omitempty"`
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -247,9 +247,9 @@ func (x *UserData) GetPhone() string {
 	return ""
 }
 
-func (x *UserData) GetRoleIds() []uint64 {
+func (x *UserData) GetRoleCodes() []int32 {
 	if x != nil {
-		return x.RoleIds
+		return x.RoleCodes
 	}
 	return nil
 }
@@ -964,14 +964,15 @@ const file_user_v1_user_payload_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x129\n" +
 	"\n" +
-	"created_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\xf1\x01\n" +
+	"created_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\xf5\x01\n" +
 	"\bUserData\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12\x1a\n" +
 	"\bfullname\x18\x03 \x01(\tR\bfullname\x12\x18\n" +
 	"\aaddress\x18\x04 \x01(\tR\aaddress\x12\x14\n" +
-	"\x05phone\x18\x05 \x01(\tR\x05phone\x12\x19\n" +
-	"\brole_ids\x18\x06 \x03(\x04R\aroleIds\x12\x1d\n" +
+	"\x05phone\x18\x05 \x01(\tR\x05phone\x12\x1d\n" +
+	"\n" +
+	"role_codes\x18\x06 \x03(\x05R\troleCodes\x12\x1d\n" +
 	"\n" +
 	"role_names\x18\a \x03(\tR\troleNames\x129\n" +
 	"\n" +

@@ -11,6 +11,12 @@ errors:
     en: Data not found.
     id: Data tidak ditemukan.
 
+  endpoint_not_found:
+    code: NF
+    http_status: 404
+    en: Endpoint not found.
+    id: Endpoint tidak ditemukan.
+
   unauthorized:
     code: UA
     http_status: 401

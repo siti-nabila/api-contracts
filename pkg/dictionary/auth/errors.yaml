@@ -43,3 +43,10 @@ errors:
     http_status: 500
     en: Failed generating token.
     id: Gagal membuat token.
+    
+  auth_not_allowed:
+    code: NA
+    http_status: 403
+    en: Feature not allowed for you.
+    id: Fitur tidak diizinkan untuk anda.
+
