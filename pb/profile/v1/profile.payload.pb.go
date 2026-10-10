@@ -9,6 +9,7 @@ package profilev1
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	fieldmaskpb "google.golang.org/protobuf/types/known/fieldmaskpb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -98,10 +99,13 @@ func (x *Profile) GetPhone() string {
 }
 
 type ProfileRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Address       string                 `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
-	Phone         string                 `protobuf:"bytes,3,opt,name=phone,proto3" json:"phone,omitempty"`
+	state   protoimpl.MessageState `protogen:"open.v1"`
+	Name    string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Address string                 `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
+	Phone   string                 `protobuf:"bytes,3,opt,name=phone,proto3" json:"phone,omitempty"`
+	// Absent: legacy full replacement. Present: only selected allowed fields.
+	// Paths are name/address/phone; selected empty values follow field validation.
+	FieldMask     *fieldmaskpb.FieldMask `protobuf:"bytes,4,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -157,9 +161,18 @@ func (x *ProfileRequest) GetPhone() string {
 	return ""
 }
 
+func (x *ProfileRequest) GetFieldMask() *fieldmaskpb.FieldMask {
+	if x != nil {
+		return x.FieldMask
+	}
+	return nil
+}
+
 type ProfileResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Profile       *Profile               `protobuf:"bytes,1,opt,name=profile,proto3" json:"profile,omitempty"`
+	Version       uint64                 `protobuf:"varint,2,opt,name=version,proto3" json:"version,omitempty"` // User entity version, not auth_version.
+	Changed       bool                   `protobuf:"varint,3,opt,name=changed,proto3" json:"changed,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -201,24 +214,42 @@ func (x *ProfileResponse) GetProfile() *Profile {
 	return nil
 }
 
+func (x *ProfileResponse) GetVersion() uint64 {
+	if x != nil {
+		return x.Version
+	}
+	return 0
+}
+
+func (x *ProfileResponse) GetChanged() bool {
+	if x != nil {
+		return x.Changed
+	}
+	return false
+}
+
 var File_profile_v1_profile_payload_proto protoreflect.FileDescriptor
 
 const file_profile_v1_profile_payload_proto_rawDesc = "" +
 	"\n" +
 	" profile/v1/profile.payload.proto\x12\n" +
-	"profile.v1\"v\n" +
+	"profile.v1\x1a google/protobuf/field_mask.proto\"v\n" +
 	"\aProfile\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\x04R\x06userId\x12\x12\n" +
 	"\x04name\x18\x03 \x01(\tR\x04name\x12\x18\n" +
 	"\aaddress\x18\x04 \x01(\tR\aaddress\x12\x14\n" +
-	"\x05phone\x18\x05 \x01(\tR\x05phone\"T\n" +
+	"\x05phone\x18\x05 \x01(\tR\x05phone\"\x8f\x01\n" +
 	"\x0eProfileRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x18\n" +
 	"\aaddress\x18\x02 \x01(\tR\aaddress\x12\x14\n" +
-	"\x05phone\x18\x03 \x01(\tR\x05phone\"@\n" +
+	"\x05phone\x18\x03 \x01(\tR\x05phone\x129\n" +
+	"\n" +
+	"field_mask\x18\x04 \x01(\v2\x1a.google.protobuf.FieldMaskR\tfieldMask\"t\n" +
 	"\x0fProfileResponse\x12-\n" +
-	"\aprofile\x18\x01 \x01(\v2\x13.profile.v1.ProfileR\aprofileB>Z<github.com/siti-nabila/api-contracts/pb/profile/v1;profilev1b\x06proto3"
+	"\aprofile\x18\x01 \x01(\v2\x13.profile.v1.ProfileR\aprofile\x12\x18\n" +
+	"\aversion\x18\x02 \x01(\x04R\aversion\x12\x18\n" +
+	"\achanged\x18\x03 \x01(\bR\achangedB>Z<github.com/siti-nabila/api-contracts/pb/profile/v1;profilev1b\x06proto3"
 
 var (
 	file_profile_v1_profile_payload_proto_rawDescOnce sync.Once
@@ -234,17 +265,19 @@ func file_profile_v1_profile_payload_proto_rawDescGZIP() []byte {
 
 var file_profile_v1_profile_payload_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_profile_v1_profile_payload_proto_goTypes = []any{
-	(*Profile)(nil),         // 0: profile.v1.Profile
-	(*ProfileRequest)(nil),  // 1: profile.v1.ProfileRequest
-	(*ProfileResponse)(nil), // 2: profile.v1.ProfileResponse
+	(*Profile)(nil),               // 0: profile.v1.Profile
+	(*ProfileRequest)(nil),        // 1: profile.v1.ProfileRequest
+	(*ProfileResponse)(nil),       // 2: profile.v1.ProfileResponse
+	(*fieldmaskpb.FieldMask)(nil), // 3: google.protobuf.FieldMask
 }
 var file_profile_v1_profile_payload_proto_depIdxs = []int32{
-	0, // 0: profile.v1.ProfileResponse.profile:type_name -> profile.v1.Profile
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	3, // 0: profile.v1.ProfileRequest.field_mask:type_name -> google.protobuf.FieldMask
+	0, // 1: profile.v1.ProfileResponse.profile:type_name -> profile.v1.Profile
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_profile_v1_profile_payload_proto_init() }

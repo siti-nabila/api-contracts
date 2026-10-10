@@ -13,6 +13,8 @@ type Decoded struct {
 	Reason      string
 	Metadata    map[string]string
 	FieldErrors map[string][]string
+	// RetryInfo is nil when no structured retry guidance was supplied.
+	RetryInfo *errdetails.RetryInfo
 }
 
 func Decode(err error) (Decoded, bool) {
@@ -34,6 +36,8 @@ func Decode(err error) (Decoded, bool) {
 			for key, value := range typed.GetMetadata() {
 				decoded.Metadata[key] = value
 			}
+		case *errdetails.RetryInfo:
+			decoded.RetryInfo = typed
 		case *errdetails.BadRequest:
 			for _, violation := range typed.GetFieldViolations() {
 				field := violation.GetField()

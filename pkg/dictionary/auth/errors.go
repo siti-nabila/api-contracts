@@ -12,15 +12,18 @@ var (
 
 	registry = dictionary.MustLoadYAML("auth", errorList)
 
-	ErrDataExists       = registry.MustNew("already_exists")
-	ErrNotFound         = registry.MustNew("not_found")
-	ErrPasswordMismatch = registry.MustNew("password_mismatch")
-	ErrRequired         = registry.MustNew("required")
-	ErrAlphaOnly        = registry.MustNew("alpha_only")
-	ErrInvalidEmail     = registry.MustNew("invalid_email")
-	ErrGeneratingToken  = registry.MustNew("generate_token")
-	ErrAuthNotAllowed   = registry.MustNew("auth_not_allowed")
-	ErrResourceBusy     = registry.MustNew("resource_busy")
+	ErrServiceAuthenticationFailed = registry.MustNew("service_authentication_failed")
+	ErrInvalidSession              = registry.MustNew("invalid_session")
+	ErrLoginFailed                 = registry.MustNew("login_failed")
+	ErrDataExists                  = registry.MustNew("already_exists")
+	ErrNotFound                    = registry.MustNew("not_found")
+	ErrPasswordMismatch            = registry.MustNew("password_mismatch")
+	ErrRequired                    = registry.MustNew("required")
+	ErrAlphaOnly                   = registry.MustNew("alpha_only")
+	ErrInvalidEmail                = registry.MustNew("invalid_email")
+	ErrGeneratingToken             = registry.MustNew("generate_token")
+	ErrAuthNotAllowed              = registry.MustNew("auth_not_allowed")
+	ErrResourceBusy                = registry.MustNew("resource_busy")
 )
 
 func Registry() dictionary.Registry {

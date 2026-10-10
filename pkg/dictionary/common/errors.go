@@ -12,6 +12,7 @@ var (
 
 	registry = dictionary.MustLoadYAML("common", errorList)
 
+	ErrRateLimited           = registry.MustNew("rate_limited")
 	ErrBadRequest            = registry.MustNew("bad_request")
 	ErrNotFound              = registry.MustNew("not_found")
 	ErrEndpointNotFound      = registry.MustNew("endpoint_not_found")

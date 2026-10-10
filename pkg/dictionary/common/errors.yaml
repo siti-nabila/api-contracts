@@ -1,4 +1,10 @@
 errors:
+  rate_limited:
+    code: RL
+    http_status: 429
+    en: Too many requests. Try again later.
+    id: Terlalu banyak permintaan. Coba lagi nanti.
+
   dependency_unavailable:
     code: DU
     http_status: 503

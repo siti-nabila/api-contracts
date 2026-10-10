@@ -1,0 +1,89 @@
+{
+  "name":  "profile/v1/profile.payload.proto",
+  "package":  "profile.v1",
+  "messageType":  [
+    {
+      "name":  "Profile",
+      "field":  [
+        {
+          "name":  "id",
+          "number":  1,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_UINT64",
+          "jsonName":  "id"
+        },
+        {
+          "name":  "user_id",
+          "number":  2,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_UINT64",
+          "jsonName":  "userId"
+        },
+        {
+          "name":  "name",
+          "number":  3,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "name"
+        },
+        {
+          "name":  "address",
+          "number":  4,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "address"
+        },
+        {
+          "name":  "phone",
+          "number":  5,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "phone"
+        }
+      ]
+    },
+    {
+      "name":  "ProfileRequest",
+      "field":  [
+        {
+          "name":  "name",
+          "number":  1,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "name"
+        },
+        {
+          "name":  "address",
+          "number":  2,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "address"
+        },
+        {
+          "name":  "phone",
+          "number":  3,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "phone"
+        }
+      ]
+    },
+    {
+      "name":  "ProfileResponse",
+      "field":  [
+        {
+          "name":  "profile",
+          "number":  1,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_MESSAGE",
+          "typeName":  ".profile.v1.Profile",
+          "jsonName":  "profile"
+        }
+      ]
+    }
+  ],
+  "options":  {
+    "goPackage":  "github.com/siti-nabila/api-contracts/pb/profile/v1;profilev1"
+  },
+  "syntax":  "proto3"
+}

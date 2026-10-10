@@ -1,0 +1,183 @@
+{
+  "name":  "paginator/v1/paginator.payload.proto",
+  "package":  "paginator.v1",
+  "messageType":  [
+    {
+      "name":  "PageQuery",
+      "field":  [
+        {
+          "name":  "page",
+          "number":  1,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_INT32",
+          "jsonName":  "page"
+        },
+        {
+          "name":  "limit",
+          "number":  2,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_INT32",
+          "jsonName":  "limit"
+        },
+        {
+          "name":  "fields",
+          "number":  3,
+          "label":  "LABEL_REPEATED",
+          "type":  "TYPE_STRING",
+          "jsonName":  "fields"
+        },
+        {
+          "name":  "sort",
+          "number":  4,
+          "label":  "LABEL_REPEATED",
+          "type":  "TYPE_MESSAGE",
+          "typeName":  ".paginator.v1.Sort",
+          "jsonName":  "sort"
+        },
+        {
+          "name":  "search",
+          "number":  5,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_MESSAGE",
+          "typeName":  ".paginator.v1.Search",
+          "jsonName":  "search"
+        },
+        {
+          "name":  "last_id",
+          "number":  6,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "lastId"
+        }
+      ]
+    },
+    {
+      "name":  "PageMeta",
+      "field":  [
+        {
+          "name":  "page",
+          "number":  1,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_INT32",
+          "jsonName":  "page"
+        },
+        {
+          "name":  "limit",
+          "number":  2,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_INT32",
+          "jsonName":  "limit"
+        },
+        {
+          "name":  "total",
+          "number":  3,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_INT64",
+          "jsonName":  "total"
+        },
+        {
+          "name":  "total_pages",
+          "number":  4,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_INT32",
+          "jsonName":  "totalPages"
+        },
+        {
+          "name":  "has_next",
+          "number":  5,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_BOOL",
+          "jsonName":  "hasNext"
+        },
+        {
+          "name":  "has_prev",
+          "number":  6,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_BOOL",
+          "jsonName":  "hasPrev"
+        }
+      ]
+    },
+    {
+      "name":  "Sort",
+      "field":  [
+        {
+          "name":  "field",
+          "number":  1,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "field"
+        },
+        {
+          "name":  "desc",
+          "number":  2,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_BOOL",
+          "jsonName":  "desc"
+        }
+      ]
+    },
+    {
+      "name":  "Search",
+      "field":  [
+        {
+          "name":  "fields",
+          "number":  1,
+          "label":  "LABEL_REPEATED",
+          "type":  "TYPE_STRING",
+          "jsonName":  "fields"
+        },
+        {
+          "name":  "keyword",
+          "number":  2,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "keyword"
+        },
+        {
+          "name":  "mode",
+          "number":  3,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_ENUM",
+          "typeName":  ".paginator.v1.SearchMode",
+          "jsonName":  "mode"
+        }
+      ]
+    }
+  ],
+  "enumType":  [
+    {
+      "name":  "SearchMode",
+      "value":  [
+        {
+          "name":  "SEARCH_MODE_UNSPECIFIED",
+          "number":  0
+        },
+        {
+          "name":  "SEARCH_MODE_CONTAINS",
+          "number":  1
+        },
+        {
+          "name":  "SEARCH_MODE_PREFIX",
+          "number":  2
+        },
+        {
+          "name":  "SEARCH_MODE_FULL_TEXT",
+          "number":  3
+        },
+        {
+          "name":  "SEARCH_MODE_TRIGRAM",
+          "number":  4
+        },
+        {
+          "name":  "SEARCH_MODE_FULL_TEXT_TRIGRAM",
+          "number":  5
+        }
+      ]
+    }
+  ],
+  "options":  {
+    "goPackage":  "github.com/siti-nabila/api-contracts/pb/paginator/v1;paginatorv1"
+  },
+  "syntax":  "proto3"
+}

@@ -1,0 +1,23 @@
+{
+  "name":  "profile/v1/profile.service.proto",
+  "package":  "profile.v1",
+  "dependency":  [
+    "profile/v1/profile.payload.proto"
+  ],
+  "service":  [
+    {
+      "name":  "ProfileService",
+      "method":  [
+        {
+          "name":  "UpdateProfile",
+          "inputType":  ".profile.v1.ProfileRequest",
+          "outputType":  ".profile.v1.ProfileResponse"
+        }
+      ]
+    }
+  ],
+  "options":  {
+    "goPackage":  "github.com/siti-nabila/api-contracts/pb/profile/v1;profilev1"
+  },
+  "syntax":  "proto3"
+}
