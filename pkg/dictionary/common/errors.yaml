@@ -1,4 +1,16 @@
 errors:
+  dependency_unavailable:
+    code: DU
+    http_status: 503
+    en: Dependency unavailable.
+    id: Layanan pendukung tidak tersedia.
+
+  request_canceled:
+    code: RC
+    http_status: 499
+    en: Request canceled.
+    id: Permintaan dibatalkan.
+
   bad_request:
     code: BR
     http_status: 400

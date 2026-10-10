@@ -8,6 +8,7 @@ import (
 
 func AuthCodeMappings() []grpcerror.CodeMapping {
 	return []grpcerror.CodeMapping{
+		{Code: codes.Aborted, Errors: []error{auth.ErrResourceBusy}},
 		{
 			Code: codes.InvalidArgument,
 			Errors: []error{

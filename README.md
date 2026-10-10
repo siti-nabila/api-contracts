@@ -45,3 +45,18 @@ English is the required fallback. A regional request such as `zh-CN` falls
 back to `zh` when that base-language message exists. gRPC status mappings are
 declared separately in `pkg/grpcerror`; they are not derived from HTTP status
 and are not stored in the YAML catalog.
+
+Transaction consumers register `mapping.AuthCodeMappings()` and
+`mapping.UserCodeMappings()` alongside `mapping.CommonCodeMappings()`.
+`auth.ErrResourceBusy` and `user.ErrResourceBusy` have distinct qualified keys
+and map to gRPC ABORTED / HTTP 409. Use `common.ErrDependencyUnavailable` for
+an unavailable dependency (UNAVAILABLE / HTTP 503); the legacy
+`common.ErrServiceUnavailable` mapping remains unchanged. Request cancellation
+(including wrapped context errors and raw gRPC CANCELED) is localized as
+`common.request_canceled`; deadline failures retain DEADLINE_EXCEEDED. Unknown
+errors remain generic INTERNAL responses.
+
+Publish the tested contract version before pinning it in grpc-auth. Parent
+workspace verification uses this checkout and does not prove a published
+version is available; consumers must also verify with `GOWORK=off` after
+publishing. This update changes no protobuf source or generated code.

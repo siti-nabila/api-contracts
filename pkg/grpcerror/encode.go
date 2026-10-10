@@ -1,6 +1,7 @@
 package grpcerror
 
 import (
+	"context"
 	"errors"
 	"sort"
 	"strconv"
@@ -35,6 +36,13 @@ func (encoder *Encoder) Encode(err error, language locale.Language) error {
 		return nil
 	}
 
+	if errors.Is(err, context.Canceled) {
+		return encodeApplicationError(common.ErrRequestCanceled, language, codes.Canceled)
+	}
+	if errors.Is(err, context.DeadlineExceeded) {
+		return encodeApplicationError(common.ErrDeadlineExceeded, language, codes.DeadlineExceeded)
+	}
+
 	if grpcStatus, ok := status.FromError(err); ok {
 		if len(grpcStatus.Details()) > 0 {
 			return err
@@ -63,6 +71,8 @@ func (encoder *Encoder) Encode(err error, language locale.Language) error {
 
 func encodeGRPCStatus(code codes.Code, language locale.Language) error {
 	switch code {
+	case codes.Canceled:
+		return encodeApplicationError(common.ErrRequestCanceled, language, code)
 	case codes.InvalidArgument:
 		return encodeApplicationError(common.ErrBadRequest, language, code)
 	case codes.Unauthenticated:

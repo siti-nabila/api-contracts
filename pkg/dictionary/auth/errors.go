@@ -20,6 +20,7 @@ var (
 	ErrInvalidEmail     = registry.MustNew("invalid_email")
 	ErrGeneratingToken  = registry.MustNew("generate_token")
 	ErrAuthNotAllowed   = registry.MustNew("auth_not_allowed")
+	ErrResourceBusy     = registry.MustNew("resource_busy")
 )
 
 func Registry() dictionary.Registry {
