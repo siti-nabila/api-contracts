@@ -8,6 +8,7 @@ import (
 
 func CommonCodeMappings() []grpcerror.CodeMapping {
 	return []grpcerror.CodeMapping{
+		{Code: codes.ResourceExhausted, Errors: []error{common.ErrRateLimited}},
 		{Code: codes.Unavailable, Errors: []error{common.ErrDependencyUnavailable}},
 		{Code: codes.Canceled, Errors: []error{common.ErrRequestCanceled}},
 		{

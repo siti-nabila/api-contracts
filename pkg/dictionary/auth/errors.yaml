@@ -1,4 +1,22 @@
 errors:
+  service_authentication_failed:
+    code: SF
+    http_status: 401
+    en: Service authentication failed.
+    id: Autentikasi layanan gagal.
+
+  invalid_session:
+    code: SI
+    http_status: 401
+    en: Invalid session.
+    id: Sesi tidak valid.
+
+  login_failed:
+    code: LF
+    http_status: 401
+    en: Login failed.
+    id: Login gagal.
+
   resource_busy:
     code: RB
     http_status: 409

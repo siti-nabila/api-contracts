@@ -18,6 +18,8 @@ import (
 
 func All() []testutils.Scenario {
 	return []testutils.Scenario{
+		{Name: "session security errors preserve catalog locale and legacy mappings", Run: sessionErrors},
+		{Name: "rate limiting preserves structured retry guidance", Run: rateRetryDetails},
 		{Name: "transaction errors preserve feature identity locale cause and legacy mappings", Run: transactionErrors},
 		{
 			Name: "encodes auth errors using explicit grpc mappings",

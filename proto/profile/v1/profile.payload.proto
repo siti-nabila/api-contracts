@@ -4,6 +4,8 @@ package profile.v1;
 
 option go_package = "github.com/siti-nabila/api-contracts/pb/profile/v1;profilev1";
 
+import "google/protobuf/field_mask.proto";
+
 message Profile {
   uint64 id = 1;
   uint64 user_id = 2;
@@ -16,8 +18,13 @@ message ProfileRequest {
   string name = 1;
   string address = 2;
   string phone = 3;
+  // Absent: legacy full replacement. Present: only selected allowed fields.
+  // Paths are name/address/phone; selected empty values follow field validation.
+  google.protobuf.FieldMask field_mask = 4;
 }
 
 message ProfileResponse {
   Profile profile = 1;
+  uint64 version = 2; // User entity version, not auth_version.
+  bool changed = 3;
 }

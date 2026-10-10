@@ -59,4 +59,13 @@ errors remain generic INTERNAL responses.
 Publish the tested contract version before pinning it in grpc-auth. Parent
 workspace verification uses this checkout and does not prove a published
 version is available; consumers must also verify with `GOWORK=off` after
-publishing. This update changes no protobuf source or generated code.
+publishing.
+
+## Session authorization foundation contract
+
+The additive fields and security errors for grpc-auth are specified in
+[docs/auth-session-contract.md](docs/auth-session-contract.md). The six existing
+RPC names, old field numbers/types, numeric role codes, and cursor pagination
+remain compatible. Publishing these contracts does not activate PENDING
+registration, session authentication, or change legacy Login behavior by itself.
+grpc-auth and rest-orc must complete their separate producer/caller/cutover gates.

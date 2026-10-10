@@ -1,0 +1,437 @@
+{
+  "name":  "user/v1/user.payload.proto",
+  "package":  "user.v1",
+  "dependency":  [
+    "profile/v1/profile.payload.proto",
+    "paginator/v1/paginator.payload.proto",
+    "google/protobuf/timestamp.proto"
+  ],
+  "messageType":  [
+    {
+      "name":  "User",
+      "field":  [
+        {
+          "name":  "id",
+          "number":  1,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_UINT64",
+          "jsonName":  "id"
+        },
+        {
+          "name":  "name",
+          "number":  2,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "name"
+        },
+        {
+          "name":  "email",
+          "number":  3,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "email"
+        },
+        {
+          "name":  "password",
+          "number":  4,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "password"
+        },
+        {
+          "name":  "dob",
+          "number":  5,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "dob"
+        },
+        {
+          "name":  "phone_no",
+          "number":  6,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "phoneNo"
+        }
+      ]
+    },
+    {
+      "name":  "UserResponse",
+      "field":  [
+        {
+          "name":  "id",
+          "number":  1,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_UINT64",
+          "jsonName":  "id"
+        },
+        {
+          "name":  "email",
+          "number":  2,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "email"
+        },
+        {
+          "name":  "created_at",
+          "number":  3,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_MESSAGE",
+          "typeName":  ".google.protobuf.Timestamp",
+          "jsonName":  "createdAt"
+        }
+      ]
+    },
+    {
+      "name":  "UserData",
+      "field":  [
+        {
+          "name":  "id",
+          "number":  1,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_UINT64",
+          "jsonName":  "id"
+        },
+        {
+          "name":  "email",
+          "number":  2,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "email"
+        },
+        {
+          "name":  "fullname",
+          "number":  3,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "fullname"
+        },
+        {
+          "name":  "address",
+          "number":  4,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "address"
+        },
+        {
+          "name":  "phone",
+          "number":  5,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "phone"
+        },
+        {
+          "name":  "role_codes",
+          "number":  6,
+          "label":  "LABEL_REPEATED",
+          "type":  "TYPE_INT32",
+          "jsonName":  "roleCodes"
+        },
+        {
+          "name":  "role_names",
+          "number":  7,
+          "label":  "LABEL_REPEATED",
+          "type":  "TYPE_STRING",
+          "jsonName":  "roleNames"
+        },
+        {
+          "name":  "created_at",
+          "number":  8,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_MESSAGE",
+          "typeName":  ".google.protobuf.Timestamp",
+          "jsonName":  "createdAt"
+        }
+      ]
+    },
+    {
+      "name":  "UserDataOld",
+      "field":  [
+        {
+          "name":  "user",
+          "number":  1,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_MESSAGE",
+          "typeName":  ".user.v1.UserResponse",
+          "jsonName":  "user"
+        },
+        {
+          "name":  "profile",
+          "number":  2,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_MESSAGE",
+          "typeName":  ".profile.v1.Profile",
+          "jsonName":  "profile"
+        }
+      ]
+    },
+    {
+      "name":  "AuthRequest",
+      "field":  [
+        {
+          "name":  "email",
+          "number":  1,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "email"
+        },
+        {
+          "name":  "password",
+          "number":  2,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "password"
+        }
+      ]
+    },
+    {
+      "name":  "UserTokenResponse",
+      "field":  [
+        {
+          "name":  "token",
+          "number":  1,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "token"
+        }
+      ]
+    },
+    {
+      "name":  "CreateUserRequest",
+      "field":  [
+        {
+          "name":  "name",
+          "number":  1,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "name"
+        },
+        {
+          "name":  "email",
+          "number":  2,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "email"
+        },
+        {
+          "name":  "password",
+          "number":  3,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "password"
+        }
+      ]
+    },
+    {
+      "name":  "CreateUserResponse",
+      "field":  [
+        {
+          "name":  "user",
+          "number":  1,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_MESSAGE",
+          "typeName":  ".user.v1.User",
+          "jsonName":  "user"
+        }
+      ]
+    },
+    {
+      "name":  "GetUserRequest",
+      "field":  [
+        {
+          "name":  "id",
+          "number":  1,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_UINT64",
+          "jsonName":  "id"
+        }
+      ]
+    },
+    {
+      "name":  "GetUserResponse",
+      "field":  [
+        {
+          "name":  "user",
+          "number":  1,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_MESSAGE",
+          "typeName":  ".user.v1.User",
+          "jsonName":  "user"
+        }
+      ]
+    },
+    {
+      "name":  "TestRPC",
+      "field":  [
+        {
+          "name":  "res",
+          "number":  1,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "res"
+        }
+      ]
+    },
+    {
+      "name":  "ListUsersRequest",
+      "field":  [
+        {
+          "name":  "query",
+          "number":  1,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_MESSAGE",
+          "typeName":  ".paginator.v1.PageQuery",
+          "jsonName":  "query"
+        },
+        {
+          "name":  "filter",
+          "number":  2,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_MESSAGE",
+          "typeName":  ".user.v1.UserFilter",
+          "jsonName":  "filter"
+        }
+      ]
+    },
+    {
+      "name":  "UserListItem",
+      "field":  [
+        {
+          "name":  "id",
+          "number":  1,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_INT32",
+          "jsonName":  "id"
+        },
+        {
+          "name":  "email",
+          "number":  2,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "email"
+        },
+        {
+          "name":  "name",
+          "number":  3,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "name"
+        },
+        {
+          "name":  "address",
+          "number":  4,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "address"
+        },
+        {
+          "name":  "phone",
+          "number":  5,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "phone"
+        }
+      ]
+    },
+    {
+      "name":  "ListUsersResponse",
+      "field":  [
+        {
+          "name":  "items",
+          "number":  1,
+          "label":  "LABEL_REPEATED",
+          "type":  "TYPE_MESSAGE",
+          "typeName":  ".user.v1.UserListItem",
+          "jsonName":  "items"
+        },
+        {
+          "name":  "total",
+          "number":  2,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_INT32",
+          "jsonName":  "total"
+        },
+        {
+          "name":  "page",
+          "number":  3,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_INT32",
+          "jsonName":  "page"
+        },
+        {
+          "name":  "limit",
+          "number":  4,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_INT32",
+          "jsonName":  "limit"
+        },
+        {
+          "name":  "total_pages",
+          "number":  5,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_INT32",
+          "jsonName":  "totalPages"
+        },
+        {
+          "name":  "has_next",
+          "number":  6,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_BOOL",
+          "jsonName":  "hasNext"
+        },
+        {
+          "name":  "has_prev",
+          "number":  7,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_BOOL",
+          "jsonName":  "hasPrev"
+        },
+        {
+          "name":  "next_cursor",
+          "number":  8,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_STRING",
+          "jsonName":  "nextCursor"
+        }
+      ]
+    },
+    {
+      "name":  "UserFilter",
+      "field":  [
+        {
+          "name":  "created_from",
+          "number":  1,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_MESSAGE",
+          "typeName":  ".google.protobuf.Timestamp",
+          "jsonName":  "createdFrom"
+        },
+        {
+          "name":  "created_to",
+          "number":  2,
+          "label":  "LABEL_OPTIONAL",
+          "type":  "TYPE_MESSAGE",
+          "typeName":  ".google.protobuf.Timestamp",
+          "jsonName":  "createdTo"
+        },
+        {
+          "name":  "role_codes",
+          "number":  3,
+          "label":  "LABEL_REPEATED",
+          "type":  "TYPE_UINT64",
+          "jsonName":  "roleCodes"
+        },
+        {
+          "name":  "statuses",
+          "number":  4,
+          "label":  "LABEL_REPEATED",
+          "type":  "TYPE_STRING",
+          "jsonName":  "statuses"
+        }
+      ]
+    }
+  ],
+  "options":  {
+    "goPackage":  "github.com/siti-nabila/api-contracts/pb/user/v1;userv1"
+  },
+  "syntax":  "proto3"
+}

@@ -1,0 +1,44 @@
+{
+  "name":  "user/v1/user.service.proto",
+  "package":  "user.v1",
+  "dependency":  [
+    "user/v1/user.payload.proto",
+    "google/protobuf/empty.proto"
+  ],
+  "service":  [
+    {
+      "name":  "UserService",
+      "method":  [
+        {
+          "name":  "Register",
+          "inputType":  ".user.v1.AuthRequest",
+          "outputType":  ".user.v1.UserTokenResponse"
+        },
+        {
+          "name":  "Login",
+          "inputType":  ".user.v1.AuthRequest",
+          "outputType":  ".user.v1.UserTokenResponse"
+        },
+        {
+          "name":  "Me",
+          "inputType":  ".google.protobuf.Empty",
+          "outputType":  ".user.v1.UserData"
+        },
+        {
+          "name":  "ListUsers",
+          "inputType":  ".user.v1.ListUsersRequest",
+          "outputType":  ".user.v1.ListUsersResponse"
+        },
+        {
+          "name":  "TesRPC",
+          "inputType":  ".google.protobuf.Empty",
+          "outputType":  ".user.v1.TestRPC"
+        }
+      ]
+    }
+  ],
+  "options":  {
+    "goPackage":  "github.com/siti-nabila/api-contracts/pb/user/v1;userv1"
+  },
+  "syntax":  "proto3"
+}
