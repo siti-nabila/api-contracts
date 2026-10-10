@@ -1,2 +1,64 @@
 # Local AI agent instructions
 AGENTS.md
+
+# If you prefer the allow list template instead of the deny list, see community template:
+# https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
+#
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Code coverage profiles and other test artifacts
+*.out
+coverage.*
+*.coverprofile
+profile.cov
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file
+go.work
+go.work.sum
+
+logs/
+bin
+
+# Editor/IDE
+.idea/
+.vscode/
+
+
+# macOS metadata
+.DS_Store
+._*
+
+graphify-out/
+
+# Local agent configuration and generated codebase graphs
+.agents/
+.codex/
+.claude/
+.graphifyignore
+
+# Local runtime configuration and credentials
+.env
+.env.*
+!.env.example
+/env.yaml
+/env.*.yaml
+!/env.example.yaml
+secrets/
+*.key
+*.pem
+
+# Generated test and profiling directories
+coverage/
+test-results/
+playwright-report/
