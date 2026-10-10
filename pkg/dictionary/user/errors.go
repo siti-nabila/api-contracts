@@ -12,7 +12,8 @@ var (
 
 	registry = dictionary.MustLoadYAML("user", errorList)
 
-	ErrResourceBusy = registry.MustNew("resource_busy")
+	ErrResourceBusy        = registry.MustNew("resource_busy")
+	ErrIdempotencyConflict = registry.MustNew("idempotency_conflict")
 )
 
 func Registry() dictionary.Registry {

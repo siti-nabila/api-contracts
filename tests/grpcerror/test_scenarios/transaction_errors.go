@@ -32,6 +32,7 @@ func transactionErrors(t *testing.T) {
 		appCode    string
 		httpStatus string
 	}{
+		{"user idempotency conflict", fmt.Errorf("private request: %w", user.ErrIdempotencyConflict), user.ErrIdempotencyConflict, codes.Aborted, "IC", "409"},
 		{"auth busy", auth.ErrResourceBusy, auth.ErrResourceBusy, codes.Aborted, "RB", "409"},
 		{"wrapped user busy", fmt.Errorf("private database detail: %w", user.ErrResourceBusy), user.ErrResourceBusy, codes.Aborted, "RB", "409"},
 		{"dependency", fmt.Errorf("private database detail: %w", common.ErrDependencyUnavailable), common.ErrDependencyUnavailable, codes.Unavailable, "DU", "503"},

@@ -4,3 +4,9 @@ errors:
     http_status: 409
     en: Resource is busy. Retry the request.
     id: Resource sedang digunakan. Ulangi permintaan.
+
+  idempotency_conflict:
+    code: IC
+    http_status: 409
+    en: Idempotency key was already used with a different request.
+    id: Kunci idempotensi sudah digunakan untuk permintaan yang berbeda.
