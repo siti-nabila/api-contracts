@@ -8,6 +8,8 @@ import (
 
 func CommonCodeMappings() []grpcerror.CodeMapping {
 	return []grpcerror.CodeMapping{
+		{Code: codes.Unavailable, Errors: []error{common.ErrDependencyUnavailable}},
+		{Code: codes.Canceled, Errors: []error{common.ErrRequestCanceled}},
 		{
 			Code: codes.InvalidArgument,
 			Errors: []error{

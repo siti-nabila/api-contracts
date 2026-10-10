@@ -1,4 +1,10 @@
 errors:
+  resource_busy:
+    code: RB
+    http_status: 409
+    en: Resource is busy. Retry the request.
+    id: Resource sedang digunakan. Ulangi permintaan.
+
   already_exists:
     code: EX
     http_status: 409

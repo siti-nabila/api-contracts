@@ -4,7 +4,7 @@ go 1.26.2
 
 require (
 	github.com/goccy/go-yaml v1.19.2
-	github.com/siti-nabila/error-package v0.0.9
+	github.com/siti-nabila/error-package v0.0.10-0.20260927130242-e06b69ef855d
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260414002931-afd174a4e478
 	google.golang.org/grpc v1.82.1
 	google.golang.org/protobuf v1.36.11

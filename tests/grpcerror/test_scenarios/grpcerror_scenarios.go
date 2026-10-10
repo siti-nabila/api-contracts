@@ -18,6 +18,7 @@ import (
 
 func All() []testutils.Scenario {
 	return []testutils.Scenario{
+		{Name: "transaction errors preserve feature identity locale cause and legacy mappings", Run: transactionErrors},
 		{
 			Name: "encodes auth errors using explicit grpc mappings",
 			Run:  encodeMappedCodes,
