@@ -1,4 +1,10 @@
 errors:
+  refresh_token_reused:
+    code: RR
+    http_status: 401
+    en: Refresh token was already used. Log in again.
+    id: Token refresh sudah digunakan. Silakan login kembali.
+
   service_authentication_failed:
     code: SF
     http_status: 401

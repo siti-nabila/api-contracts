@@ -15,6 +15,7 @@ var (
 	ErrServiceAuthenticationFailed = registry.MustNew("service_authentication_failed")
 	ErrInvalidSession              = registry.MustNew("invalid_session")
 	ErrLoginFailed                 = registry.MustNew("login_failed")
+	ErrRefreshTokenReused          = registry.MustNew("refresh_token_reused")
 	ErrDataExists                  = registry.MustNew("already_exists")
 	ErrNotFound                    = registry.MustNew("not_found")
 	ErrPasswordMismatch            = registry.MustNew("password_mismatch")

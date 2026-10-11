@@ -12,6 +12,7 @@ func AuthCodeMappings() []grpcerror.CodeMapping {
 			auth.ErrServiceAuthenticationFailed,
 			auth.ErrInvalidSession,
 			auth.ErrLoginFailed,
+			auth.ErrRefreshTokenReused,
 		}},
 		{Code: codes.Aborted, Errors: []error{auth.ErrResourceBusy}},
 		{

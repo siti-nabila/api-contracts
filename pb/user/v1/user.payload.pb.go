@@ -568,12 +568,12 @@ func (x *AuthRequest) GetPassword() string {
 
 type UserTokenResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Login access token; empty on Register. Keep legacy field 1 and its type.
+	// Login/Refresh access token; empty on Register. Keep legacy field 1 and its type.
 	Token string `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
 	// Register only: PENDING registration, without credentials or session.
 	RegistrationId     uint64 `protobuf:"varint,2,opt,name=registration_id,json=registrationId,proto3" json:"registration_id,omitempty"`
 	RegistrationStatus string `protobuf:"bytes,3,opt,name=registration_status,json=registrationStatus,proto3" json:"registration_status,omitempty"`
-	// Login only. Never populate these fields in Register or management responses.
+	// Login/Refresh only. Never populate these fields in Register or management responses.
 	RefreshToken       string                 `protobuf:"bytes,4,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
 	SessionId          string                 `protobuf:"bytes,5,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"` // UUID, owned by the authenticated user.
 	AccessExpiresAt    *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=access_expires_at,json=accessExpiresAt,proto3" json:"access_expires_at,omitempty"`
@@ -968,6 +968,7 @@ type UserListItem struct {
 	Version           uint64                   `protobuf:"varint,7,opt,name=version,proto3" json:"version,omitempty"`
 	Roles             []*UserRoleAssignment    `protobuf:"bytes,8,rep,name=roles,proto3" json:"roles,omitempty"`
 	ApplicationAccess []*UserApplicationAccess `protobuf:"bytes,9,rep,name=application_access,json=applicationAccess,proto3" json:"application_access,omitempty"`
+	CreatedAt         *timestamppb.Timestamp   `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"` // User creation time; sortable.
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -1061,6 +1062,13 @@ func (x *UserListItem) GetRoles() []*UserRoleAssignment {
 func (x *UserListItem) GetApplicationAccess() []*UserApplicationAccess {
 	if x != nil {
 		return x.ApplicationAccess
+	}
+	return nil
+}
+
+func (x *UserListItem) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
 	}
 	return nil
 }
@@ -1319,7 +1327,7 @@ const file_user_v1_user_payload_proto_rawDesc = "" +
 	"\x03res\x18\x01 \x01(\tR\x03res\"n\n" +
 	"\x10ListUsersRequest\x12-\n" +
 	"\x05query\x18\x01 \x01(\v2\x17.paginator.v1.PageQueryR\x05query\x12+\n" +
-	"\x06filter\x18\x02 \x01(\v2\x13.user.v1.UserFilterR\x06filter\"\xac\x02\n" +
+	"\x06filter\x18\x02 \x01(\v2\x13.user.v1.UserFilterR\x06filter\"\xe7\x02\n" +
 	"\fUserListItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12\x12\n" +
@@ -1329,7 +1337,10 @@ const file_user_v1_user_payload_proto_rawDesc = "" +
 	"\x06status\x18\x06 \x01(\tR\x06status\x12\x18\n" +
 	"\aversion\x18\a \x01(\x04R\aversion\x121\n" +
 	"\x05roles\x18\b \x03(\v2\x1b.user.v1.UserRoleAssignmentR\x05roles\x12M\n" +
-	"\x12application_access\x18\t \x03(\v2\x1e.user.v1.UserApplicationAccessR\x11applicationAccess\"\xf8\x01\n" +
+	"\x12application_access\x18\t \x03(\v2\x1e.user.v1.UserApplicationAccessR\x11applicationAccess\x129\n" +
+	"\n" +
+	"created_at\x18\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\xf8\x01\n" +
 	"\x11ListUsersResponse\x12+\n" +
 	"\x05items\x18\x01 \x03(\v2\x15.user.v1.UserListItemR\x05items\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x05R\x05total\x12\x12\n" +
@@ -1401,14 +1412,15 @@ var file_user_v1_user_payload_proto_depIdxs = []int32{
 	16, // 11: user.v1.ListUsersRequest.filter:type_name -> user.v1.UserFilter
 	3,  // 12: user.v1.UserListItem.roles:type_name -> user.v1.UserRoleAssignment
 	4,  // 13: user.v1.UserListItem.application_access:type_name -> user.v1.UserApplicationAccess
-	14, // 14: user.v1.ListUsersResponse.items:type_name -> user.v1.UserListItem
-	17, // 15: user.v1.UserFilter.created_from:type_name -> google.protobuf.Timestamp
-	17, // 16: user.v1.UserFilter.created_to:type_name -> google.protobuf.Timestamp
-	17, // [17:17] is the sub-list for method output_type
-	17, // [17:17] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	17, // 14: user.v1.UserListItem.created_at:type_name -> google.protobuf.Timestamp
+	14, // 15: user.v1.ListUsersResponse.items:type_name -> user.v1.UserListItem
+	17, // 16: user.v1.UserFilter.created_from:type_name -> google.protobuf.Timestamp
+	17, // 17: user.v1.UserFilter.created_to:type_name -> google.protobuf.Timestamp
+	18, // [18:18] is the sub-list for method output_type
+	18, // [18:18] is the sub-list for method input_type
+	18, // [18:18] is the sub-list for extension type_name
+	18, // [18:18] is the sub-list for extension extendee
+	0,  // [0:18] is the sub-list for field type_name
 }
 
 func init() { file_user_v1_user_payload_proto_init() }

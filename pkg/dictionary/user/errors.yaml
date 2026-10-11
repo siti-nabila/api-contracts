@@ -1,4 +1,10 @@
 errors:
+  version_conflict:
+    code: VC
+    http_status: 409
+    en: User version has changed. Reload and retry.
+    id: Versi pengguna telah berubah. Muat ulang dan coba kembali.
+
   resource_busy:
     code: RB
     http_status: 409

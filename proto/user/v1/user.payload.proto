@@ -68,12 +68,12 @@ message AuthRequest {
 }
 
 message UserTokenResponse {
-  // Login access token; empty on Register. Keep legacy field 1 and its type.
+  // Login/Refresh access token; empty on Register. Keep legacy field 1 and its type.
   string token = 1;
   // Register only: PENDING registration, without credentials or session.
   uint64 registration_id = 2;
   string registration_status = 3;
-  // Login only. Never populate these fields in Register or management responses.
+  // Login/Refresh only. Never populate these fields in Register or management responses.
   string refresh_token = 4;
   string session_id = 5; // UUID, owned by the authenticated user.
   google.protobuf.Timestamp access_expires_at = 6;
@@ -118,6 +118,7 @@ message UserListItem {
   uint64 version = 7;
   repeated UserRoleAssignment roles = 8;
   repeated UserApplicationAccess application_access = 9;
+  google.protobuf.Timestamp created_at = 10; // User creation time; sortable.
 }
 
 message ListUsersResponse {

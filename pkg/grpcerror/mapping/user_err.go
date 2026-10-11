@@ -8,6 +8,6 @@ import (
 
 func UserCodeMappings() []grpcerror.CodeMapping {
 	return []grpcerror.CodeMapping{
-		{Code: codes.Aborted, Errors: []error{user.ErrResourceBusy, user.ErrIdempotencyConflict}},
+		{Code: codes.Aborted, Errors: []error{user.ErrResourceBusy, user.ErrIdempotencyConflict, user.ErrVersionConflict}},
 	}
 }

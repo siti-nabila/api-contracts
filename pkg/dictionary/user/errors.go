@@ -14,6 +14,7 @@ var (
 
 	ErrResourceBusy        = registry.MustNew("resource_busy")
 	ErrIdempotencyConflict = registry.MustNew("idempotency_conflict")
+	ErrVersionConflict     = registry.MustNew("version_conflict")
 )
 
 func Registry() dictionary.Registry {

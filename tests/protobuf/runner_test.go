@@ -9,3 +9,5 @@ import (
 func TestSessionContract(t *testing.T) {
 	testutils.Run(t, test_scenarios.All())
 }
+
+func TestLifecycleContract(t *testing.T) { testutils.Run(t, test_scenarios.Lifecycle()) }
