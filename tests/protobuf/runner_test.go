@@ -11,3 +11,5 @@ func TestSessionContract(t *testing.T) {
 }
 
 func TestLifecycleContract(t *testing.T) { testutils.Run(t, test_scenarios.Lifecycle()) }
+
+func TestUserManagementContract(t *testing.T) { testutils.Run(t, test_scenarios.UserManagement()) }

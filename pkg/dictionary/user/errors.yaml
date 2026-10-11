@@ -16,3 +16,21 @@ errors:
     http_status: 409
     en: Idempotency key was already used with a different request.
     id: Kunci idempotensi sudah digunakan untuk permintaan yang berbeda.
+
+  invalid_status_transition:
+    code: IST
+    http_status: 409
+    en: User status transition is not allowed.
+    id: Perubahan status pengguna tidak diizinkan.
+
+  self_inactivation_forbidden:
+    code: SIF
+    http_status: 403
+    en: You cannot suspend or deactivate your own account.
+    id: Anda tidak dapat menangguhkan atau menonaktifkan akun sendiri.
+
+  last_admin_required:
+    code: LAR
+    http_status: 409
+    en: At least one active platform administrator is required.
+    id: Minimal satu administrator platform aktif harus tersedia.

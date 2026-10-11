@@ -12,5 +12,9 @@ service UserService {
   rpc Login(AuthRequest) returns (UserTokenResponse);
   rpc Me(google.protobuf.Empty) returns (UserData);
   rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
+  rpc ChangeUserStatus(ChangeUserStatusRequest) returns (ChangeUserStatusResponse);
   rpc TesRPC(google.protobuf.Empty) returns (TestRPC);
 }

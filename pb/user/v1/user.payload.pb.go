@@ -11,6 +11,7 @@ import (
 	v1 "github.com/siti-nabila/api-contracts/pb/profile/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	fieldmaskpb "google.golang.org/protobuf/types/known/fieldmaskpb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
@@ -25,15 +26,22 @@ const (
 )
 
 type User struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Email         string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
-	Password      string                 `protobuf:"bytes,4,opt,name=password,proto3" json:"password,omitempty"`
-	Dob           string                 `protobuf:"bytes,5,opt,name=dob,proto3" json:"dob,omitempty"`
-	PhoneNo       string                 `protobuf:"bytes,6,opt,name=phone_no,json=phoneNo,proto3" json:"phone_no,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state              protoimpl.MessageState   `protogen:"open.v1"`
+	Id                 uint64                   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name               string                   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Email              string                   `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
+	Password           string                   `protobuf:"bytes,4,opt,name=password,proto3" json:"password,omitempty"` // Legacy only. Management responses MUST leave this empty.
+	Dob                string                   `protobuf:"bytes,5,opt,name=dob,proto3" json:"dob,omitempty"`
+	PhoneNo            string                   `protobuf:"bytes,6,opt,name=phone_no,json=phoneNo,proto3" json:"phone_no,omitempty"`
+	Address            string                   `protobuf:"bytes,7,opt,name=address,proto3" json:"address,omitempty"`
+	Status             string                   `protobuf:"bytes,8,opt,name=status,proto3" json:"status,omitempty"`
+	Version            uint64                   `protobuf:"varint,9,opt,name=version,proto3" json:"version,omitempty"`
+	CreatedAt          *timestamppb.Timestamp   `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	MustChangePassword bool                     `protobuf:"varint,11,opt,name=must_change_password,json=mustChangePassword,proto3" json:"must_change_password,omitempty"`
+	Roles              []*UserRoleAssignment    `protobuf:"bytes,12,rep,name=roles,proto3" json:"roles,omitempty"`
+	ApplicationAccess  []*UserApplicationAccess `protobuf:"bytes,13,rep,name=application_access,json=applicationAccess,proto3" json:"application_access,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *User) Reset() {
@@ -106,6 +114,55 @@ func (x *User) GetPhoneNo() string {
 		return x.PhoneNo
 	}
 	return ""
+}
+
+func (x *User) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
+}
+
+func (x *User) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *User) GetVersion() uint64 {
+	if x != nil {
+		return x.Version
+	}
+	return 0
+}
+
+func (x *User) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *User) GetMustChangePassword() bool {
+	if x != nil {
+		return x.MustChangePassword
+	}
+	return false
+}
+
+func (x *User) GetRoles() []*UserRoleAssignment {
+	if x != nil {
+		return x.Roles
+	}
+	return nil
+}
+
+func (x *User) GetApplicationAccess() []*UserApplicationAccess {
+	if x != nil {
+		return x.ApplicationAccess
+	}
+	return nil
 }
 
 type UserResponse struct {
@@ -673,7 +730,10 @@ type CreateUserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Email         string                 `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
-	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
+	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`   // Input only; never persist in replay results.
+	Status        *string                `protobuf:"bytes,4,opt,name=status,proto3,oneof" json:"status,omitempty"` // Explicit PENDING or ACTIVE required.
+	Address       string                 `protobuf:"bytes,5,opt,name=address,proto3" json:"address,omitempty"`
+	Phone         string                 `protobuf:"bytes,6,opt,name=phone,proto3" json:"phone,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -725,6 +785,27 @@ func (x *CreateUserRequest) GetEmail() string {
 func (x *CreateUserRequest) GetPassword() string {
 	if x != nil {
 		return x.Password
+	}
+	return ""
+}
+
+func (x *CreateUserRequest) GetStatus() string {
+	if x != nil && x.Status != nil {
+		return *x.Status
+	}
+	return ""
+}
+
+func (x *CreateUserRequest) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
+}
+
+func (x *CreateUserRequest) GetPhone() string {
+	if x != nil {
+		return x.Phone
 	}
 	return ""
 }
@@ -1249,18 +1330,301 @@ func (x *UserFilter) GetApplicationCode() string {
 	return ""
 }
 
+// Only name/address/phone are writable. Mask paths and presence must agree.
+// A selected empty address/phone clears it; selected empty name is invalid.
+type UpdateUserRequest struct {
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	UserId              uint64                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	ExpectedUserVersion *uint64                `protobuf:"varint,2,opt,name=expected_user_version,json=expectedUserVersion,proto3,oneof" json:"expected_user_version,omitempty"`
+	Name                *string                `protobuf:"bytes,3,opt,name=name,proto3,oneof" json:"name,omitempty"`
+	Address             *string                `protobuf:"bytes,4,opt,name=address,proto3,oneof" json:"address,omitempty"`
+	Phone               *string                `protobuf:"bytes,5,opt,name=phone,proto3,oneof" json:"phone,omitempty"`
+	FieldMask           *fieldmaskpb.FieldMask `protobuf:"bytes,6,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
+}
+
+func (x *UpdateUserRequest) Reset() {
+	*x = UpdateUserRequest{}
+	mi := &file_user_v1_user_payload_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateUserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateUserRequest) ProtoMessage() {}
+
+func (x *UpdateUserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_payload_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateUserRequest.ProtoReflect.Descriptor instead.
+func (*UpdateUserRequest) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_payload_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *UpdateUserRequest) GetUserId() uint64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *UpdateUserRequest) GetExpectedUserVersion() uint64 {
+	if x != nil && x.ExpectedUserVersion != nil {
+		return *x.ExpectedUserVersion
+	}
+	return 0
+}
+
+func (x *UpdateUserRequest) GetName() string {
+	if x != nil && x.Name != nil {
+		return *x.Name
+	}
+	return ""
+}
+
+func (x *UpdateUserRequest) GetAddress() string {
+	if x != nil && x.Address != nil {
+		return *x.Address
+	}
+	return ""
+}
+
+func (x *UpdateUserRequest) GetPhone() string {
+	if x != nil && x.Phone != nil {
+		return *x.Phone
+	}
+	return ""
+}
+
+func (x *UpdateUserRequest) GetFieldMask() *fieldmaskpb.FieldMask {
+	if x != nil {
+		return x.FieldMask
+	}
+	return nil
+}
+
+type UpdateUserResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	Changed       bool                   `protobuf:"varint,2,opt,name=changed,proto3" json:"changed,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateUserResponse) Reset() {
+	*x = UpdateUserResponse{}
+	mi := &file_user_v1_user_payload_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateUserResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateUserResponse) ProtoMessage() {}
+
+func (x *UpdateUserResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_payload_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateUserResponse.ProtoReflect.Descriptor instead.
+func (*UpdateUserResponse) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_payload_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *UpdateUserResponse) GetUser() *User {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
+func (x *UpdateUserResponse) GetChanged() bool {
+	if x != nil {
+		return x.Changed
+	}
+	return false
+}
+
+type ChangeUserStatusRequest struct {
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	UserId              uint64                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Status              *string                `protobuf:"bytes,2,opt,name=status,proto3,oneof" json:"status,omitempty"`
+	Reason              string                 `protobuf:"bytes,3,opt,name=reason,proto3" json:"reason,omitempty"`
+	ExpectedUserVersion *uint64                `protobuf:"varint,4,opt,name=expected_user_version,json=expectedUserVersion,proto3,oneof" json:"expected_user_version,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
+}
+
+func (x *ChangeUserStatusRequest) Reset() {
+	*x = ChangeUserStatusRequest{}
+	mi := &file_user_v1_user_payload_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChangeUserStatusRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChangeUserStatusRequest) ProtoMessage() {}
+
+func (x *ChangeUserStatusRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_payload_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChangeUserStatusRequest.ProtoReflect.Descriptor instead.
+func (*ChangeUserStatusRequest) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_payload_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *ChangeUserStatusRequest) GetUserId() uint64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *ChangeUserStatusRequest) GetStatus() string {
+	if x != nil && x.Status != nil {
+		return *x.Status
+	}
+	return ""
+}
+
+func (x *ChangeUserStatusRequest) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
+func (x *ChangeUserStatusRequest) GetExpectedUserVersion() uint64 {
+	if x != nil && x.ExpectedUserVersion != nil {
+		return *x.ExpectedUserVersion
+	}
+	return 0
+}
+
+type ChangeUserStatusResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        uint64                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Status        string                 `protobuf:"bytes,2,opt,name=status,proto3" json:"status,omitempty"`
+	Version       uint64                 `protobuf:"varint,3,opt,name=version,proto3" json:"version,omitempty"`
+	Changed       bool                   `protobuf:"varint,4,opt,name=changed,proto3" json:"changed,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChangeUserStatusResponse) Reset() {
+	*x = ChangeUserStatusResponse{}
+	mi := &file_user_v1_user_payload_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChangeUserStatusResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChangeUserStatusResponse) ProtoMessage() {}
+
+func (x *ChangeUserStatusResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_payload_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChangeUserStatusResponse.ProtoReflect.Descriptor instead.
+func (*ChangeUserStatusResponse) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_payload_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *ChangeUserStatusResponse) GetUserId() uint64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *ChangeUserStatusResponse) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *ChangeUserStatusResponse) GetVersion() uint64 {
+	if x != nil {
+		return x.Version
+	}
+	return 0
+}
+
+func (x *ChangeUserStatusResponse) GetChanged() bool {
+	if x != nil {
+		return x.Changed
+	}
+	return false
+}
+
 var File_user_v1_user_payload_proto protoreflect.FileDescriptor
 
 const file_user_v1_user_payload_proto_rawDesc = "" +
 	"\n" +
-	"\x1auser/v1/user.payload.proto\x12\auser.v1\x1a profile/v1/profile.payload.proto\x1a$paginator/v1/paginator.payload.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x89\x01\n" +
+	"\x1auser/v1/user.payload.proto\x12\auser.v1\x1a profile/v1/profile.payload.proto\x1a$paginator/v1/paginator.payload.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\"\xc4\x03\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
 	"\x05email\x18\x03 \x01(\tR\x05email\x12\x1a\n" +
 	"\bpassword\x18\x04 \x01(\tR\bpassword\x12\x10\n" +
 	"\x03dob\x18\x05 \x01(\tR\x03dob\x12\x19\n" +
-	"\bphone_no\x18\x06 \x01(\tR\aphoneNo\"o\n" +
+	"\bphone_no\x18\x06 \x01(\tR\aphoneNo\x12\x18\n" +
+	"\aaddress\x18\a \x01(\tR\aaddress\x12\x16\n" +
+	"\x06status\x18\b \x01(\tR\x06status\x12\x18\n" +
+	"\aversion\x18\t \x01(\x04R\aversion\x129\n" +
+	"\n" +
+	"created_at\x18\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x120\n" +
+	"\x14must_change_password\x18\v \x01(\bR\x12mustChangePassword\x121\n" +
+	"\x05roles\x18\f \x03(\v2\x1b.user.v1.UserRoleAssignmentR\x05roles\x12M\n" +
+	"\x12application_access\x18\r \x03(\v2\x1e.user.v1.UserApplicationAccessR\x11applicationAccess\"o\n" +
 	"\fUserResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x129\n" +
@@ -1312,11 +1676,15 @@ const file_user_v1_user_payload_proto_rawDesc = "" +
 	"session_id\x18\x05 \x01(\tR\tsessionId\x12F\n" +
 	"\x11access_expires_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\x0faccessExpiresAt\x12H\n" +
 	"\x12session_expires_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\x10sessionExpiresAt\x120\n" +
-	"\x14must_change_password\x18\b \x01(\bR\x12mustChangePassword\"Y\n" +
+	"\x14must_change_password\x18\b \x01(\bR\x12mustChangePassword\"\xb1\x01\n" +
 	"\x11CreateUserRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12\x1a\n" +
-	"\bpassword\x18\x03 \x01(\tR\bpassword\"7\n" +
+	"\bpassword\x18\x03 \x01(\tR\bpassword\x12\x1b\n" +
+	"\x06status\x18\x04 \x01(\tH\x00R\x06status\x88\x01\x01\x12\x18\n" +
+	"\aaddress\x18\x05 \x01(\tR\aaddress\x12\x14\n" +
+	"\x05phone\x18\x06 \x01(\tR\x05phoneB\t\n" +
+	"\a_status\"7\n" +
 	"\x12CreateUserResponse\x12!\n" +
 	"\x04user\x18\x01 \x01(\v2\r.user.v1.UserR\x04user\" \n" +
 	"\x0eGetUserRequest\x12\x0e\n" +
@@ -1360,7 +1728,35 @@ const file_user_v1_user_payload_proto_rawDesc = "" +
 	"\n" +
 	"role_codes\x18\x03 \x03(\x04R\troleCodes\x12\x1a\n" +
 	"\bstatuses\x18\x04 \x03(\tR\bstatuses\x12)\n" +
-	"\x10application_code\x18\x05 \x01(\tR\x0fapplicationCodeB8Z6github.com/siti-nabila/api-contracts/pb/user/v1;userv1b\x06proto3"
+	"\x10application_code\x18\x05 \x01(\tR\x0fapplicationCode\"\xac\x02\n" +
+	"\x11UpdateUserRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x04R\x06userId\x127\n" +
+	"\x15expected_user_version\x18\x02 \x01(\x04H\x00R\x13expectedUserVersion\x88\x01\x01\x12\x17\n" +
+	"\x04name\x18\x03 \x01(\tH\x01R\x04name\x88\x01\x01\x12\x1d\n" +
+	"\aaddress\x18\x04 \x01(\tH\x02R\aaddress\x88\x01\x01\x12\x19\n" +
+	"\x05phone\x18\x05 \x01(\tH\x03R\x05phone\x88\x01\x01\x129\n" +
+	"\n" +
+	"field_mask\x18\x06 \x01(\v2\x1a.google.protobuf.FieldMaskR\tfieldMaskB\x18\n" +
+	"\x16_expected_user_versionB\a\n" +
+	"\x05_nameB\n" +
+	"\n" +
+	"\b_addressB\b\n" +
+	"\x06_phone\"Q\n" +
+	"\x12UpdateUserResponse\x12!\n" +
+	"\x04user\x18\x01 \x01(\v2\r.user.v1.UserR\x04user\x12\x18\n" +
+	"\achanged\x18\x02 \x01(\bR\achanged\"\xc5\x01\n" +
+	"\x17ChangeUserStatusRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x04R\x06userId\x12\x1b\n" +
+	"\x06status\x18\x02 \x01(\tH\x00R\x06status\x88\x01\x01\x12\x16\n" +
+	"\x06reason\x18\x03 \x01(\tR\x06reason\x127\n" +
+	"\x15expected_user_version\x18\x04 \x01(\x04H\x01R\x13expectedUserVersion\x88\x01\x01B\t\n" +
+	"\a_statusB\x18\n" +
+	"\x16_expected_user_version\"\x7f\n" +
+	"\x18ChangeUserStatusResponse\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x04R\x06userId\x12\x16\n" +
+	"\x06status\x18\x02 \x01(\tR\x06status\x12\x18\n" +
+	"\aversion\x18\x03 \x01(\x04R\aversion\x12\x18\n" +
+	"\achanged\x18\x04 \x01(\bR\achangedB8Z6github.com/siti-nabila/api-contracts/pb/user/v1;userv1b\x06proto3"
 
 var (
 	file_user_v1_user_payload_proto_rawDescOnce sync.Once
@@ -1374,53 +1770,63 @@ func file_user_v1_user_payload_proto_rawDescGZIP() []byte {
 	return file_user_v1_user_payload_proto_rawDescData
 }
 
-var file_user_v1_user_payload_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_user_v1_user_payload_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
 var file_user_v1_user_payload_proto_goTypes = []any{
-	(*User)(nil),                  // 0: user.v1.User
-	(*UserResponse)(nil),          // 1: user.v1.UserResponse
-	(*UserData)(nil),              // 2: user.v1.UserData
-	(*UserRoleAssignment)(nil),    // 3: user.v1.UserRoleAssignment
-	(*UserApplicationAccess)(nil), // 4: user.v1.UserApplicationAccess
-	(*UserDataOld)(nil),           // 5: user.v1.UserDataOld
-	(*AuthRequest)(nil),           // 6: user.v1.AuthRequest
-	(*UserTokenResponse)(nil),     // 7: user.v1.UserTokenResponse
-	(*CreateUserRequest)(nil),     // 8: user.v1.CreateUserRequest
-	(*CreateUserResponse)(nil),    // 9: user.v1.CreateUserResponse
-	(*GetUserRequest)(nil),        // 10: user.v1.GetUserRequest
-	(*GetUserResponse)(nil),       // 11: user.v1.GetUserResponse
-	(*TestRPC)(nil),               // 12: user.v1.TestRPC
-	(*ListUsersRequest)(nil),      // 13: user.v1.ListUsersRequest
-	(*UserListItem)(nil),          // 14: user.v1.UserListItem
-	(*ListUsersResponse)(nil),     // 15: user.v1.ListUsersResponse
-	(*UserFilter)(nil),            // 16: user.v1.UserFilter
-	(*timestamppb.Timestamp)(nil), // 17: google.protobuf.Timestamp
-	(*v1.Profile)(nil),            // 18: profile.v1.Profile
-	(*v11.PageQuery)(nil),         // 19: paginator.v1.PageQuery
+	(*User)(nil),                     // 0: user.v1.User
+	(*UserResponse)(nil),             // 1: user.v1.UserResponse
+	(*UserData)(nil),                 // 2: user.v1.UserData
+	(*UserRoleAssignment)(nil),       // 3: user.v1.UserRoleAssignment
+	(*UserApplicationAccess)(nil),    // 4: user.v1.UserApplicationAccess
+	(*UserDataOld)(nil),              // 5: user.v1.UserDataOld
+	(*AuthRequest)(nil),              // 6: user.v1.AuthRequest
+	(*UserTokenResponse)(nil),        // 7: user.v1.UserTokenResponse
+	(*CreateUserRequest)(nil),        // 8: user.v1.CreateUserRequest
+	(*CreateUserResponse)(nil),       // 9: user.v1.CreateUserResponse
+	(*GetUserRequest)(nil),           // 10: user.v1.GetUserRequest
+	(*GetUserResponse)(nil),          // 11: user.v1.GetUserResponse
+	(*TestRPC)(nil),                  // 12: user.v1.TestRPC
+	(*ListUsersRequest)(nil),         // 13: user.v1.ListUsersRequest
+	(*UserListItem)(nil),             // 14: user.v1.UserListItem
+	(*ListUsersResponse)(nil),        // 15: user.v1.ListUsersResponse
+	(*UserFilter)(nil),               // 16: user.v1.UserFilter
+	(*UpdateUserRequest)(nil),        // 17: user.v1.UpdateUserRequest
+	(*UpdateUserResponse)(nil),       // 18: user.v1.UpdateUserResponse
+	(*ChangeUserStatusRequest)(nil),  // 19: user.v1.ChangeUserStatusRequest
+	(*ChangeUserStatusResponse)(nil), // 20: user.v1.ChangeUserStatusResponse
+	(*timestamppb.Timestamp)(nil),    // 21: google.protobuf.Timestamp
+	(*v1.Profile)(nil),               // 22: profile.v1.Profile
+	(*v11.PageQuery)(nil),            // 23: paginator.v1.PageQuery
+	(*fieldmaskpb.FieldMask)(nil),    // 24: google.protobuf.FieldMask
 }
 var file_user_v1_user_payload_proto_depIdxs = []int32{
-	17, // 0: user.v1.UserResponse.created_at:type_name -> google.protobuf.Timestamp
-	17, // 1: user.v1.UserData.created_at:type_name -> google.protobuf.Timestamp
-	3,  // 2: user.v1.UserData.roles:type_name -> user.v1.UserRoleAssignment
-	4,  // 3: user.v1.UserData.application_access:type_name -> user.v1.UserApplicationAccess
-	1,  // 4: user.v1.UserDataOld.user:type_name -> user.v1.UserResponse
-	18, // 5: user.v1.UserDataOld.profile:type_name -> profile.v1.Profile
-	17, // 6: user.v1.UserTokenResponse.access_expires_at:type_name -> google.protobuf.Timestamp
-	17, // 7: user.v1.UserTokenResponse.session_expires_at:type_name -> google.protobuf.Timestamp
-	0,  // 8: user.v1.CreateUserResponse.user:type_name -> user.v1.User
-	0,  // 9: user.v1.GetUserResponse.user:type_name -> user.v1.User
-	19, // 10: user.v1.ListUsersRequest.query:type_name -> paginator.v1.PageQuery
-	16, // 11: user.v1.ListUsersRequest.filter:type_name -> user.v1.UserFilter
-	3,  // 12: user.v1.UserListItem.roles:type_name -> user.v1.UserRoleAssignment
-	4,  // 13: user.v1.UserListItem.application_access:type_name -> user.v1.UserApplicationAccess
-	17, // 14: user.v1.UserListItem.created_at:type_name -> google.protobuf.Timestamp
-	14, // 15: user.v1.ListUsersResponse.items:type_name -> user.v1.UserListItem
-	17, // 16: user.v1.UserFilter.created_from:type_name -> google.protobuf.Timestamp
-	17, // 17: user.v1.UserFilter.created_to:type_name -> google.protobuf.Timestamp
-	18, // [18:18] is the sub-list for method output_type
-	18, // [18:18] is the sub-list for method input_type
-	18, // [18:18] is the sub-list for extension type_name
-	18, // [18:18] is the sub-list for extension extendee
-	0,  // [0:18] is the sub-list for field type_name
+	21, // 0: user.v1.User.created_at:type_name -> google.protobuf.Timestamp
+	3,  // 1: user.v1.User.roles:type_name -> user.v1.UserRoleAssignment
+	4,  // 2: user.v1.User.application_access:type_name -> user.v1.UserApplicationAccess
+	21, // 3: user.v1.UserResponse.created_at:type_name -> google.protobuf.Timestamp
+	21, // 4: user.v1.UserData.created_at:type_name -> google.protobuf.Timestamp
+	3,  // 5: user.v1.UserData.roles:type_name -> user.v1.UserRoleAssignment
+	4,  // 6: user.v1.UserData.application_access:type_name -> user.v1.UserApplicationAccess
+	1,  // 7: user.v1.UserDataOld.user:type_name -> user.v1.UserResponse
+	22, // 8: user.v1.UserDataOld.profile:type_name -> profile.v1.Profile
+	21, // 9: user.v1.UserTokenResponse.access_expires_at:type_name -> google.protobuf.Timestamp
+	21, // 10: user.v1.UserTokenResponse.session_expires_at:type_name -> google.protobuf.Timestamp
+	0,  // 11: user.v1.CreateUserResponse.user:type_name -> user.v1.User
+	0,  // 12: user.v1.GetUserResponse.user:type_name -> user.v1.User
+	23, // 13: user.v1.ListUsersRequest.query:type_name -> paginator.v1.PageQuery
+	16, // 14: user.v1.ListUsersRequest.filter:type_name -> user.v1.UserFilter
+	3,  // 15: user.v1.UserListItem.roles:type_name -> user.v1.UserRoleAssignment
+	4,  // 16: user.v1.UserListItem.application_access:type_name -> user.v1.UserApplicationAccess
+	21, // 17: user.v1.UserListItem.created_at:type_name -> google.protobuf.Timestamp
+	14, // 18: user.v1.ListUsersResponse.items:type_name -> user.v1.UserListItem
+	21, // 19: user.v1.UserFilter.created_from:type_name -> google.protobuf.Timestamp
+	21, // 20: user.v1.UserFilter.created_to:type_name -> google.protobuf.Timestamp
+	24, // 21: user.v1.UpdateUserRequest.field_mask:type_name -> google.protobuf.FieldMask
+	0,  // 22: user.v1.UpdateUserResponse.user:type_name -> user.v1.User
+	23, // [23:23] is the sub-list for method output_type
+	23, // [23:23] is the sub-list for method input_type
+	23, // [23:23] is the sub-list for extension type_name
+	23, // [23:23] is the sub-list for extension extendee
+	0,  // [0:23] is the sub-list for field type_name
 }
 
 func init() { file_user_v1_user_payload_proto_init() }
@@ -1428,13 +1834,16 @@ func file_user_v1_user_payload_proto_init() {
 	if File_user_v1_user_payload_proto != nil {
 		return
 	}
+	file_user_v1_user_payload_proto_msgTypes[8].OneofWrappers = []any{}
+	file_user_v1_user_payload_proto_msgTypes[17].OneofWrappers = []any{}
+	file_user_v1_user_payload_proto_msgTypes[19].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_v1_user_payload_proto_rawDesc), len(file_user_v1_user_payload_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   17,
+			NumMessages:   21,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

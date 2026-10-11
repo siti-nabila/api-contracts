@@ -28,6 +28,9 @@ func lifecycleErrors(t *testing.T) {
 		key, code, http, en, id string
 		grpc                    codes.Code
 	}{
+		{user.ErrInvalidStatusTransition, "user.invalid_status_transition", "IST", "409", "User status transition is not allowed.", "Perubahan status pengguna tidak diizinkan.", codes.FailedPrecondition},
+		{user.ErrSelfInactivationForbidden, "user.self_inactivation_forbidden", "SIF", "403", "You cannot suspend or deactivate your own account.", "Anda tidak dapat menangguhkan atau menonaktifkan akun sendiri.", codes.PermissionDenied},
+		{user.ErrLastAdminRequired, "user.last_admin_required", "LAR", "409", "At least one active platform administrator is required.", "Minimal satu administrator platform aktif harus tersedia.", codes.FailedPrecondition},
 		{auth.ErrRefreshTokenReused, "auth.refresh_token_reused", "RR", "401", "Refresh token was already used. Log in again.", "Token refresh sudah digunakan. Silakan login kembali.", codes.Unauthenticated},
 		{user.ErrVersionConflict, "user.version_conflict", "VC", "409", "User version has changed. Reload and retry.", "Versi pengguna telah berubah. Muat ulang dan coba kembali.", codes.Aborted},
 		{user.ErrIdempotencyConflict, "user.idempotency_conflict", "IC", "409", "Idempotency key was already used with a different request.", "Kunci idempotensi sudah digunakan untuk permintaan yang berbeda.", codes.Aborted},

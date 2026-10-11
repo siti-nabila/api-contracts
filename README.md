@@ -78,3 +78,5 @@ See [docs/session-lifecycle-contract.md](docs/session-lifecycle-contract.md) for
 the nine additive lifecycle RPCs, credential modes, errors and ListUsers sorting,
 filter/search/cursor semantics and additive created_at. These contracts require
 separate backend implementation and Phase6 deployment readiness.
+
+User management: [contract and compatibility](docs/user-management-contract.md).
