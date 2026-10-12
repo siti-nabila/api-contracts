@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package application.v1;
+
+option go_package = "github.com/siti-nabila/api-contracts/pb/application/v1;applicationv1";
+
+import "application/v1/application.payload.proto";
+
+// TLS, verified IAM/method-allowed service, ACTIVE unrestricted access/session
+// and exact current iam.permission.read. Read-only catalog; no implicit access.
+service ApplicationService {
+  rpc ListApplications(ListApplicationsRequest) returns (ListApplicationsResponse);
+}

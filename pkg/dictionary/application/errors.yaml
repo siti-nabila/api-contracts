@@ -1,0 +1,18 @@
+errors:
+  application_not_found:
+    code: ANF
+    http_status: 404
+    en: Application not found.
+    id: Aplikasi tidak ditemukan.
+
+  application_inactive:
+    code: AI
+    http_status: 409
+    en: Application is not active.
+    id: Aplikasi tidak aktif.
+
+  system_application_protected:
+    code: SAP
+    http_status: 409
+    en: System applications cannot contain custom roles.
+    id: Aplikasi sistem tidak dapat memiliki role kustom.

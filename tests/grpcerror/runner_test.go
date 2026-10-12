@@ -12,3 +12,5 @@ func TestGRPCError(t *testing.T) {
 }
 
 func TestLifecycleErrors(t *testing.T) { testutils.Run(t, test_scenarios.LifecycleErrors()) }
+
+func TestRoleErrors(t *testing.T) { testutils.Run(t, test_scenarios.RoleErrors()) }

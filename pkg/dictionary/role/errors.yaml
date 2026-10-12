@@ -1,0 +1,42 @@
+errors:
+  role_not_found:
+    code: RNF
+    http_status: 404
+    en: Role not found.
+    id: Role tidak ditemukan.
+
+  role_code_already_exists:
+    code: RCE
+    http_status: 409
+    en: Role code already exists.
+    id: Kode role sudah ada.
+
+  system_role_protected:
+    code: SRP
+    http_status: 409
+    en: System roles cannot be modified.
+    id: Role sistem tidak dapat diubah.
+
+  invalid_permission_set:
+    code: IPS
+    http_status: 400
+    en: Permissions must be registered in the role application.
+    id: Permission harus terdaftar pada aplikasi role.
+
+  version_conflict:
+    code: VC
+    http_status: 409
+    en: Role version has changed. Reload and retry.
+    id: Versi role telah berubah. Muat ulang dan coba kembali.
+
+  idempotency_conflict:
+    code: IC
+    http_status: 409
+    en: Idempotency key was already used with a different request.
+    id: Kunci idempotensi sudah digunakan untuk permintaan yang berbeda.
+
+  resource_busy:
+    code: RB
+    http_status: 409
+    en: Resource is busy. Retry the request.
+    id: Resource sedang digunakan. Ulangi permintaan.

@@ -9,6 +9,9 @@ Shared Protocol Buffer contracts and generated Go clients for Siti Nabila's gRPC
 - `pb/session/v1`: self/admin session management contract
 - `pb/profile/v1`: profile messages
 - `pb/paginator/v1`: pagination messages
+- `pb/role/v1`: role management and safe role metadata
+- `pb/permission/v1`: read-only permission catalog
+- `pb/application/v1`: read-only application catalog
 
 ## Generate
 
@@ -80,3 +83,5 @@ filter/search/cursor semantics and additive created_at. These contracts require
 separate backend implementation and Phase6 deployment readiness.
 
 User management: [contract and compatibility](docs/user-management-contract.md).
+
+Role management and catalogs: [contract B](docs/role-management-contract.md).

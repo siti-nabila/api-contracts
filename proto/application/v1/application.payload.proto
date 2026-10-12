@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package application.v1;
+
+option go_package = "github.com/siti-nabila/api-contracts/pb/application/v1;applicationv1";
+
+import "paginator/v1/paginator.payload.proto";
+
+message ApplicationItem {
+  uint64 id = 1;
+  string code = 2;
+  string name = 3;
+  string status = 4; // ACTIVE or DISABLED.
+  bool is_system = 5;
+}
+
+message ApplicationFilter {
+  repeated string statuses = 1; // OR; absent includes all statuses.
+}
+
+message ListApplicationsRequest {
+  paginator.v1.PageQuery query = 1;
+  ApplicationFilter filter = 2;
+}
+
+message ListApplicationsResponse {
+  repeated ApplicationItem items = 1;
+  paginator.v1.PageMeta meta = 2;
+  string next_cursor = 3;
+}
