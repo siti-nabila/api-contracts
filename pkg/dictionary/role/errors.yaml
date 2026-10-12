@@ -40,3 +40,9 @@ errors:
     http_status: 409
     en: Resource is busy. Retry the request.
     id: Resource sedang digunakan. Ulangi permintaan.
+
+  role_disabled:
+    code: RD
+    http_status: 409
+    en: Role is disabled.
+    id: Role dinonaktifkan.

@@ -9,6 +9,7 @@ var (
 	//go:embed errors.yaml
 	errorList                []byte
 	registry                 = dictionary.MustLoadYAML("role", errorList)
+	ErrRoleDisabled          = registry.MustNew("role_disabled")
 	ErrRoleNotFound          = registry.MustNew("role_not_found")
 	ErrRoleCodeAlreadyExists = registry.MustNew("role_code_already_exists")
 	ErrSystemRoleProtected   = registry.MustNew("system_role_protected")

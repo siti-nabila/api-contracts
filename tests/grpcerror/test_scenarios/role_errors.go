@@ -43,6 +43,10 @@ func roleErrors(t *testing.T) {
 		{application.ErrApplicationNotFound, codes.NotFound, "ANF", "404", "Application not found.", "Aplikasi tidak ditemukan."},
 		{application.ErrApplicationInactive, codes.FailedPrecondition, "AI", "409", "Application is not active.", "Aplikasi tidak aktif."},
 		{application.ErrSystemApplicationProtected, codes.FailedPrecondition, "SAP", "409", "System applications cannot contain custom roles.", "Aplikasi sistem tidak dapat memiliki role kustom."},
+		{user.ErrGrantTargetInactive, codes.FailedPrecondition, "GTI", "409", "Grant target must be an active user.", "Target pemberian role harus pengguna aktif."},
+		{user.ErrSelfAdminRoleRevokeForbidden, codes.PermissionDenied, "SARF", "403", "You cannot revoke your own platform administrator role.", "Anda tidak dapat mencabut role administrator platform sendiri."},
+		{role.ErrRoleDisabled, codes.FailedPrecondition, "RD", "409", "Role is disabled.", "Role dinonaktifkan."},
+		{application.ErrApplicationAccessRequired, codes.FailedPrecondition, "AAR", "409", "Active application access is required.", "Akses aplikasi aktif diperlukan."},
 	}
 	cause := errors.New("private database constraint detail")
 	for _, c := range cases {
@@ -57,7 +61,7 @@ func roleErrors(t *testing.T) {
 				if !ok || got.Code != c.code || got.Reason != c.err.Key() || got.Message != want || got.Metadata["code"] != c.appCode || got.Metadata["http_status"] != c.http {
 					t.Fatalf("locale %s: %#v", lang, got)
 				}
-				def, found := got.Definition(role.Registry(), application.Registry())
+				def, found := got.Definition(role.Registry(), application.Registry(), user.Registry())
 				if !found || def.Key() != c.err.Key() || def.Message(lang) != want {
 					t.Fatal("decoded catalog definition missing")
 				}

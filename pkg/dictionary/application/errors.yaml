@@ -16,3 +16,9 @@ errors:
     http_status: 409
     en: System applications cannot contain custom roles.
     id: Aplikasi sistem tidak dapat memiliki role kustom.
+
+  application_access_required:
+    code: AAR
+    http_status: 409
+    en: Active application access is required.
+    id: Akses aplikasi aktif diperlukan.

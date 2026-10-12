@@ -10,6 +10,7 @@ var (
 	errorList                     []byte
 	registry                      = dictionary.MustLoadYAML("application", errorList)
 	ErrApplicationNotFound        = registry.MustNew("application_not_found")
+	ErrApplicationAccessRequired  = registry.MustNew("application_access_required")
 	ErrApplicationInactive        = registry.MustNew("application_inactive")
 	ErrSystemApplicationProtected = registry.MustNew("system_application_protected")
 )

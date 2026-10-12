@@ -49,7 +49,7 @@ func roleBaseline(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if !proto.Equal(old, protodesc.ToFileDescriptorProto(current)) {
+		if !assignmentBaselineContains(old, protodesc.ToFileDescriptorProto(current)) {
 			t.Error("baseline descriptor changed", path)
 		}
 		for _, s := range old.GetService() {

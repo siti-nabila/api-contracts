@@ -34,3 +34,15 @@ errors:
     http_status: 409
     en: At least one active platform administrator is required.
     id: Minimal satu administrator platform aktif harus tersedia.
+
+  grant_target_inactive:
+    code: GTI
+    http_status: 409
+    en: Grant target must be an active user.
+    id: Target pemberian role harus pengguna aktif.
+
+  self_admin_role_revoke_forbidden:
+    code: SARF
+    http_status: 403
+    en: You cannot revoke your own platform administrator role.
+    id: Anda tidak dapat mencabut role administrator platform sendiri.

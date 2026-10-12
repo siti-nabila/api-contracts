@@ -15,3 +15,5 @@ func TestLifecycleContract(t *testing.T) { testutils.Run(t, test_scenarios.Lifec
 func TestUserManagementContract(t *testing.T) { testutils.Run(t, test_scenarios.UserManagement()) }
 
 func TestRoleManagementContract(t *testing.T) { testutils.Run(t, test_scenarios.RoleManagement()) }
+
+func TestAssignmentContract(t *testing.T) { testutils.Run(t, test_scenarios.Assignment()) }

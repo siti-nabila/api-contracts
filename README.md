@@ -85,3 +85,5 @@ separate backend implementation and Phase6 deployment readiness.
 User management: [contract and compatibility](docs/user-management-contract.md).
 
 Role management and catalogs: [contract B](docs/role-management-contract.md).
+
+User role assignment: [increment C](docs/user-role-assignment-contract.md).

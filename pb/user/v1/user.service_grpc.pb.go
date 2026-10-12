@@ -28,6 +28,9 @@ const (
 	UserService_CreateUser_FullMethodName       = "/user.v1.UserService/CreateUser"
 	UserService_UpdateUser_FullMethodName       = "/user.v1.UserService/UpdateUser"
 	UserService_ChangeUserStatus_FullMethodName = "/user.v1.UserService/ChangeUserStatus"
+	UserService_ListUserRoles_FullMethodName    = "/user.v1.UserService/ListUserRoles"
+	UserService_GrantUserRoles_FullMethodName   = "/user.v1.UserService/GrantUserRoles"
+	UserService_RevokeUserRoles_FullMethodName  = "/user.v1.UserService/RevokeUserRoles"
 	UserService_TesRPC_FullMethodName           = "/user.v1.UserService/TesRPC"
 )
 
@@ -43,6 +46,9 @@ type UserServiceClient interface {
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UpdateUserResponse, error)
 	ChangeUserStatus(ctx context.Context, in *ChangeUserStatusRequest, opts ...grpc.CallOption) (*ChangeUserStatusResponse, error)
+	ListUserRoles(ctx context.Context, in *ListUserRolesRequest, opts ...grpc.CallOption) (*ListUserRolesResponse, error)
+	GrantUserRoles(ctx context.Context, in *GrantUserRolesRequest, opts ...grpc.CallOption) (*GrantUserRolesResponse, error)
+	RevokeUserRoles(ctx context.Context, in *RevokeUserRolesRequest, opts ...grpc.CallOption) (*RevokeUserRolesResponse, error)
 	TesRPC(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*TestRPC, error)
 }
 
@@ -134,6 +140,36 @@ func (c *userServiceClient) ChangeUserStatus(ctx context.Context, in *ChangeUser
 	return out, nil
 }
 
+func (c *userServiceClient) ListUserRoles(ctx context.Context, in *ListUserRolesRequest, opts ...grpc.CallOption) (*ListUserRolesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListUserRolesResponse)
+	err := c.cc.Invoke(ctx, UserService_ListUserRoles_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) GrantUserRoles(ctx context.Context, in *GrantUserRolesRequest, opts ...grpc.CallOption) (*GrantUserRolesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GrantUserRolesResponse)
+	err := c.cc.Invoke(ctx, UserService_GrantUserRoles_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) RevokeUserRoles(ctx context.Context, in *RevokeUserRolesRequest, opts ...grpc.CallOption) (*RevokeUserRolesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RevokeUserRolesResponse)
+	err := c.cc.Invoke(ctx, UserService_RevokeUserRoles_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *userServiceClient) TesRPC(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*TestRPC, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(TestRPC)
@@ -156,6 +192,9 @@ type UserServiceServer interface {
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
 	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error)
 	ChangeUserStatus(context.Context, *ChangeUserStatusRequest) (*ChangeUserStatusResponse, error)
+	ListUserRoles(context.Context, *ListUserRolesRequest) (*ListUserRolesResponse, error)
+	GrantUserRoles(context.Context, *GrantUserRolesRequest) (*GrantUserRolesResponse, error)
+	RevokeUserRoles(context.Context, *RevokeUserRolesRequest) (*RevokeUserRolesResponse, error)
 	TesRPC(context.Context, *emptypb.Empty) (*TestRPC, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
@@ -190,6 +229,15 @@ func (UnimplementedUserServiceServer) UpdateUser(context.Context, *UpdateUserReq
 }
 func (UnimplementedUserServiceServer) ChangeUserStatus(context.Context, *ChangeUserStatusRequest) (*ChangeUserStatusResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ChangeUserStatus not implemented")
+}
+func (UnimplementedUserServiceServer) ListUserRoles(context.Context, *ListUserRolesRequest) (*ListUserRolesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListUserRoles not implemented")
+}
+func (UnimplementedUserServiceServer) GrantUserRoles(context.Context, *GrantUserRolesRequest) (*GrantUserRolesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GrantUserRoles not implemented")
+}
+func (UnimplementedUserServiceServer) RevokeUserRoles(context.Context, *RevokeUserRolesRequest) (*RevokeUserRolesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RevokeUserRoles not implemented")
 }
 func (UnimplementedUserServiceServer) TesRPC(context.Context, *emptypb.Empty) (*TestRPC, error) {
 	return nil, status.Error(codes.Unimplemented, "method TesRPC not implemented")
@@ -359,6 +407,60 @@ func _UserService_ChangeUserStatus_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_ListUserRoles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListUserRolesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).ListUserRoles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_ListUserRoles_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).ListUserRoles(ctx, req.(*ListUserRolesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_GrantUserRoles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GrantUserRolesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GrantUserRoles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_GrantUserRoles_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GrantUserRoles(ctx, req.(*GrantUserRolesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_RevokeUserRoles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RevokeUserRolesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).RevokeUserRoles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_RevokeUserRoles_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).RevokeUserRoles(ctx, req.(*RevokeUserRolesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _UserService_TesRPC_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
@@ -415,6 +517,18 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ChangeUserStatus",
 			Handler:    _UserService_ChangeUserStatus_Handler,
+		},
+		{
+			MethodName: "ListUserRoles",
+			Handler:    _UserService_ListUserRoles_Handler,
+		},
+		{
+			MethodName: "GrantUserRoles",
+			Handler:    _UserService_GrantUserRoles_Handler,
+		},
+		{
+			MethodName: "RevokeUserRoles",
+			Handler:    _UserService_RevokeUserRoles_Handler,
 		},
 		{
 			MethodName: "TesRPC",
