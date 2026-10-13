@@ -24,19 +24,29 @@ var File_application_v1_application_service_proto protoreflect.FileDescriptor
 
 const file_application_v1_application_service_proto_rawDesc = "" +
 	"\n" +
-	"(application/v1/application.service.proto\x12\x0eapplication.v1\x1a(application/v1/application.payload.proto2{\n" +
+	"(application/v1/application.service.proto\x12\x0eapplication.v1\x1a(application/v1/application.payload.proto2\xf0\x02\n" +
 	"\x12ApplicationService\x12e\n" +
-	"\x10ListApplications\x12'.application.v1.ListApplicationsRequest\x1a(.application.v1.ListApplicationsResponseBFZDgithub.com/siti-nabila/api-contracts/pb/application/v1;applicationv1b\x06proto3"
+	"\x10ListApplications\x12'.application.v1.ListApplicationsRequest\x1a(.application.v1.ListApplicationsResponse\x12w\n" +
+	"\x16GrantApplicationAccess\x12-.application.v1.GrantApplicationAccessRequest\x1a..application.v1.GrantApplicationAccessResponse\x12z\n" +
+	"\x17RevokeApplicationAccess\x12..application.v1.RevokeApplicationAccessRequest\x1a/.application.v1.RevokeApplicationAccessResponseBFZDgithub.com/siti-nabila/api-contracts/pb/application/v1;applicationv1b\x06proto3"
 
 var file_application_v1_application_service_proto_goTypes = []any{
-	(*ListApplicationsRequest)(nil),  // 0: application.v1.ListApplicationsRequest
-	(*ListApplicationsResponse)(nil), // 1: application.v1.ListApplicationsResponse
+	(*ListApplicationsRequest)(nil),         // 0: application.v1.ListApplicationsRequest
+	(*GrantApplicationAccessRequest)(nil),   // 1: application.v1.GrantApplicationAccessRequest
+	(*RevokeApplicationAccessRequest)(nil),  // 2: application.v1.RevokeApplicationAccessRequest
+	(*ListApplicationsResponse)(nil),        // 3: application.v1.ListApplicationsResponse
+	(*GrantApplicationAccessResponse)(nil),  // 4: application.v1.GrantApplicationAccessResponse
+	(*RevokeApplicationAccessResponse)(nil), // 5: application.v1.RevokeApplicationAccessResponse
 }
 var file_application_v1_application_service_proto_depIdxs = []int32{
 	0, // 0: application.v1.ApplicationService.ListApplications:input_type -> application.v1.ListApplicationsRequest
-	1, // 1: application.v1.ApplicationService.ListApplications:output_type -> application.v1.ListApplicationsResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	1, // 1: application.v1.ApplicationService.GrantApplicationAccess:input_type -> application.v1.GrantApplicationAccessRequest
+	2, // 2: application.v1.ApplicationService.RevokeApplicationAccess:input_type -> application.v1.RevokeApplicationAccessRequest
+	3, // 3: application.v1.ApplicationService.ListApplications:output_type -> application.v1.ListApplicationsResponse
+	4, // 4: application.v1.ApplicationService.GrantApplicationAccess:output_type -> application.v1.GrantApplicationAccessResponse
+	5, // 5: application.v1.ApplicationService.RevokeApplicationAccess:output_type -> application.v1.RevokeApplicationAccessResponse
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name

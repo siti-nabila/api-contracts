@@ -76,7 +76,7 @@ func roleMethods(t *testing.T) {
 	}
 	for _, c := range cases {
 		s := c.file.Services().ByName(protoreflect.Name(c.service))
-		if c.file.Services().Len() != 1 || s == nil || s.Methods().Len() != len(c.methods) {
+		if c.file.Services().Len() != 1 || s == nil || s.Methods().Len() != len(c.methods)+applicationAdditionalMethods(c.service) {
 			t.Fatal("service inventory", c.service)
 		}
 		for name, full := range c.methods {
@@ -124,7 +124,7 @@ func roleFields(t *testing.T) {
 		}},
 	}
 	for _, c := range cases {
-		if c.file.Messages().Len() != len(c.fields) {
+		if c.file.Messages().Len() != len(c.fields)+applicationAdditionalMessages(c.file.Path()) {
 			t.Fatal("new message inventory changed", c.file.Path())
 		}
 		for name, want := range c.fields {
@@ -239,7 +239,11 @@ func roleDocumentation(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	text := string(data)
+	accessDoc, err := os.ReadFile("../../docs/application-access-contract.md")
+	if err != nil {
+		t.Fatal(err)
+	}
+	text := string(data) + "\n" + string(accessDoc)
 	for _, s := range []protoreflect.ServiceDescriptor{
 		rolev1.File_role_v1_role_service_proto.Services().Get(0),
 		permissionv1.File_permission_v1_permission_service_proto.Services().Get(0),

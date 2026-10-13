@@ -249,3 +249,37 @@ message RevokeUserRolesResponse {
   uint64 version = 3;
   bool changed = 4;
 }
+
+// Stored access history, independent of effective permission.
+message UserApplicationAccessItem {
+  uint64 application_id = 1;
+  string application_code = 2;
+  string name = 3;
+  string application_status = 4;
+  bool is_system = 5;
+  string status = 6; // Access ACTIVE or REVOKED.
+  optional uint64 granted_by = 7;
+  google.protobuf.Timestamp granted_at = 8;
+  optional uint64 revoked_by = 9;
+  google.protobuf.Timestamp revoked_at = 10;
+  optional string revoke_reason = 11;
+}
+
+message UserApplicationAccessFilter {
+  string application_code = 1;
+  repeated string statuses = 2; // Access ACTIVE/REVOKED; absent includes both.
+}
+
+message ListUserApplicationAccessRequest {
+  uint64 user_id = 1;
+  paginator.v1.PageQuery query = 2;
+  UserApplicationAccessFilter filter = 3;
+}
+
+message ListUserApplicationAccessResponse {
+  uint64 user_id = 1;
+  uint64 version = 2;
+  repeated UserApplicationAccessItem items = 3;
+  paginator.v1.PageMeta meta = 4;
+  string next_cursor = 5;
+}

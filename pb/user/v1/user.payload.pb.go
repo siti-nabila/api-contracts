@@ -2238,6 +2238,319 @@ func (x *RevokeUserRolesResponse) GetChanged() bool {
 	return false
 }
 
+// Stored access history, independent of effective permission.
+type UserApplicationAccessItem struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	ApplicationId     uint64                 `protobuf:"varint,1,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
+	ApplicationCode   string                 `protobuf:"bytes,2,opt,name=application_code,json=applicationCode,proto3" json:"application_code,omitempty"`
+	Name              string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	ApplicationStatus string                 `protobuf:"bytes,4,opt,name=application_status,json=applicationStatus,proto3" json:"application_status,omitempty"`
+	IsSystem          bool                   `protobuf:"varint,5,opt,name=is_system,json=isSystem,proto3" json:"is_system,omitempty"`
+	Status            string                 `protobuf:"bytes,6,opt,name=status,proto3" json:"status,omitempty"` // Access ACTIVE or REVOKED.
+	GrantedBy         *uint64                `protobuf:"varint,7,opt,name=granted_by,json=grantedBy,proto3,oneof" json:"granted_by,omitempty"`
+	GrantedAt         *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=granted_at,json=grantedAt,proto3" json:"granted_at,omitempty"`
+	RevokedBy         *uint64                `protobuf:"varint,9,opt,name=revoked_by,json=revokedBy,proto3,oneof" json:"revoked_by,omitempty"`
+	RevokedAt         *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=revoked_at,json=revokedAt,proto3" json:"revoked_at,omitempty"`
+	RevokeReason      *string                `protobuf:"bytes,11,opt,name=revoke_reason,json=revokeReason,proto3,oneof" json:"revoke_reason,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *UserApplicationAccessItem) Reset() {
+	*x = UserApplicationAccessItem{}
+	mi := &file_user_v1_user_payload_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserApplicationAccessItem) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserApplicationAccessItem) ProtoMessage() {}
+
+func (x *UserApplicationAccessItem) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_payload_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserApplicationAccessItem.ProtoReflect.Descriptor instead.
+func (*UserApplicationAccessItem) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_payload_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *UserApplicationAccessItem) GetApplicationId() uint64 {
+	if x != nil {
+		return x.ApplicationId
+	}
+	return 0
+}
+
+func (x *UserApplicationAccessItem) GetApplicationCode() string {
+	if x != nil {
+		return x.ApplicationCode
+	}
+	return ""
+}
+
+func (x *UserApplicationAccessItem) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *UserApplicationAccessItem) GetApplicationStatus() string {
+	if x != nil {
+		return x.ApplicationStatus
+	}
+	return ""
+}
+
+func (x *UserApplicationAccessItem) GetIsSystem() bool {
+	if x != nil {
+		return x.IsSystem
+	}
+	return false
+}
+
+func (x *UserApplicationAccessItem) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *UserApplicationAccessItem) GetGrantedBy() uint64 {
+	if x != nil && x.GrantedBy != nil {
+		return *x.GrantedBy
+	}
+	return 0
+}
+
+func (x *UserApplicationAccessItem) GetGrantedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.GrantedAt
+	}
+	return nil
+}
+
+func (x *UserApplicationAccessItem) GetRevokedBy() uint64 {
+	if x != nil && x.RevokedBy != nil {
+		return *x.RevokedBy
+	}
+	return 0
+}
+
+func (x *UserApplicationAccessItem) GetRevokedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.RevokedAt
+	}
+	return nil
+}
+
+func (x *UserApplicationAccessItem) GetRevokeReason() string {
+	if x != nil && x.RevokeReason != nil {
+		return *x.RevokeReason
+	}
+	return ""
+}
+
+type UserApplicationAccessFilter struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	ApplicationCode string                 `protobuf:"bytes,1,opt,name=application_code,json=applicationCode,proto3" json:"application_code,omitempty"`
+	Statuses        []string               `protobuf:"bytes,2,rep,name=statuses,proto3" json:"statuses,omitempty"` // Access ACTIVE/REVOKED; absent includes both.
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *UserApplicationAccessFilter) Reset() {
+	*x = UserApplicationAccessFilter{}
+	mi := &file_user_v1_user_payload_proto_msgTypes[30]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserApplicationAccessFilter) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserApplicationAccessFilter) ProtoMessage() {}
+
+func (x *UserApplicationAccessFilter) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_payload_proto_msgTypes[30]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserApplicationAccessFilter.ProtoReflect.Descriptor instead.
+func (*UserApplicationAccessFilter) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_payload_proto_rawDescGZIP(), []int{30}
+}
+
+func (x *UserApplicationAccessFilter) GetApplicationCode() string {
+	if x != nil {
+		return x.ApplicationCode
+	}
+	return ""
+}
+
+func (x *UserApplicationAccessFilter) GetStatuses() []string {
+	if x != nil {
+		return x.Statuses
+	}
+	return nil
+}
+
+type ListUserApplicationAccessRequest struct {
+	state         protoimpl.MessageState       `protogen:"open.v1"`
+	UserId        uint64                       `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Query         *v11.PageQuery               `protobuf:"bytes,2,opt,name=query,proto3" json:"query,omitempty"`
+	Filter        *UserApplicationAccessFilter `protobuf:"bytes,3,opt,name=filter,proto3" json:"filter,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListUserApplicationAccessRequest) Reset() {
+	*x = ListUserApplicationAccessRequest{}
+	mi := &file_user_v1_user_payload_proto_msgTypes[31]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListUserApplicationAccessRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListUserApplicationAccessRequest) ProtoMessage() {}
+
+func (x *ListUserApplicationAccessRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_payload_proto_msgTypes[31]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListUserApplicationAccessRequest.ProtoReflect.Descriptor instead.
+func (*ListUserApplicationAccessRequest) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_payload_proto_rawDescGZIP(), []int{31}
+}
+
+func (x *ListUserApplicationAccessRequest) GetUserId() uint64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *ListUserApplicationAccessRequest) GetQuery() *v11.PageQuery {
+	if x != nil {
+		return x.Query
+	}
+	return nil
+}
+
+func (x *ListUserApplicationAccessRequest) GetFilter() *UserApplicationAccessFilter {
+	if x != nil {
+		return x.Filter
+	}
+	return nil
+}
+
+type ListUserApplicationAccessResponse struct {
+	state         protoimpl.MessageState       `protogen:"open.v1"`
+	UserId        uint64                       `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Version       uint64                       `protobuf:"varint,2,opt,name=version,proto3" json:"version,omitempty"`
+	Items         []*UserApplicationAccessItem `protobuf:"bytes,3,rep,name=items,proto3" json:"items,omitempty"`
+	Meta          *v11.PageMeta                `protobuf:"bytes,4,opt,name=meta,proto3" json:"meta,omitempty"`
+	NextCursor    string                       `protobuf:"bytes,5,opt,name=next_cursor,json=nextCursor,proto3" json:"next_cursor,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListUserApplicationAccessResponse) Reset() {
+	*x = ListUserApplicationAccessResponse{}
+	mi := &file_user_v1_user_payload_proto_msgTypes[32]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListUserApplicationAccessResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListUserApplicationAccessResponse) ProtoMessage() {}
+
+func (x *ListUserApplicationAccessResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_payload_proto_msgTypes[32]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListUserApplicationAccessResponse.ProtoReflect.Descriptor instead.
+func (*ListUserApplicationAccessResponse) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_payload_proto_rawDescGZIP(), []int{32}
+}
+
+func (x *ListUserApplicationAccessResponse) GetUserId() uint64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *ListUserApplicationAccessResponse) GetVersion() uint64 {
+	if x != nil {
+		return x.Version
+	}
+	return 0
+}
+
+func (x *ListUserApplicationAccessResponse) GetItems() []*UserApplicationAccessItem {
+	if x != nil {
+		return x.Items
+	}
+	return nil
+}
+
+func (x *ListUserApplicationAccessResponse) GetMeta() *v11.PageMeta {
+	if x != nil {
+		return x.Meta
+	}
+	return nil
+}
+
+func (x *ListUserApplicationAccessResponse) GetNextCursor() string {
+	if x != nil {
+		return x.NextCursor
+	}
+	return ""
+}
+
 var File_user_v1_user_payload_proto protoreflect.FileDescriptor
 
 const file_user_v1_user_payload_proto_rawDesc = "" +
@@ -2454,7 +2767,41 @@ const file_user_v1_user_payload_proto_rawDesc = "" +
 	"\auser_id\x18\x01 \x01(\x04R\x06userId\x12(\n" +
 	"\x10changed_role_ids\x18\x02 \x03(\x04R\x0echangedRoleIds\x12\x18\n" +
 	"\aversion\x18\x03 \x01(\x04R\aversion\x12\x18\n" +
-	"\achanged\x18\x04 \x01(\bR\achangedB8Z6github.com/siti-nabila/api-contracts/pb/user/v1;userv1b\x06proto3"
+	"\achanged\x18\x04 \x01(\bR\achanged\"\xfd\x03\n" +
+	"\x19UserApplicationAccessItem\x12%\n" +
+	"\x0eapplication_id\x18\x01 \x01(\x04R\rapplicationId\x12)\n" +
+	"\x10application_code\x18\x02 \x01(\tR\x0fapplicationCode\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12-\n" +
+	"\x12application_status\x18\x04 \x01(\tR\x11applicationStatus\x12\x1b\n" +
+	"\tis_system\x18\x05 \x01(\bR\bisSystem\x12\x16\n" +
+	"\x06status\x18\x06 \x01(\tR\x06status\x12\"\n" +
+	"\n" +
+	"granted_by\x18\a \x01(\x04H\x00R\tgrantedBy\x88\x01\x01\x129\n" +
+	"\n" +
+	"granted_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tgrantedAt\x12\"\n" +
+	"\n" +
+	"revoked_by\x18\t \x01(\x04H\x01R\trevokedBy\x88\x01\x01\x129\n" +
+	"\n" +
+	"revoked_at\x18\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\trevokedAt\x12(\n" +
+	"\rrevoke_reason\x18\v \x01(\tH\x02R\frevokeReason\x88\x01\x01B\r\n" +
+	"\v_granted_byB\r\n" +
+	"\v_revoked_byB\x10\n" +
+	"\x0e_revoke_reason\"d\n" +
+	"\x1bUserApplicationAccessFilter\x12)\n" +
+	"\x10application_code\x18\x01 \x01(\tR\x0fapplicationCode\x12\x1a\n" +
+	"\bstatuses\x18\x02 \x03(\tR\bstatuses\"\xa8\x01\n" +
+	" ListUserApplicationAccessRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x04R\x06userId\x12-\n" +
+	"\x05query\x18\x02 \x01(\v2\x17.paginator.v1.PageQueryR\x05query\x12<\n" +
+	"\x06filter\x18\x03 \x01(\v2$.user.v1.UserApplicationAccessFilterR\x06filter\"\xdd\x01\n" +
+	"!ListUserApplicationAccessResponse\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x04R\x06userId\x12\x18\n" +
+	"\aversion\x18\x02 \x01(\x04R\aversion\x128\n" +
+	"\x05items\x18\x03 \x03(\v2\".user.v1.UserApplicationAccessItemR\x05items\x12*\n" +
+	"\x04meta\x18\x04 \x01(\v2\x16.paginator.v1.PageMetaR\x04meta\x12\x1f\n" +
+	"\vnext_cursor\x18\x05 \x01(\tR\n" +
+	"nextCursorB8Z6github.com/siti-nabila/api-contracts/pb/user/v1;userv1b\x06proto3"
 
 var (
 	file_user_v1_user_payload_proto_rawDescOnce sync.Once
@@ -2468,78 +2815,88 @@ func file_user_v1_user_payload_proto_rawDescGZIP() []byte {
 	return file_user_v1_user_payload_proto_rawDescData
 }
 
-var file_user_v1_user_payload_proto_msgTypes = make([]protoimpl.MessageInfo, 29)
+var file_user_v1_user_payload_proto_msgTypes = make([]protoimpl.MessageInfo, 33)
 var file_user_v1_user_payload_proto_goTypes = []any{
-	(*User)(nil),                     // 0: user.v1.User
-	(*UserResponse)(nil),             // 1: user.v1.UserResponse
-	(*UserData)(nil),                 // 2: user.v1.UserData
-	(*UserRoleAssignment)(nil),       // 3: user.v1.UserRoleAssignment
-	(*UserApplicationAccess)(nil),    // 4: user.v1.UserApplicationAccess
-	(*UserDataOld)(nil),              // 5: user.v1.UserDataOld
-	(*AuthRequest)(nil),              // 6: user.v1.AuthRequest
-	(*UserTokenResponse)(nil),        // 7: user.v1.UserTokenResponse
-	(*CreateUserRequest)(nil),        // 8: user.v1.CreateUserRequest
-	(*CreateUserResponse)(nil),       // 9: user.v1.CreateUserResponse
-	(*GetUserRequest)(nil),           // 10: user.v1.GetUserRequest
-	(*GetUserResponse)(nil),          // 11: user.v1.GetUserResponse
-	(*TestRPC)(nil),                  // 12: user.v1.TestRPC
-	(*ListUsersRequest)(nil),         // 13: user.v1.ListUsersRequest
-	(*UserListItem)(nil),             // 14: user.v1.UserListItem
-	(*ListUsersResponse)(nil),        // 15: user.v1.ListUsersResponse
-	(*UserFilter)(nil),               // 16: user.v1.UserFilter
-	(*UpdateUserRequest)(nil),        // 17: user.v1.UpdateUserRequest
-	(*UpdateUserResponse)(nil),       // 18: user.v1.UpdateUserResponse
-	(*ChangeUserStatusRequest)(nil),  // 19: user.v1.ChangeUserStatusRequest
-	(*ChangeUserStatusResponse)(nil), // 20: user.v1.ChangeUserStatusResponse
-	(*UserRoleAssignmentItem)(nil),   // 21: user.v1.UserRoleAssignmentItem
-	(*UserRoleAssignmentFilter)(nil), // 22: user.v1.UserRoleAssignmentFilter
-	(*ListUserRolesRequest)(nil),     // 23: user.v1.ListUserRolesRequest
-	(*ListUserRolesResponse)(nil),    // 24: user.v1.ListUserRolesResponse
-	(*GrantUserRolesRequest)(nil),    // 25: user.v1.GrantUserRolesRequest
-	(*GrantUserRolesResponse)(nil),   // 26: user.v1.GrantUserRolesResponse
-	(*RevokeUserRolesRequest)(nil),   // 27: user.v1.RevokeUserRolesRequest
-	(*RevokeUserRolesResponse)(nil),  // 28: user.v1.RevokeUserRolesResponse
-	(*timestamppb.Timestamp)(nil),    // 29: google.protobuf.Timestamp
-	(*v1.Profile)(nil),               // 30: profile.v1.Profile
-	(*v11.PageQuery)(nil),            // 31: paginator.v1.PageQuery
-	(*fieldmaskpb.FieldMask)(nil),    // 32: google.protobuf.FieldMask
-	(*v11.PageMeta)(nil),             // 33: paginator.v1.PageMeta
+	(*User)(nil),                              // 0: user.v1.User
+	(*UserResponse)(nil),                      // 1: user.v1.UserResponse
+	(*UserData)(nil),                          // 2: user.v1.UserData
+	(*UserRoleAssignment)(nil),                // 3: user.v1.UserRoleAssignment
+	(*UserApplicationAccess)(nil),             // 4: user.v1.UserApplicationAccess
+	(*UserDataOld)(nil),                       // 5: user.v1.UserDataOld
+	(*AuthRequest)(nil),                       // 6: user.v1.AuthRequest
+	(*UserTokenResponse)(nil),                 // 7: user.v1.UserTokenResponse
+	(*CreateUserRequest)(nil),                 // 8: user.v1.CreateUserRequest
+	(*CreateUserResponse)(nil),                // 9: user.v1.CreateUserResponse
+	(*GetUserRequest)(nil),                    // 10: user.v1.GetUserRequest
+	(*GetUserResponse)(nil),                   // 11: user.v1.GetUserResponse
+	(*TestRPC)(nil),                           // 12: user.v1.TestRPC
+	(*ListUsersRequest)(nil),                  // 13: user.v1.ListUsersRequest
+	(*UserListItem)(nil),                      // 14: user.v1.UserListItem
+	(*ListUsersResponse)(nil),                 // 15: user.v1.ListUsersResponse
+	(*UserFilter)(nil),                        // 16: user.v1.UserFilter
+	(*UpdateUserRequest)(nil),                 // 17: user.v1.UpdateUserRequest
+	(*UpdateUserResponse)(nil),                // 18: user.v1.UpdateUserResponse
+	(*ChangeUserStatusRequest)(nil),           // 19: user.v1.ChangeUserStatusRequest
+	(*ChangeUserStatusResponse)(nil),          // 20: user.v1.ChangeUserStatusResponse
+	(*UserRoleAssignmentItem)(nil),            // 21: user.v1.UserRoleAssignmentItem
+	(*UserRoleAssignmentFilter)(nil),          // 22: user.v1.UserRoleAssignmentFilter
+	(*ListUserRolesRequest)(nil),              // 23: user.v1.ListUserRolesRequest
+	(*ListUserRolesResponse)(nil),             // 24: user.v1.ListUserRolesResponse
+	(*GrantUserRolesRequest)(nil),             // 25: user.v1.GrantUserRolesRequest
+	(*GrantUserRolesResponse)(nil),            // 26: user.v1.GrantUserRolesResponse
+	(*RevokeUserRolesRequest)(nil),            // 27: user.v1.RevokeUserRolesRequest
+	(*RevokeUserRolesResponse)(nil),           // 28: user.v1.RevokeUserRolesResponse
+	(*UserApplicationAccessItem)(nil),         // 29: user.v1.UserApplicationAccessItem
+	(*UserApplicationAccessFilter)(nil),       // 30: user.v1.UserApplicationAccessFilter
+	(*ListUserApplicationAccessRequest)(nil),  // 31: user.v1.ListUserApplicationAccessRequest
+	(*ListUserApplicationAccessResponse)(nil), // 32: user.v1.ListUserApplicationAccessResponse
+	(*timestamppb.Timestamp)(nil),             // 33: google.protobuf.Timestamp
+	(*v1.Profile)(nil),                        // 34: profile.v1.Profile
+	(*v11.PageQuery)(nil),                     // 35: paginator.v1.PageQuery
+	(*fieldmaskpb.FieldMask)(nil),             // 36: google.protobuf.FieldMask
+	(*v11.PageMeta)(nil),                      // 37: paginator.v1.PageMeta
 }
 var file_user_v1_user_payload_proto_depIdxs = []int32{
-	29, // 0: user.v1.User.created_at:type_name -> google.protobuf.Timestamp
+	33, // 0: user.v1.User.created_at:type_name -> google.protobuf.Timestamp
 	3,  // 1: user.v1.User.roles:type_name -> user.v1.UserRoleAssignment
 	4,  // 2: user.v1.User.application_access:type_name -> user.v1.UserApplicationAccess
-	29, // 3: user.v1.UserResponse.created_at:type_name -> google.protobuf.Timestamp
-	29, // 4: user.v1.UserData.created_at:type_name -> google.protobuf.Timestamp
+	33, // 3: user.v1.UserResponse.created_at:type_name -> google.protobuf.Timestamp
+	33, // 4: user.v1.UserData.created_at:type_name -> google.protobuf.Timestamp
 	3,  // 5: user.v1.UserData.roles:type_name -> user.v1.UserRoleAssignment
 	4,  // 6: user.v1.UserData.application_access:type_name -> user.v1.UserApplicationAccess
 	1,  // 7: user.v1.UserDataOld.user:type_name -> user.v1.UserResponse
-	30, // 8: user.v1.UserDataOld.profile:type_name -> profile.v1.Profile
-	29, // 9: user.v1.UserTokenResponse.access_expires_at:type_name -> google.protobuf.Timestamp
-	29, // 10: user.v1.UserTokenResponse.session_expires_at:type_name -> google.protobuf.Timestamp
+	34, // 8: user.v1.UserDataOld.profile:type_name -> profile.v1.Profile
+	33, // 9: user.v1.UserTokenResponse.access_expires_at:type_name -> google.protobuf.Timestamp
+	33, // 10: user.v1.UserTokenResponse.session_expires_at:type_name -> google.protobuf.Timestamp
 	0,  // 11: user.v1.CreateUserResponse.user:type_name -> user.v1.User
 	0,  // 12: user.v1.GetUserResponse.user:type_name -> user.v1.User
-	31, // 13: user.v1.ListUsersRequest.query:type_name -> paginator.v1.PageQuery
+	35, // 13: user.v1.ListUsersRequest.query:type_name -> paginator.v1.PageQuery
 	16, // 14: user.v1.ListUsersRequest.filter:type_name -> user.v1.UserFilter
 	3,  // 15: user.v1.UserListItem.roles:type_name -> user.v1.UserRoleAssignment
 	4,  // 16: user.v1.UserListItem.application_access:type_name -> user.v1.UserApplicationAccess
-	29, // 17: user.v1.UserListItem.created_at:type_name -> google.protobuf.Timestamp
+	33, // 17: user.v1.UserListItem.created_at:type_name -> google.protobuf.Timestamp
 	14, // 18: user.v1.ListUsersResponse.items:type_name -> user.v1.UserListItem
-	29, // 19: user.v1.UserFilter.created_from:type_name -> google.protobuf.Timestamp
-	29, // 20: user.v1.UserFilter.created_to:type_name -> google.protobuf.Timestamp
-	32, // 21: user.v1.UpdateUserRequest.field_mask:type_name -> google.protobuf.FieldMask
+	33, // 19: user.v1.UserFilter.created_from:type_name -> google.protobuf.Timestamp
+	33, // 20: user.v1.UserFilter.created_to:type_name -> google.protobuf.Timestamp
+	36, // 21: user.v1.UpdateUserRequest.field_mask:type_name -> google.protobuf.FieldMask
 	0,  // 22: user.v1.UpdateUserResponse.user:type_name -> user.v1.User
-	29, // 23: user.v1.UserRoleAssignmentItem.granted_at:type_name -> google.protobuf.Timestamp
-	29, // 24: user.v1.UserRoleAssignmentItem.revoked_at:type_name -> google.protobuf.Timestamp
-	31, // 25: user.v1.ListUserRolesRequest.query:type_name -> paginator.v1.PageQuery
+	33, // 23: user.v1.UserRoleAssignmentItem.granted_at:type_name -> google.protobuf.Timestamp
+	33, // 24: user.v1.UserRoleAssignmentItem.revoked_at:type_name -> google.protobuf.Timestamp
+	35, // 25: user.v1.ListUserRolesRequest.query:type_name -> paginator.v1.PageQuery
 	22, // 26: user.v1.ListUserRolesRequest.filter:type_name -> user.v1.UserRoleAssignmentFilter
 	21, // 27: user.v1.ListUserRolesResponse.items:type_name -> user.v1.UserRoleAssignmentItem
-	33, // 28: user.v1.ListUserRolesResponse.meta:type_name -> paginator.v1.PageMeta
-	29, // [29:29] is the sub-list for method output_type
-	29, // [29:29] is the sub-list for method input_type
-	29, // [29:29] is the sub-list for extension type_name
-	29, // [29:29] is the sub-list for extension extendee
-	0,  // [0:29] is the sub-list for field type_name
+	37, // 28: user.v1.ListUserRolesResponse.meta:type_name -> paginator.v1.PageMeta
+	33, // 29: user.v1.UserApplicationAccessItem.granted_at:type_name -> google.protobuf.Timestamp
+	33, // 30: user.v1.UserApplicationAccessItem.revoked_at:type_name -> google.protobuf.Timestamp
+	35, // 31: user.v1.ListUserApplicationAccessRequest.query:type_name -> paginator.v1.PageQuery
+	30, // 32: user.v1.ListUserApplicationAccessRequest.filter:type_name -> user.v1.UserApplicationAccessFilter
+	29, // 33: user.v1.ListUserApplicationAccessResponse.items:type_name -> user.v1.UserApplicationAccessItem
+	37, // 34: user.v1.ListUserApplicationAccessResponse.meta:type_name -> paginator.v1.PageMeta
+	35, // [35:35] is the sub-list for method output_type
+	35, // [35:35] is the sub-list for method input_type
+	35, // [35:35] is the sub-list for extension type_name
+	35, // [35:35] is the sub-list for extension extendee
+	0,  // [0:35] is the sub-list for field type_name
 }
 
 func init() { file_user_v1_user_payload_proto_init() }
@@ -2553,13 +2910,14 @@ func file_user_v1_user_payload_proto_init() {
 	file_user_v1_user_payload_proto_msgTypes[21].OneofWrappers = []any{}
 	file_user_v1_user_payload_proto_msgTypes[25].OneofWrappers = []any{}
 	file_user_v1_user_payload_proto_msgTypes[27].OneofWrappers = []any{}
+	file_user_v1_user_payload_proto_msgTypes[29].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_v1_user_payload_proto_rawDesc), len(file_user_v1_user_payload_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   29,
+			NumMessages:   33,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

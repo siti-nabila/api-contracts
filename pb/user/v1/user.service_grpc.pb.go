@@ -20,18 +20,19 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserService_Register_FullMethodName         = "/user.v1.UserService/Register"
-	UserService_Login_FullMethodName            = "/user.v1.UserService/Login"
-	UserService_Me_FullMethodName               = "/user.v1.UserService/Me"
-	UserService_ListUsers_FullMethodName        = "/user.v1.UserService/ListUsers"
-	UserService_GetUser_FullMethodName          = "/user.v1.UserService/GetUser"
-	UserService_CreateUser_FullMethodName       = "/user.v1.UserService/CreateUser"
-	UserService_UpdateUser_FullMethodName       = "/user.v1.UserService/UpdateUser"
-	UserService_ChangeUserStatus_FullMethodName = "/user.v1.UserService/ChangeUserStatus"
-	UserService_ListUserRoles_FullMethodName    = "/user.v1.UserService/ListUserRoles"
-	UserService_GrantUserRoles_FullMethodName   = "/user.v1.UserService/GrantUserRoles"
-	UserService_RevokeUserRoles_FullMethodName  = "/user.v1.UserService/RevokeUserRoles"
-	UserService_TesRPC_FullMethodName           = "/user.v1.UserService/TesRPC"
+	UserService_Register_FullMethodName                  = "/user.v1.UserService/Register"
+	UserService_Login_FullMethodName                     = "/user.v1.UserService/Login"
+	UserService_Me_FullMethodName                        = "/user.v1.UserService/Me"
+	UserService_ListUsers_FullMethodName                 = "/user.v1.UserService/ListUsers"
+	UserService_GetUser_FullMethodName                   = "/user.v1.UserService/GetUser"
+	UserService_CreateUser_FullMethodName                = "/user.v1.UserService/CreateUser"
+	UserService_UpdateUser_FullMethodName                = "/user.v1.UserService/UpdateUser"
+	UserService_ChangeUserStatus_FullMethodName          = "/user.v1.UserService/ChangeUserStatus"
+	UserService_ListUserRoles_FullMethodName             = "/user.v1.UserService/ListUserRoles"
+	UserService_GrantUserRoles_FullMethodName            = "/user.v1.UserService/GrantUserRoles"
+	UserService_RevokeUserRoles_FullMethodName           = "/user.v1.UserService/RevokeUserRoles"
+	UserService_ListUserApplicationAccess_FullMethodName = "/user.v1.UserService/ListUserApplicationAccess"
+	UserService_TesRPC_FullMethodName                    = "/user.v1.UserService/TesRPC"
 )
 
 // UserServiceClient is the client API for UserService service.
@@ -49,6 +50,8 @@ type UserServiceClient interface {
 	ListUserRoles(ctx context.Context, in *ListUserRolesRequest, opts ...grpc.CallOption) (*ListUserRolesResponse, error)
 	GrantUserRoles(ctx context.Context, in *GrantUserRolesRequest, opts ...grpc.CallOption) (*GrantUserRolesResponse, error)
 	RevokeUserRoles(ctx context.Context, in *RevokeUserRolesRequest, opts ...grpc.CallOption) (*RevokeUserRolesResponse, error)
+	// TLS, IAM service namespace and exact current iam.user.read.
+	ListUserApplicationAccess(ctx context.Context, in *ListUserApplicationAccessRequest, opts ...grpc.CallOption) (*ListUserApplicationAccessResponse, error)
 	TesRPC(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*TestRPC, error)
 }
 
@@ -170,6 +173,16 @@ func (c *userServiceClient) RevokeUserRoles(ctx context.Context, in *RevokeUserR
 	return out, nil
 }
 
+func (c *userServiceClient) ListUserApplicationAccess(ctx context.Context, in *ListUserApplicationAccessRequest, opts ...grpc.CallOption) (*ListUserApplicationAccessResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListUserApplicationAccessResponse)
+	err := c.cc.Invoke(ctx, UserService_ListUserApplicationAccess_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *userServiceClient) TesRPC(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*TestRPC, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(TestRPC)
@@ -195,6 +208,8 @@ type UserServiceServer interface {
 	ListUserRoles(context.Context, *ListUserRolesRequest) (*ListUserRolesResponse, error)
 	GrantUserRoles(context.Context, *GrantUserRolesRequest) (*GrantUserRolesResponse, error)
 	RevokeUserRoles(context.Context, *RevokeUserRolesRequest) (*RevokeUserRolesResponse, error)
+	// TLS, IAM service namespace and exact current iam.user.read.
+	ListUserApplicationAccess(context.Context, *ListUserApplicationAccessRequest) (*ListUserApplicationAccessResponse, error)
 	TesRPC(context.Context, *emptypb.Empty) (*TestRPC, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
@@ -238,6 +253,9 @@ func (UnimplementedUserServiceServer) GrantUserRoles(context.Context, *GrantUser
 }
 func (UnimplementedUserServiceServer) RevokeUserRoles(context.Context, *RevokeUserRolesRequest) (*RevokeUserRolesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method RevokeUserRoles not implemented")
+}
+func (UnimplementedUserServiceServer) ListUserApplicationAccess(context.Context, *ListUserApplicationAccessRequest) (*ListUserApplicationAccessResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListUserApplicationAccess not implemented")
 }
 func (UnimplementedUserServiceServer) TesRPC(context.Context, *emptypb.Empty) (*TestRPC, error) {
 	return nil, status.Error(codes.Unimplemented, "method TesRPC not implemented")
@@ -461,6 +479,24 @@ func _UserService_RevokeUserRoles_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_ListUserApplicationAccess_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListUserApplicationAccessRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).ListUserApplicationAccess(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_ListUserApplicationAccess_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).ListUserApplicationAccess(ctx, req.(*ListUserApplicationAccessRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _UserService_TesRPC_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
@@ -529,6 +565,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RevokeUserRoles",
 			Handler:    _UserService_RevokeUserRoles_Handler,
+		},
+		{
+			MethodName: "ListUserApplicationAccess",
+			Handler:    _UserService_ListUserApplicationAccess_Handler,
 		},
 		{
 			MethodName: "TesRPC",

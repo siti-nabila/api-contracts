@@ -19,5 +19,7 @@ service UserService {
   rpc ListUserRoles(ListUserRolesRequest) returns (ListUserRolesResponse);
   rpc GrantUserRoles(GrantUserRolesRequest) returns (GrantUserRolesResponse);
   rpc RevokeUserRoles(RevokeUserRolesRequest) returns (RevokeUserRolesResponse);
+  // TLS, IAM service namespace and exact current iam.user.read.
+  rpc ListUserApplicationAccess(ListUserApplicationAccessRequest) returns (ListUserApplicationAccessResponse);
   rpc TesRPC(google.protobuf.Empty) returns (TestRPC);
 }

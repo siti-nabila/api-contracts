@@ -254,6 +254,319 @@ func (x *ListApplicationsResponse) GetNextCursor() string {
 	return ""
 }
 
+// Both mutations require idempotency-key metadata and current AND permissions.
+type GrantApplicationAccessRequest struct {
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	UserId              uint64                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	ApplicationCode     string                 `protobuf:"bytes,2,opt,name=application_code,json=applicationCode,proto3" json:"application_code,omitempty"`
+	RoleIds             []uint64               `protobuf:"varint,3,rep,packed,name=role_ids,json=roleIds,proto3" json:"role_ids,omitempty"` // 1-20 submitted entries; additive selected set.
+	Reason              string                 `protobuf:"bytes,4,opt,name=reason,proto3" json:"reason,omitempty"`
+	ExpectedUserVersion *uint64                `protobuf:"varint,5,opt,name=expected_user_version,json=expectedUserVersion,proto3,oneof" json:"expected_user_version,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
+}
+
+func (x *GrantApplicationAccessRequest) Reset() {
+	*x = GrantApplicationAccessRequest{}
+	mi := &file_application_v1_application_payload_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GrantApplicationAccessRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GrantApplicationAccessRequest) ProtoMessage() {}
+
+func (x *GrantApplicationAccessRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_application_v1_application_payload_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GrantApplicationAccessRequest.ProtoReflect.Descriptor instead.
+func (*GrantApplicationAccessRequest) Descriptor() ([]byte, []int) {
+	return file_application_v1_application_payload_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *GrantApplicationAccessRequest) GetUserId() uint64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *GrantApplicationAccessRequest) GetApplicationCode() string {
+	if x != nil {
+		return x.ApplicationCode
+	}
+	return ""
+}
+
+func (x *GrantApplicationAccessRequest) GetRoleIds() []uint64 {
+	if x != nil {
+		return x.RoleIds
+	}
+	return nil
+}
+
+func (x *GrantApplicationAccessRequest) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
+func (x *GrantApplicationAccessRequest) GetExpectedUserVersion() uint64 {
+	if x != nil && x.ExpectedUserVersion != nil {
+		return *x.ExpectedUserVersion
+	}
+	return 0
+}
+
+type RevokeApplicationAccessRequest struct {
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	UserId              uint64                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	ApplicationCode     string                 `protobuf:"bytes,2,opt,name=application_code,json=applicationCode,proto3" json:"application_code,omitempty"`
+	Reason              string                 `protobuf:"bytes,3,opt,name=reason,proto3" json:"reason,omitempty"`
+	ExpectedUserVersion *uint64                `protobuf:"varint,4,opt,name=expected_user_version,json=expectedUserVersion,proto3,oneof" json:"expected_user_version,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
+}
+
+func (x *RevokeApplicationAccessRequest) Reset() {
+	*x = RevokeApplicationAccessRequest{}
+	mi := &file_application_v1_application_payload_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RevokeApplicationAccessRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RevokeApplicationAccessRequest) ProtoMessage() {}
+
+func (x *RevokeApplicationAccessRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_application_v1_application_payload_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RevokeApplicationAccessRequest.ProtoReflect.Descriptor instead.
+func (*RevokeApplicationAccessRequest) Descriptor() ([]byte, []int) {
+	return file_application_v1_application_payload_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *RevokeApplicationAccessRequest) GetUserId() uint64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *RevokeApplicationAccessRequest) GetApplicationCode() string {
+	if x != nil {
+		return x.ApplicationCode
+	}
+	return ""
+}
+
+func (x *RevokeApplicationAccessRequest) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
+func (x *RevokeApplicationAccessRequest) GetExpectedUserVersion() uint64 {
+	if x != nil && x.ExpectedUserVersion != nil {
+		return *x.ExpectedUserVersion
+	}
+	return 0
+}
+
+type GrantApplicationAccessResponse struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	UserId         uint64                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	ApplicationId  uint64                 `protobuf:"varint,2,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
+	AccessStatus   *string                `protobuf:"bytes,3,opt,name=access_status,json=accessStatus,proto3,oneof" json:"access_status,omitempty"`
+	ChangedRoleIds []uint64               `protobuf:"varint,4,rep,packed,name=changed_role_ids,json=changedRoleIds,proto3" json:"changed_role_ids,omitempty"`
+	Version        uint64                 `protobuf:"varint,5,opt,name=version,proto3" json:"version,omitempty"`
+	Changed        bool                   `protobuf:"varint,6,opt,name=changed,proto3" json:"changed,omitempty"` // Access-only changes can have empty changed_role_ids.
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *GrantApplicationAccessResponse) Reset() {
+	*x = GrantApplicationAccessResponse{}
+	mi := &file_application_v1_application_payload_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GrantApplicationAccessResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GrantApplicationAccessResponse) ProtoMessage() {}
+
+func (x *GrantApplicationAccessResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_application_v1_application_payload_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GrantApplicationAccessResponse.ProtoReflect.Descriptor instead.
+func (*GrantApplicationAccessResponse) Descriptor() ([]byte, []int) {
+	return file_application_v1_application_payload_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GrantApplicationAccessResponse) GetUserId() uint64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *GrantApplicationAccessResponse) GetApplicationId() uint64 {
+	if x != nil {
+		return x.ApplicationId
+	}
+	return 0
+}
+
+func (x *GrantApplicationAccessResponse) GetAccessStatus() string {
+	if x != nil && x.AccessStatus != nil {
+		return *x.AccessStatus
+	}
+	return ""
+}
+
+func (x *GrantApplicationAccessResponse) GetChangedRoleIds() []uint64 {
+	if x != nil {
+		return x.ChangedRoleIds
+	}
+	return nil
+}
+
+func (x *GrantApplicationAccessResponse) GetVersion() uint64 {
+	if x != nil {
+		return x.Version
+	}
+	return 0
+}
+
+func (x *GrantApplicationAccessResponse) GetChanged() bool {
+	if x != nil {
+		return x.Changed
+	}
+	return false
+}
+
+type RevokeApplicationAccessResponse struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	UserId         uint64                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	ApplicationId  uint64                 `protobuf:"varint,2,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
+	AccessStatus   *string                `protobuf:"bytes,3,opt,name=access_status,json=accessStatus,proto3,oneof" json:"access_status,omitempty"`           // Absent means no stored access pair.
+	ChangedRoleIds []uint64               `protobuf:"varint,4,rep,packed,name=changed_role_ids,json=changedRoleIds,proto3" json:"changed_role_ids,omitempty"` // All actual revocations; no 20-role cap.
+	Version        uint64                 `protobuf:"varint,5,opt,name=version,proto3" json:"version,omitempty"`
+	Changed        bool                   `protobuf:"varint,6,opt,name=changed,proto3" json:"changed,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *RevokeApplicationAccessResponse) Reset() {
+	*x = RevokeApplicationAccessResponse{}
+	mi := &file_application_v1_application_payload_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RevokeApplicationAccessResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RevokeApplicationAccessResponse) ProtoMessage() {}
+
+func (x *RevokeApplicationAccessResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_application_v1_application_payload_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RevokeApplicationAccessResponse.ProtoReflect.Descriptor instead.
+func (*RevokeApplicationAccessResponse) Descriptor() ([]byte, []int) {
+	return file_application_v1_application_payload_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *RevokeApplicationAccessResponse) GetUserId() uint64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *RevokeApplicationAccessResponse) GetApplicationId() uint64 {
+	if x != nil {
+		return x.ApplicationId
+	}
+	return 0
+}
+
+func (x *RevokeApplicationAccessResponse) GetAccessStatus() string {
+	if x != nil && x.AccessStatus != nil {
+		return *x.AccessStatus
+	}
+	return ""
+}
+
+func (x *RevokeApplicationAccessResponse) GetChangedRoleIds() []uint64 {
+	if x != nil {
+		return x.ChangedRoleIds
+	}
+	return nil
+}
+
+func (x *RevokeApplicationAccessResponse) GetVersion() uint64 {
+	if x != nil {
+		return x.Version
+	}
+	return 0
+}
+
+func (x *RevokeApplicationAccessResponse) GetChanged() bool {
+	if x != nil {
+		return x.Changed
+	}
+	return false
+}
+
 var File_application_v1_application_payload_proto protoreflect.FileDescriptor
 
 const file_application_v1_application_payload_proto_rawDesc = "" +
@@ -274,7 +587,36 @@ const file_application_v1_application_payload_proto_rawDesc = "" +
 	"\x05items\x18\x01 \x03(\v2\x1f.application.v1.ApplicationItemR\x05items\x12*\n" +
 	"\x04meta\x18\x02 \x01(\v2\x16.paginator.v1.PageMetaR\x04meta\x12\x1f\n" +
 	"\vnext_cursor\x18\x03 \x01(\tR\n" +
-	"nextCursorBFZDgithub.com/siti-nabila/api-contracts/pb/application/v1;applicationv1b\x06proto3"
+	"nextCursor\"\xe9\x01\n" +
+	"\x1dGrantApplicationAccessRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x04R\x06userId\x12)\n" +
+	"\x10application_code\x18\x02 \x01(\tR\x0fapplicationCode\x12\x19\n" +
+	"\brole_ids\x18\x03 \x03(\x04R\aroleIds\x12\x16\n" +
+	"\x06reason\x18\x04 \x01(\tR\x06reason\x127\n" +
+	"\x15expected_user_version\x18\x05 \x01(\x04H\x00R\x13expectedUserVersion\x88\x01\x01B\x18\n" +
+	"\x16_expected_user_version\"\xcf\x01\n" +
+	"\x1eRevokeApplicationAccessRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x04R\x06userId\x12)\n" +
+	"\x10application_code\x18\x02 \x01(\tR\x0fapplicationCode\x12\x16\n" +
+	"\x06reason\x18\x03 \x01(\tR\x06reason\x127\n" +
+	"\x15expected_user_version\x18\x04 \x01(\x04H\x00R\x13expectedUserVersion\x88\x01\x01B\x18\n" +
+	"\x16_expected_user_version\"\xfa\x01\n" +
+	"\x1eGrantApplicationAccessResponse\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x04R\x06userId\x12%\n" +
+	"\x0eapplication_id\x18\x02 \x01(\x04R\rapplicationId\x12(\n" +
+	"\raccess_status\x18\x03 \x01(\tH\x00R\faccessStatus\x88\x01\x01\x12(\n" +
+	"\x10changed_role_ids\x18\x04 \x03(\x04R\x0echangedRoleIds\x12\x18\n" +
+	"\aversion\x18\x05 \x01(\x04R\aversion\x12\x18\n" +
+	"\achanged\x18\x06 \x01(\bR\achangedB\x10\n" +
+	"\x0e_access_status\"\xfb\x01\n" +
+	"\x1fRevokeApplicationAccessResponse\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x04R\x06userId\x12%\n" +
+	"\x0eapplication_id\x18\x02 \x01(\x04R\rapplicationId\x12(\n" +
+	"\raccess_status\x18\x03 \x01(\tH\x00R\faccessStatus\x88\x01\x01\x12(\n" +
+	"\x10changed_role_ids\x18\x04 \x03(\x04R\x0echangedRoleIds\x12\x18\n" +
+	"\aversion\x18\x05 \x01(\x04R\aversion\x12\x18\n" +
+	"\achanged\x18\x06 \x01(\bR\achangedB\x10\n" +
+	"\x0e_access_statusBFZDgithub.com/siti-nabila/api-contracts/pb/application/v1;applicationv1b\x06proto3"
 
 var (
 	file_application_v1_application_payload_proto_rawDescOnce sync.Once
@@ -288,20 +630,24 @@ func file_application_v1_application_payload_proto_rawDescGZIP() []byte {
 	return file_application_v1_application_payload_proto_rawDescData
 }
 
-var file_application_v1_application_payload_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_application_v1_application_payload_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_application_v1_application_payload_proto_goTypes = []any{
-	(*ApplicationItem)(nil),          // 0: application.v1.ApplicationItem
-	(*ApplicationFilter)(nil),        // 1: application.v1.ApplicationFilter
-	(*ListApplicationsRequest)(nil),  // 2: application.v1.ListApplicationsRequest
-	(*ListApplicationsResponse)(nil), // 3: application.v1.ListApplicationsResponse
-	(*v1.PageQuery)(nil),             // 4: paginator.v1.PageQuery
-	(*v1.PageMeta)(nil),              // 5: paginator.v1.PageMeta
+	(*ApplicationItem)(nil),                 // 0: application.v1.ApplicationItem
+	(*ApplicationFilter)(nil),               // 1: application.v1.ApplicationFilter
+	(*ListApplicationsRequest)(nil),         // 2: application.v1.ListApplicationsRequest
+	(*ListApplicationsResponse)(nil),        // 3: application.v1.ListApplicationsResponse
+	(*GrantApplicationAccessRequest)(nil),   // 4: application.v1.GrantApplicationAccessRequest
+	(*RevokeApplicationAccessRequest)(nil),  // 5: application.v1.RevokeApplicationAccessRequest
+	(*GrantApplicationAccessResponse)(nil),  // 6: application.v1.GrantApplicationAccessResponse
+	(*RevokeApplicationAccessResponse)(nil), // 7: application.v1.RevokeApplicationAccessResponse
+	(*v1.PageQuery)(nil),                    // 8: paginator.v1.PageQuery
+	(*v1.PageMeta)(nil),                     // 9: paginator.v1.PageMeta
 }
 var file_application_v1_application_payload_proto_depIdxs = []int32{
-	4, // 0: application.v1.ListApplicationsRequest.query:type_name -> paginator.v1.PageQuery
+	8, // 0: application.v1.ListApplicationsRequest.query:type_name -> paginator.v1.PageQuery
 	1, // 1: application.v1.ListApplicationsRequest.filter:type_name -> application.v1.ApplicationFilter
 	0, // 2: application.v1.ListApplicationsResponse.items:type_name -> application.v1.ApplicationItem
-	5, // 3: application.v1.ListApplicationsResponse.meta:type_name -> paginator.v1.PageMeta
+	9, // 3: application.v1.ListApplicationsResponse.meta:type_name -> paginator.v1.PageMeta
 	4, // [4:4] is the sub-list for method output_type
 	4, // [4:4] is the sub-list for method input_type
 	4, // [4:4] is the sub-list for extension type_name
@@ -314,13 +660,17 @@ func file_application_v1_application_payload_proto_init() {
 	if File_application_v1_application_payload_proto != nil {
 		return
 	}
+	file_application_v1_application_payload_proto_msgTypes[4].OneofWrappers = []any{}
+	file_application_v1_application_payload_proto_msgTypes[5].OneofWrappers = []any{}
+	file_application_v1_application_payload_proto_msgTypes[6].OneofWrappers = []any{}
+	file_application_v1_application_payload_proto_msgTypes[7].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_application_v1_application_payload_proto_rawDesc), len(file_application_v1_application_payload_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

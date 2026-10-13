@@ -19,7 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ApplicationService_ListApplications_FullMethodName = "/application.v1.ApplicationService/ListApplications"
+	ApplicationService_ListApplications_FullMethodName        = "/application.v1.ApplicationService/ListApplications"
+	ApplicationService_GrantApplicationAccess_FullMethodName  = "/application.v1.ApplicationService/GrantApplicationAccess"
+	ApplicationService_RevokeApplicationAccess_FullMethodName = "/application.v1.ApplicationService/RevokeApplicationAccess"
 )
 
 // ApplicationServiceClient is the client API for ApplicationService service.
@@ -27,9 +29,13 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
 // TLS, verified IAM/method-allowed service, ACTIVE unrestricted access/session
-// and exact current iam.permission.read. Read-only catalog; no implicit access.
+// with exact current permissions below. Catalog reads never grant access.
 type ApplicationServiceClient interface {
 	ListApplications(ctx context.Context, in *ListApplicationsRequest, opts ...grpc.CallOption) (*ListApplicationsResponse, error)
+	// iam.user.application.grant AND iam.user.role.grant; additive access/roles.
+	GrantApplicationAccess(ctx context.Context, in *GrantApplicationAccessRequest, opts ...grpc.CallOption) (*GrantApplicationAccessResponse, error)
+	// iam.user.application.revoke AND iam.user.role.revoke; revoke all app roles.
+	RevokeApplicationAccess(ctx context.Context, in *RevokeApplicationAccessRequest, opts ...grpc.CallOption) (*RevokeApplicationAccessResponse, error)
 }
 
 type applicationServiceClient struct {
@@ -50,14 +56,38 @@ func (c *applicationServiceClient) ListApplications(ctx context.Context, in *Lis
 	return out, nil
 }
 
+func (c *applicationServiceClient) GrantApplicationAccess(ctx context.Context, in *GrantApplicationAccessRequest, opts ...grpc.CallOption) (*GrantApplicationAccessResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GrantApplicationAccessResponse)
+	err := c.cc.Invoke(ctx, ApplicationService_GrantApplicationAccess_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationServiceClient) RevokeApplicationAccess(ctx context.Context, in *RevokeApplicationAccessRequest, opts ...grpc.CallOption) (*RevokeApplicationAccessResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RevokeApplicationAccessResponse)
+	err := c.cc.Invoke(ctx, ApplicationService_RevokeApplicationAccess_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ApplicationServiceServer is the server API for ApplicationService service.
 // All implementations must embed UnimplementedApplicationServiceServer
 // for forward compatibility.
 //
 // TLS, verified IAM/method-allowed service, ACTIVE unrestricted access/session
-// and exact current iam.permission.read. Read-only catalog; no implicit access.
+// with exact current permissions below. Catalog reads never grant access.
 type ApplicationServiceServer interface {
 	ListApplications(context.Context, *ListApplicationsRequest) (*ListApplicationsResponse, error)
+	// iam.user.application.grant AND iam.user.role.grant; additive access/roles.
+	GrantApplicationAccess(context.Context, *GrantApplicationAccessRequest) (*GrantApplicationAccessResponse, error)
+	// iam.user.application.revoke AND iam.user.role.revoke; revoke all app roles.
+	RevokeApplicationAccess(context.Context, *RevokeApplicationAccessRequest) (*RevokeApplicationAccessResponse, error)
 	mustEmbedUnimplementedApplicationServiceServer()
 }
 
@@ -70,6 +100,12 @@ type UnimplementedApplicationServiceServer struct{}
 
 func (UnimplementedApplicationServiceServer) ListApplications(context.Context, *ListApplicationsRequest) (*ListApplicationsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListApplications not implemented")
+}
+func (UnimplementedApplicationServiceServer) GrantApplicationAccess(context.Context, *GrantApplicationAccessRequest) (*GrantApplicationAccessResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GrantApplicationAccess not implemented")
+}
+func (UnimplementedApplicationServiceServer) RevokeApplicationAccess(context.Context, *RevokeApplicationAccessRequest) (*RevokeApplicationAccessResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RevokeApplicationAccess not implemented")
 }
 func (UnimplementedApplicationServiceServer) mustEmbedUnimplementedApplicationServiceServer() {}
 func (UnimplementedApplicationServiceServer) testEmbeddedByValue()                            {}
@@ -110,6 +146,42 @@ func _ApplicationService_ListApplications_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApplicationService_GrantApplicationAccess_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GrantApplicationAccessRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationServiceServer).GrantApplicationAccess(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ApplicationService_GrantApplicationAccess_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationServiceServer).GrantApplicationAccess(ctx, req.(*GrantApplicationAccessRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationService_RevokeApplicationAccess_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RevokeApplicationAccessRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationServiceServer).RevokeApplicationAccess(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ApplicationService_RevokeApplicationAccess_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationServiceServer).RevokeApplicationAccess(ctx, req.(*RevokeApplicationAccessRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ApplicationService_ServiceDesc is the grpc.ServiceDesc for ApplicationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -120,6 +192,14 @@ var ApplicationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListApplications",
 			Handler:    _ApplicationService_ListApplications_Handler,
+		},
+		{
+			MethodName: "GrantApplicationAccess",
+			Handler:    _ApplicationService_GrantApplicationAccess_Handler,
+		},
+		{
+			MethodName: "RevokeApplicationAccess",
+			Handler:    _ApplicationService_RevokeApplicationAccess_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

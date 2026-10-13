@@ -42,6 +42,7 @@ func roleErrors(t *testing.T) {
 		{role.ErrResourceBusy, codes.Aborted, "RB", "409", "Resource is busy. Retry the request.", "Resource sedang digunakan. Ulangi permintaan."},
 		{application.ErrApplicationNotFound, codes.NotFound, "ANF", "404", "Application not found.", "Aplikasi tidak ditemukan."},
 		{application.ErrApplicationInactive, codes.FailedPrecondition, "AI", "409", "Application is not active.", "Aplikasi tidak aktif."},
+		{application.ErrApplicationAccessSystemProtected, codes.FailedPrecondition, "AASP", "409", "System application access cannot be modified.", "Akses aplikasi sistem tidak dapat diubah."},
 		{application.ErrSystemApplicationProtected, codes.FailedPrecondition, "SAP", "409", "System applications cannot contain custom roles.", "Aplikasi sistem tidak dapat memiliki role kustom."},
 		{user.ErrGrantTargetInactive, codes.FailedPrecondition, "GTI", "409", "Grant target must be an active user.", "Target pemberian role harus pengguna aktif."},
 		{user.ErrSelfAdminRoleRevokeForbidden, codes.PermissionDenied, "SARF", "403", "You cannot revoke your own platform administrator role.", "Anda tidak dapat mencabut role administrator platform sendiri."},

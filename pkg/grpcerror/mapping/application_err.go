@@ -9,6 +9,6 @@ import (
 func ApplicationCodeMappings() []grpcerror.CodeMapping {
 	return []grpcerror.CodeMapping{
 		{Code: codes.NotFound, Errors: []error{application.ErrApplicationNotFound}},
-		{Code: codes.FailedPrecondition, Errors: []error{application.ErrApplicationInactive, application.ErrSystemApplicationProtected, application.ErrApplicationAccessRequired}},
+		{Code: codes.FailedPrecondition, Errors: []error{application.ErrApplicationInactive, application.ErrSystemApplicationProtected, application.ErrApplicationAccessRequired, application.ErrApplicationAccessSystemProtected}},
 	}
 }

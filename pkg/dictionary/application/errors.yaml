@@ -22,3 +22,9 @@ errors:
     http_status: 409
     en: Active application access is required.
     id: Akses aplikasi aktif diperlukan.
+
+  application_access_system_protected:
+    code: AASP
+    http_status: 409
+    en: System application access cannot be modified.
+    id: Akses aplikasi sistem tidak dapat diubah.
