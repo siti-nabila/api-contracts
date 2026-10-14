@@ -20,19 +20,21 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserService_Register_FullMethodName                  = "/user.v1.UserService/Register"
-	UserService_Login_FullMethodName                     = "/user.v1.UserService/Login"
-	UserService_Me_FullMethodName                        = "/user.v1.UserService/Me"
-	UserService_ListUsers_FullMethodName                 = "/user.v1.UserService/ListUsers"
-	UserService_GetUser_FullMethodName                   = "/user.v1.UserService/GetUser"
-	UserService_CreateUser_FullMethodName                = "/user.v1.UserService/CreateUser"
-	UserService_UpdateUser_FullMethodName                = "/user.v1.UserService/UpdateUser"
-	UserService_ChangeUserStatus_FullMethodName          = "/user.v1.UserService/ChangeUserStatus"
-	UserService_ListUserRoles_FullMethodName             = "/user.v1.UserService/ListUserRoles"
-	UserService_GrantUserRoles_FullMethodName            = "/user.v1.UserService/GrantUserRoles"
-	UserService_RevokeUserRoles_FullMethodName           = "/user.v1.UserService/RevokeUserRoles"
-	UserService_ListUserApplicationAccess_FullMethodName = "/user.v1.UserService/ListUserApplicationAccess"
-	UserService_TesRPC_FullMethodName                    = "/user.v1.UserService/TesRPC"
+	UserService_Register_FullMethodName                    = "/user.v1.UserService/Register"
+	UserService_Login_FullMethodName                       = "/user.v1.UserService/Login"
+	UserService_Me_FullMethodName                          = "/user.v1.UserService/Me"
+	UserService_ListUsers_FullMethodName                   = "/user.v1.UserService/ListUsers"
+	UserService_GetUser_FullMethodName                     = "/user.v1.UserService/GetUser"
+	UserService_CreateUser_FullMethodName                  = "/user.v1.UserService/CreateUser"
+	UserService_UpdateUser_FullMethodName                  = "/user.v1.UserService/UpdateUser"
+	UserService_ChangeUserStatus_FullMethodName            = "/user.v1.UserService/ChangeUserStatus"
+	UserService_ListUserRoles_FullMethodName               = "/user.v1.UserService/ListUserRoles"
+	UserService_GrantUserRoles_FullMethodName              = "/user.v1.UserService/GrantUserRoles"
+	UserService_RevokeUserRoles_FullMethodName             = "/user.v1.UserService/RevokeUserRoles"
+	UserService_ListUserApplicationAccess_FullMethodName   = "/user.v1.UserService/ListUserApplicationAccess"
+	UserService_GetMyEffectivePermissions_FullMethodName   = "/user.v1.UserService/GetMyEffectivePermissions"
+	UserService_GetUserEffectivePermissions_FullMethodName = "/user.v1.UserService/GetUserEffectivePermissions"
+	UserService_TesRPC_FullMethodName                      = "/user.v1.UserService/TesRPC"
 )
 
 // UserServiceClient is the client API for UserService service.
@@ -52,6 +54,10 @@ type UserServiceClient interface {
 	RevokeUserRoles(ctx context.Context, in *RevokeUserRolesRequest, opts ...grpc.CallOption) (*RevokeUserRolesResponse, error)
 	// TLS, IAM service namespace and exact current iam.user.read.
 	ListUserApplicationAccess(ctx context.Context, in *ListUserApplicationAccessRequest, opts ...grpc.CallOption) (*ListUserApplicationAccessResponse, error)
+	// Verified self; application_code limits the descriptive view, never caller authority.
+	GetMyEffectivePermissions(ctx context.Context, in *GetMyEffectivePermissionsRequest, opts ...grpc.CallOption) (*GetEffectivePermissionsResponse, error)
+	// TLS, IAM service namespace and exact current iam.user.read before target lookup.
+	GetUserEffectivePermissions(ctx context.Context, in *GetUserEffectivePermissionsRequest, opts ...grpc.CallOption) (*GetEffectivePermissionsResponse, error)
 	TesRPC(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*TestRPC, error)
 }
 
@@ -183,6 +189,26 @@ func (c *userServiceClient) ListUserApplicationAccess(ctx context.Context, in *L
 	return out, nil
 }
 
+func (c *userServiceClient) GetMyEffectivePermissions(ctx context.Context, in *GetMyEffectivePermissionsRequest, opts ...grpc.CallOption) (*GetEffectivePermissionsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetEffectivePermissionsResponse)
+	err := c.cc.Invoke(ctx, UserService_GetMyEffectivePermissions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) GetUserEffectivePermissions(ctx context.Context, in *GetUserEffectivePermissionsRequest, opts ...grpc.CallOption) (*GetEffectivePermissionsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetEffectivePermissionsResponse)
+	err := c.cc.Invoke(ctx, UserService_GetUserEffectivePermissions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *userServiceClient) TesRPC(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*TestRPC, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(TestRPC)
@@ -210,6 +236,10 @@ type UserServiceServer interface {
 	RevokeUserRoles(context.Context, *RevokeUserRolesRequest) (*RevokeUserRolesResponse, error)
 	// TLS, IAM service namespace and exact current iam.user.read.
 	ListUserApplicationAccess(context.Context, *ListUserApplicationAccessRequest) (*ListUserApplicationAccessResponse, error)
+	// Verified self; application_code limits the descriptive view, never caller authority.
+	GetMyEffectivePermissions(context.Context, *GetMyEffectivePermissionsRequest) (*GetEffectivePermissionsResponse, error)
+	// TLS, IAM service namespace and exact current iam.user.read before target lookup.
+	GetUserEffectivePermissions(context.Context, *GetUserEffectivePermissionsRequest) (*GetEffectivePermissionsResponse, error)
 	TesRPC(context.Context, *emptypb.Empty) (*TestRPC, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
@@ -256,6 +286,12 @@ func (UnimplementedUserServiceServer) RevokeUserRoles(context.Context, *RevokeUs
 }
 func (UnimplementedUserServiceServer) ListUserApplicationAccess(context.Context, *ListUserApplicationAccessRequest) (*ListUserApplicationAccessResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListUserApplicationAccess not implemented")
+}
+func (UnimplementedUserServiceServer) GetMyEffectivePermissions(context.Context, *GetMyEffectivePermissionsRequest) (*GetEffectivePermissionsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetMyEffectivePermissions not implemented")
+}
+func (UnimplementedUserServiceServer) GetUserEffectivePermissions(context.Context, *GetUserEffectivePermissionsRequest) (*GetEffectivePermissionsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetUserEffectivePermissions not implemented")
 }
 func (UnimplementedUserServiceServer) TesRPC(context.Context, *emptypb.Empty) (*TestRPC, error) {
 	return nil, status.Error(codes.Unimplemented, "method TesRPC not implemented")
@@ -497,6 +533,42 @@ func _UserService_ListUserApplicationAccess_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_GetMyEffectivePermissions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMyEffectivePermissionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetMyEffectivePermissions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_GetMyEffectivePermissions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetMyEffectivePermissions(ctx, req.(*GetMyEffectivePermissionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_GetUserEffectivePermissions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserEffectivePermissionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetUserEffectivePermissions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_GetUserEffectivePermissions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetUserEffectivePermissions(ctx, req.(*GetUserEffectivePermissionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _UserService_TesRPC_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
@@ -569,6 +641,14 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListUserApplicationAccess",
 			Handler:    _UserService_ListUserApplicationAccess_Handler,
+		},
+		{
+			MethodName: "GetMyEffectivePermissions",
+			Handler:    _UserService_GetMyEffectivePermissions_Handler,
+		},
+		{
+			MethodName: "GetUserEffectivePermissions",
+			Handler:    _UserService_GetUserEffectivePermissions_Handler,
 		},
 		{
 			MethodName: "TesRPC",

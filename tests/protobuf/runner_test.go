@@ -21,3 +21,7 @@ func TestAssignmentContract(t *testing.T) { testutils.Run(t, test_scenarios.Assi
 func TestApplicationAccessContract(t *testing.T) {
 	testutils.Run(t, test_scenarios.ApplicationAccess())
 }
+
+func TestEffectivePermissionsContract(t *testing.T) {
+	testutils.Run(t, test_scenarios.EffectivePermissions())
+}

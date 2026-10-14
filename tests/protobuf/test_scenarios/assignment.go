@@ -104,7 +104,7 @@ func assignmentBaseline(t *testing.T) {
 			currentCount += len(s.Method)
 		}
 	}
-	if len(files) != 16 || oldCount != 27 || currentCount != 33 {
+	if len(files) != 16 || oldCount != 27 || currentCount != 35 {
 		t.Fatal("inventory", len(files), oldCount, currentCount)
 	}
 }

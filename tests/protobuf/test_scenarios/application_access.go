@@ -54,7 +54,7 @@ func applicationAccessBaseline(t *testing.T) {
 			count += len(service.Method)
 		}
 	}
-	if len(files) != 16 || oldCount != 30 || count != 33 {
+	if len(files) != 16 || oldCount != 30 || count != 35 {
 		t.Fatal("inventory", len(files), oldCount, count)
 	}
 }

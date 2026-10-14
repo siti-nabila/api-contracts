@@ -283,3 +283,33 @@ message ListUserApplicationAccessResponse {
   paginator.v1.PageMeta meta = 4;
   string next_cursor = 5;
 }
+
+// Blank application_code includes only namespaces allowed for the verified service.
+// A nonempty code must be allowed for that service; unknown/inactive yields no permissions.
+message GetMyEffectivePermissionsRequest {
+  string application_code = 1;
+}
+
+message GetUserEffectivePermissionsRequest {
+  uint64 user_id = 1;
+  string application_code = 2;
+}
+
+message EffectivePermissionRole {
+  uint64 role_id = 1;
+  string code = 2; // String role code; never a numeric-role authorization bypass.
+}
+
+message EffectivePermission {
+  string code = 1;
+  repeated EffectivePermissionRole roles = 2; // Unique contributing ACTIVE roles, ID ascending.
+}
+
+// Descriptive ACTIVE-role union, including retained contributions for inactive accounts.
+// user_status must accompany the view. This response never grants access or restores a session.
+message GetEffectivePermissionsResponse {
+  uint64 user_id = 1;
+  string user_status = 2;
+  uint64 version = 3; // Entity version only; role changes can alter permissions without changing it.
+  repeated EffectivePermission permissions = 4; // Unique codes, lexicographically ascending.
+}

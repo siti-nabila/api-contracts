@@ -26,7 +26,7 @@ func UserManagement() []testutils.Scenario {
 }
 func managementMethods(t *testing.T) {
 	s := userv1.File_user_v1_user_service_proto.Services().Get(0)
-	if s.Methods().Len() != 13 {
+	if s.Methods().Len() != 15 {
 		t.Fatal("UserService inventory changed")
 	}
 	for name, full := range map[string]string{

@@ -25,7 +25,7 @@ var File_user_v1_user_service_proto protoreflect.FileDescriptor
 
 const file_user_v1_user_service_proto_rawDesc = "" +
 	"\n" +
-	"\x1auser/v1/user.service.proto\x12\auser.v1\x1a\x1auser/v1/user.payload.proto\x1a\x1bgoogle/protobuf/empty.proto2\xc1\a\n" +
+	"\x1auser/v1/user.service.proto\x12\auser.v1\x1a\x1auser/v1/user.payload.proto\x1a\x1bgoogle/protobuf/empty.proto2\xa9\t\n" +
 	"\vUserService\x12<\n" +
 	"\bRegister\x12\x14.user.v1.AuthRequest\x1a\x1a.user.v1.UserTokenResponse\x129\n" +
 	"\x05Login\x12\x14.user.v1.AuthRequest\x1a\x1a.user.v1.UserTokenResponse\x12/\n" +
@@ -40,33 +40,38 @@ const file_user_v1_user_service_proto_rawDesc = "" +
 	"\rListUserRoles\x12\x1d.user.v1.ListUserRolesRequest\x1a\x1e.user.v1.ListUserRolesResponse\x12Q\n" +
 	"\x0eGrantUserRoles\x12\x1e.user.v1.GrantUserRolesRequest\x1a\x1f.user.v1.GrantUserRolesResponse\x12T\n" +
 	"\x0fRevokeUserRoles\x12\x1f.user.v1.RevokeUserRolesRequest\x1a .user.v1.RevokeUserRolesResponse\x12r\n" +
-	"\x19ListUserApplicationAccess\x12).user.v1.ListUserApplicationAccessRequest\x1a*.user.v1.ListUserApplicationAccessResponse\x122\n" +
+	"\x19ListUserApplicationAccess\x12).user.v1.ListUserApplicationAccessRequest\x1a*.user.v1.ListUserApplicationAccessResponse\x12p\n" +
+	"\x19GetMyEffectivePermissions\x12).user.v1.GetMyEffectivePermissionsRequest\x1a(.user.v1.GetEffectivePermissionsResponse\x12t\n" +
+	"\x1bGetUserEffectivePermissions\x12+.user.v1.GetUserEffectivePermissionsRequest\x1a(.user.v1.GetEffectivePermissionsResponse\x122\n" +
 	"\x06TesRPC\x12\x16.google.protobuf.Empty\x1a\x10.user.v1.TestRPCB8Z6github.com/siti-nabila/api-contracts/pb/user/v1;userv1b\x06proto3"
 
 var file_user_v1_user_service_proto_goTypes = []any{
-	(*AuthRequest)(nil),                       // 0: user.v1.AuthRequest
-	(*emptypb.Empty)(nil),                     // 1: google.protobuf.Empty
-	(*ListUsersRequest)(nil),                  // 2: user.v1.ListUsersRequest
-	(*GetUserRequest)(nil),                    // 3: user.v1.GetUserRequest
-	(*CreateUserRequest)(nil),                 // 4: user.v1.CreateUserRequest
-	(*UpdateUserRequest)(nil),                 // 5: user.v1.UpdateUserRequest
-	(*ChangeUserStatusRequest)(nil),           // 6: user.v1.ChangeUserStatusRequest
-	(*ListUserRolesRequest)(nil),              // 7: user.v1.ListUserRolesRequest
-	(*GrantUserRolesRequest)(nil),             // 8: user.v1.GrantUserRolesRequest
-	(*RevokeUserRolesRequest)(nil),            // 9: user.v1.RevokeUserRolesRequest
-	(*ListUserApplicationAccessRequest)(nil),  // 10: user.v1.ListUserApplicationAccessRequest
-	(*UserTokenResponse)(nil),                 // 11: user.v1.UserTokenResponse
-	(*UserData)(nil),                          // 12: user.v1.UserData
-	(*ListUsersResponse)(nil),                 // 13: user.v1.ListUsersResponse
-	(*GetUserResponse)(nil),                   // 14: user.v1.GetUserResponse
-	(*CreateUserResponse)(nil),                // 15: user.v1.CreateUserResponse
-	(*UpdateUserResponse)(nil),                // 16: user.v1.UpdateUserResponse
-	(*ChangeUserStatusResponse)(nil),          // 17: user.v1.ChangeUserStatusResponse
-	(*ListUserRolesResponse)(nil),             // 18: user.v1.ListUserRolesResponse
-	(*GrantUserRolesResponse)(nil),            // 19: user.v1.GrantUserRolesResponse
-	(*RevokeUserRolesResponse)(nil),           // 20: user.v1.RevokeUserRolesResponse
-	(*ListUserApplicationAccessResponse)(nil), // 21: user.v1.ListUserApplicationAccessResponse
-	(*TestRPC)(nil),                           // 22: user.v1.TestRPC
+	(*AuthRequest)(nil),                        // 0: user.v1.AuthRequest
+	(*emptypb.Empty)(nil),                      // 1: google.protobuf.Empty
+	(*ListUsersRequest)(nil),                   // 2: user.v1.ListUsersRequest
+	(*GetUserRequest)(nil),                     // 3: user.v1.GetUserRequest
+	(*CreateUserRequest)(nil),                  // 4: user.v1.CreateUserRequest
+	(*UpdateUserRequest)(nil),                  // 5: user.v1.UpdateUserRequest
+	(*ChangeUserStatusRequest)(nil),            // 6: user.v1.ChangeUserStatusRequest
+	(*ListUserRolesRequest)(nil),               // 7: user.v1.ListUserRolesRequest
+	(*GrantUserRolesRequest)(nil),              // 8: user.v1.GrantUserRolesRequest
+	(*RevokeUserRolesRequest)(nil),             // 9: user.v1.RevokeUserRolesRequest
+	(*ListUserApplicationAccessRequest)(nil),   // 10: user.v1.ListUserApplicationAccessRequest
+	(*GetMyEffectivePermissionsRequest)(nil),   // 11: user.v1.GetMyEffectivePermissionsRequest
+	(*GetUserEffectivePermissionsRequest)(nil), // 12: user.v1.GetUserEffectivePermissionsRequest
+	(*UserTokenResponse)(nil),                  // 13: user.v1.UserTokenResponse
+	(*UserData)(nil),                           // 14: user.v1.UserData
+	(*ListUsersResponse)(nil),                  // 15: user.v1.ListUsersResponse
+	(*GetUserResponse)(nil),                    // 16: user.v1.GetUserResponse
+	(*CreateUserResponse)(nil),                 // 17: user.v1.CreateUserResponse
+	(*UpdateUserResponse)(nil),                 // 18: user.v1.UpdateUserResponse
+	(*ChangeUserStatusResponse)(nil),           // 19: user.v1.ChangeUserStatusResponse
+	(*ListUserRolesResponse)(nil),              // 20: user.v1.ListUserRolesResponse
+	(*GrantUserRolesResponse)(nil),             // 21: user.v1.GrantUserRolesResponse
+	(*RevokeUserRolesResponse)(nil),            // 22: user.v1.RevokeUserRolesResponse
+	(*ListUserApplicationAccessResponse)(nil),  // 23: user.v1.ListUserApplicationAccessResponse
+	(*GetEffectivePermissionsResponse)(nil),    // 24: user.v1.GetEffectivePermissionsResponse
+	(*TestRPC)(nil),                            // 25: user.v1.TestRPC
 }
 var file_user_v1_user_service_proto_depIdxs = []int32{
 	0,  // 0: user.v1.UserService.Register:input_type -> user.v1.AuthRequest
@@ -81,22 +86,26 @@ var file_user_v1_user_service_proto_depIdxs = []int32{
 	8,  // 9: user.v1.UserService.GrantUserRoles:input_type -> user.v1.GrantUserRolesRequest
 	9,  // 10: user.v1.UserService.RevokeUserRoles:input_type -> user.v1.RevokeUserRolesRequest
 	10, // 11: user.v1.UserService.ListUserApplicationAccess:input_type -> user.v1.ListUserApplicationAccessRequest
-	1,  // 12: user.v1.UserService.TesRPC:input_type -> google.protobuf.Empty
-	11, // 13: user.v1.UserService.Register:output_type -> user.v1.UserTokenResponse
-	11, // 14: user.v1.UserService.Login:output_type -> user.v1.UserTokenResponse
-	12, // 15: user.v1.UserService.Me:output_type -> user.v1.UserData
-	13, // 16: user.v1.UserService.ListUsers:output_type -> user.v1.ListUsersResponse
-	14, // 17: user.v1.UserService.GetUser:output_type -> user.v1.GetUserResponse
-	15, // 18: user.v1.UserService.CreateUser:output_type -> user.v1.CreateUserResponse
-	16, // 19: user.v1.UserService.UpdateUser:output_type -> user.v1.UpdateUserResponse
-	17, // 20: user.v1.UserService.ChangeUserStatus:output_type -> user.v1.ChangeUserStatusResponse
-	18, // 21: user.v1.UserService.ListUserRoles:output_type -> user.v1.ListUserRolesResponse
-	19, // 22: user.v1.UserService.GrantUserRoles:output_type -> user.v1.GrantUserRolesResponse
-	20, // 23: user.v1.UserService.RevokeUserRoles:output_type -> user.v1.RevokeUserRolesResponse
-	21, // 24: user.v1.UserService.ListUserApplicationAccess:output_type -> user.v1.ListUserApplicationAccessResponse
-	22, // 25: user.v1.UserService.TesRPC:output_type -> user.v1.TestRPC
-	13, // [13:26] is the sub-list for method output_type
-	0,  // [0:13] is the sub-list for method input_type
+	11, // 12: user.v1.UserService.GetMyEffectivePermissions:input_type -> user.v1.GetMyEffectivePermissionsRequest
+	12, // 13: user.v1.UserService.GetUserEffectivePermissions:input_type -> user.v1.GetUserEffectivePermissionsRequest
+	1,  // 14: user.v1.UserService.TesRPC:input_type -> google.protobuf.Empty
+	13, // 15: user.v1.UserService.Register:output_type -> user.v1.UserTokenResponse
+	13, // 16: user.v1.UserService.Login:output_type -> user.v1.UserTokenResponse
+	14, // 17: user.v1.UserService.Me:output_type -> user.v1.UserData
+	15, // 18: user.v1.UserService.ListUsers:output_type -> user.v1.ListUsersResponse
+	16, // 19: user.v1.UserService.GetUser:output_type -> user.v1.GetUserResponse
+	17, // 20: user.v1.UserService.CreateUser:output_type -> user.v1.CreateUserResponse
+	18, // 21: user.v1.UserService.UpdateUser:output_type -> user.v1.UpdateUserResponse
+	19, // 22: user.v1.UserService.ChangeUserStatus:output_type -> user.v1.ChangeUserStatusResponse
+	20, // 23: user.v1.UserService.ListUserRoles:output_type -> user.v1.ListUserRolesResponse
+	21, // 24: user.v1.UserService.GrantUserRoles:output_type -> user.v1.GrantUserRolesResponse
+	22, // 25: user.v1.UserService.RevokeUserRoles:output_type -> user.v1.RevokeUserRolesResponse
+	23, // 26: user.v1.UserService.ListUserApplicationAccess:output_type -> user.v1.ListUserApplicationAccessResponse
+	24, // 27: user.v1.UserService.GetMyEffectivePermissions:output_type -> user.v1.GetEffectivePermissionsResponse
+	24, // 28: user.v1.UserService.GetUserEffectivePermissions:output_type -> user.v1.GetEffectivePermissionsResponse
+	25, // 29: user.v1.UserService.TesRPC:output_type -> user.v1.TestRPC
+	15, // [15:30] is the sub-list for method output_type
+	0,  // [0:15] is the sub-list for method input_type
 	0,  // [0:0] is the sub-list for extension type_name
 	0,  // [0:0] is the sub-list for extension extendee
 	0,  // [0:0] is the sub-list for field type_name
