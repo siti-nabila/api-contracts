@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package authorization.v1;
+
+option go_package = "github.com/siti-nabila/api-contracts/pb/authorization/v1;authorizationv1";
+
+import "authorization/v1/authorization.payload.proto";
+
+// Every call requires TLS, an exact-method/namespace-allowed service and a
+// current ACTIVE unrestricted user/session. This is a self evaluation only.
+service AuthorizationService {
+  rpc EvaluateAccess(EvaluateAccessRequest) returns (EvaluateAccessResponse);
+}
