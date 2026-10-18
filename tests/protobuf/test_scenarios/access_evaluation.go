@@ -61,7 +61,7 @@ func evaluationBaseline(t *testing.T) {
 		}
 		return true
 	})
-	if services != 8 || total != 36 {
+	if services != 9 || total != 37 {
 		t.Fatal("new inventory", services, total)
 	}
 }
