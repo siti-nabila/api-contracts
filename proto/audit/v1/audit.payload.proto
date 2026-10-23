@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package audit.v1;
+
+option go_package = "github.com/siti-nabila/api-contracts/pb/audit/v1;auditv1";
+
+import "paginator/v1/paginator.payload.proto";
+import "google/protobuf/timestamp.proto";
+
+// All present filters combine with AND; strings are trimmed, case-sensitive
+// exact selectors. Empty strings mean absent. These never identify the caller.
+message AuditLogFilter {
+  optional uint64 actor_user_id = 1; // Present: positive PostgreSQL INTEGER.
+  string actor_service = 2; // Maximum 100 characters.
+  string action = 3; // Maximum 100 characters; unknown values match no rows.
+  string target_type = 4; // Maximum 50 characters.
+  string target_id = 5; // Maximum 100 characters; requires target_type.
+  google.protobuf.Timestamp occurred_from = 6; // Inclusive lower bound.
+  google.protobuf.Timestamp occurred_before = 7; // Exclusive upper bound.
+}
+
+// Typed allowlist matching safe stored snapshots; never arbitrary JSON.
+// Session IDs are historical identifiers, not credentials or session-read grants.
+message AuditSnapshot {
+  int64 version = 1;
+  string status = 2;
+  optional string name = 3;
+  optional string description = 4;
+  optional string address = 5;
+  optional string phone = 6;
+  repeated uint64 role_ids = 7;
+  repeated string permission_codes = 8;
+  uint64 application_id = 9;
+  string session_id = 10;
+  string reason_code = 11;
+  bool no_op = 12;
+  optional string country_code = 13; // Telephone calling code in profile snapshots.
+}
+
+message AuditLogItem {
+  uint64 id = 1; // Positive PostgreSQL BIGINT, at most 9223372036854775807.
+  optional uint64 actor_user_id = 2;
+  optional string actor_service = 3;
+  string action = 4;
+  string target_type = 5;
+  string target_id = 6;
+  AuditSnapshot safe_before = 7;
+  AuditSnapshot safe_after = 8;
+  optional string reason = 9;
+  optional string request_id = 10;
+  optional string trace_id = 11;
+  google.protobuf.Timestamp occurred_at = 12;
+}
+
+message ListAuditLogsRequest {
+  // Only page/limit/last_id: page=1, limit=20, max=100. fields/sort/search
+  // are unsupported and rejected. Order is occurred_at DESC, id DESC.
+  // last_id is an opaque method/filter-bound cursor, not a numeric ID.
+  paginator.v1.PageQuery query = 1;
+  AuditLogFilter filter = 2;
+}
+
+// Current authority, total and items use one primary snapshot per call.
+// No frozen multi-page export or credential-bearing/raw JSON payload.
+message ListAuditLogsResponse {
+  repeated AuditLogItem items = 1;
+  paginator.v1.PageMeta meta = 2;
+  string next_cursor = 3;
+}

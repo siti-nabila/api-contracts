@@ -5,8 +5,13 @@ Shared Protocol Buffer contracts and generated Go clients for Siti Nabila's gRPC
 ## Packages
 
 - `pb/user/v1`: authentication and user service contract
+- `pb/auth/v1`: refresh, logout and password lifecycle contract
+- `pb/session/v1`: self/admin session management contract
 - `pb/profile/v1`: profile messages
 - `pb/paginator/v1`: pagination messages
+- `pb/role/v1`: role management and safe role metadata
+- `pb/permission/v1`: read-only permission catalog
+- `pb/application/v1`: read-only application catalog
 
 ## Generate
 
@@ -69,3 +74,18 @@ RPC names, old field numbers/types, numeric role codes, and cursor pagination
 remain compatible. Publishing these contracts does not activate PENDING
 registration, session authentication, or change legacy Login behavior by itself.
 grpc-auth and rest-orc must complete their separate producer/caller/cutover gates.
+
+## Session lifecycle and user listing contract
+
+See [docs/session-lifecycle-contract.md](docs/session-lifecycle-contract.md) for
+the nine additive lifecycle RPCs, credential modes, errors and ListUsers sorting,
+filter/search/cursor semantics and additive created_at. These contracts require
+separate backend implementation and Phase6 deployment readiness.
+
+User management: [contract and compatibility](docs/user-management-contract.md).
+
+Role management and catalogs: [contract B](docs/role-management-contract.md).
+
+User role assignment: [increment C](docs/user-role-assignment-contract.md).
+
+Profile telephone calling code: [additive contract and presence](docs/country-code-contract.md).

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package application.v1;
+
+option go_package = "github.com/siti-nabila/api-contracts/pb/application/v1;applicationv1";
+
+import "application/v1/application.payload.proto";
+
+// TLS, verified IAM/method-allowed service, ACTIVE unrestricted access/session
+// with exact current permissions below. Catalog reads never grant access.
+service ApplicationService {
+  rpc ListApplications(ListApplicationsRequest) returns (ListApplicationsResponse);
+  // iam.user.application.grant AND iam.user.role.grant; additive access/roles.
+  rpc GrantApplicationAccess(GrantApplicationAccessRequest) returns (GrantApplicationAccessResponse);
+  // iam.user.application.revoke AND iam.user.role.revoke; revoke all app roles.
+  rpc RevokeApplicationAccess(RevokeApplicationAccessRequest) returns (RevokeApplicationAccessResponse);
+}

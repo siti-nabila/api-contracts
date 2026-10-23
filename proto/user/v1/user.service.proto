@@ -12,5 +12,18 @@ service UserService {
   rpc Login(AuthRequest) returns (UserTokenResponse);
   rpc Me(google.protobuf.Empty) returns (UserData);
   rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
+  rpc ChangeUserStatus(ChangeUserStatusRequest) returns (ChangeUserStatusResponse);
+  rpc ListUserRoles(ListUserRolesRequest) returns (ListUserRolesResponse);
+  rpc GrantUserRoles(GrantUserRolesRequest) returns (GrantUserRolesResponse);
+  rpc RevokeUserRoles(RevokeUserRolesRequest) returns (RevokeUserRolesResponse);
+  // TLS, IAM service namespace and exact current iam.user.read.
+  rpc ListUserApplicationAccess(ListUserApplicationAccessRequest) returns (ListUserApplicationAccessResponse);
+  // Verified self; application_code limits the descriptive view, never caller authority.
+  rpc GetMyEffectivePermissions(GetMyEffectivePermissionsRequest) returns (GetEffectivePermissionsResponse);
+  // TLS, IAM service namespace and exact current iam.user.read before target lookup.
+  rpc GetUserEffectivePermissions(GetUserEffectivePermissionsRequest) returns (GetEffectivePermissionsResponse);
   rpc TesRPC(google.protobuf.Empty) returns (TestRPC);
 }

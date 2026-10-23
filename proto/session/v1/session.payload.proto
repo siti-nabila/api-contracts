@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package session.v1;
+
+option go_package = "github.com/siti-nabila/api-contracts/pb/session/v1;sessionv1";
+
+import "paginator/v1/paginator.payload.proto";
+import "google/protobuf/timestamp.proto";
+
+// Display metadata only; device/IP values never establish identity or authority.
+// No password, access/refresh token, digest or auth_version is exposed.
+message Session {
+  string id = 1; // Canonical UUID.
+  uint64 user_id = 2; // Positive PostgreSQL INTEGER-compatible identifier.
+  string status = 3; // ACTIVE or REVOKED; expiry evaluated separately.
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp last_seen_at = 5;
+  google.protobuf.Timestamp expires_at = 6; // Absolute seven-day Login boundary.
+  google.protobuf.Timestamp revoked_at = 7; // Absent until revoked.
+  string device_label = 8; // At most 200 characters.
+  string user_agent = 9; // At most 1000 characters.
+  string ip_address = 10; // Display only, supplied through trusted caller policy.
+  bool is_current = 11; // Matches the verified actor's session, never payload ID.
+}
+
+message ListMySessionsRequest {
+  paginator.v1.PageQuery query = 1;
+}
+
+message ListUserSessionsRequest {
+  uint64 user_id = 1;
+  paginator.v1.PageQuery query = 2;
+}
+
+message ListSessionsResponse {
+  repeated Session items = 1;
+  paginator.v1.PageMeta meta = 2;
+  string next_cursor = 3;
+}
+
+message RevokeMySessionRequest {
+  string session_id = 1; // Canonical UUID owned by the verified actor.
+}
+
+message RevokeUserSessionRequest {
+  uint64 user_id = 1;
+  string session_id = 2; // Must belong to user_id; actor is never payload user_id.
+  // Required idempotency-key is gRPC metadata, not a payload field.
+}
+
+message RevokeSessionResponse {
+  bool changed = 1; // Already revoked produces false, without another event.
+}
+
+message RevokeAllMySessionsResponse {
+  bool changed = 1;
+  bool login_required = 2; // Includes revocation of the caller's current session.
+}
+
+message RevokeAllUserSessionsRequest {
+  uint64 user_id = 1;
+  // Required presence and positive entity version, distinct from auth_version.
+  optional uint64 expected_user_version = 2;
+  // Required idempotency-key is gRPC metadata, not a payload field.
+}
+
+message RevokeAllUserSessionsResponse {
+  bool changed = 1;
+  uint64 version = 2; // Committed user entity version, not auth_version.
+}

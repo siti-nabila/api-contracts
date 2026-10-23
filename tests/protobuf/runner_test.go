@@ -6,6 +6,30 @@ import (
 	"testing"
 )
 
+func TestCountryCodeContract(t *testing.T) { testutils.Run(t, test_scenarios.CountryCode()) }
+
+func TestMeAccessContract(t *testing.T) { testutils.Run(t, test_scenarios.MeAccess()) }
+
 func TestSessionContract(t *testing.T) {
 	testutils.Run(t, test_scenarios.All())
 }
+
+func TestLifecycleContract(t *testing.T) { testutils.Run(t, test_scenarios.Lifecycle()) }
+
+func TestUserManagementContract(t *testing.T) { testutils.Run(t, test_scenarios.UserManagement()) }
+
+func TestRoleManagementContract(t *testing.T) { testutils.Run(t, test_scenarios.RoleManagement()) }
+
+func TestAssignmentContract(t *testing.T) { testutils.Run(t, test_scenarios.Assignment()) }
+
+func TestApplicationAccessContract(t *testing.T) {
+	testutils.Run(t, test_scenarios.ApplicationAccess())
+}
+
+func TestEffectivePermissionsContract(t *testing.T) {
+	testutils.Run(t, test_scenarios.EffectivePermissions())
+}
+
+func TestAccessEvaluationContract(t *testing.T) { testutils.Run(t, test_scenarios.AccessEvaluation()) }
+
+func TestAuditLogReadsContract(t *testing.T) { testutils.Run(t, test_scenarios.AuditLogReads()) }

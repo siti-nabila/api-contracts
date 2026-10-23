@@ -7,14 +7,23 @@ option go_package = "github.com/siti-nabila/api-contracts/pb/user/v1;userv1";
 import "profile/v1/profile.payload.proto";
 import "paginator/v1/paginator.payload.proto";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/field_mask.proto";
 
 message User {
   uint64 id = 1;
   string name = 2;
   string email = 3;
-  string password = 4;
+  string password = 4; // Legacy only. Management responses MUST leave this empty.
   string dob = 5;
   string phone_no = 6;
+  string address = 7;
+  string status = 8;
+  uint64 version = 9;
+  google.protobuf.Timestamp created_at = 10;
+  bool must_change_password = 11;
+  repeated UserRoleAssignment roles = 12;
+  repeated UserApplicationAccess application_access = 13;
+  string country_code = 14; // Telephone calling code, for example +62.
 }
 
 message UserResponse {
@@ -38,6 +47,10 @@ message UserData {
   repeated UserRoleAssignment roles = 11;
   repeated UserApplicationAccess application_access = 12;
   bool must_change_password = 13;
+  string country_code = 14; // Telephone calling code, for example +62.
+  // Current grants in the caller's allowed namespaces. Present entries are true;
+  // absent keys are not granted. Restricted Me has no privilege collections.
+  map<string, bool> permissions = 15;
 }
 
 // Safe assignment metadata; code is the string RBAC code, not numeric role_codes.
@@ -68,12 +81,12 @@ message AuthRequest {
 }
 
 message UserTokenResponse {
-  // Login access token; empty on Register. Keep legacy field 1 and its type.
+  // Login/Refresh access token; empty on Register. Keep legacy field 1 and its type.
   string token = 1;
   // Register only: PENDING registration, without credentials or session.
   uint64 registration_id = 2;
   string registration_status = 3;
-  // Login only. Never populate these fields in Register or management responses.
+  // Login/Refresh only. Never populate these fields in Register or management responses.
   string refresh_token = 4;
   string session_id = 5; // UUID, owned by the authenticated user.
   google.protobuf.Timestamp access_expires_at = 6;
@@ -84,7 +97,11 @@ message UserTokenResponse {
 message CreateUserRequest {
   string name = 1;
   string email = 2;
-  string password = 3;
+  string password = 3; // Input only; never persist in replay results.
+  optional string status = 4; // Explicit PENDING or ACTIVE required.
+  string address = 5;
+  string phone = 6;
+  optional string country_code = 7; // Omission preserves legacy creation behavior.
 }
 
 message CreateUserResponse {
@@ -118,6 +135,8 @@ message UserListItem {
   uint64 version = 7;
   repeated UserRoleAssignment roles = 8;
   repeated UserApplicationAccess application_access = 9;
+  google.protobuf.Timestamp created_at = 10; // User creation time; sortable.
+  string country_code = 11; // Telephone calling code, for example +62.
 }
 
 message ListUsersResponse {
@@ -137,4 +156,168 @@ message UserFilter {
   repeated uint64 role_codes = 3;
   repeated string statuses = 4;
   string application_code = 5;
+}
+
+// Only name/address/phone/country_code are writable. Mask paths and presence must agree.
+// A selected empty address/phone clears it; selected empty name is invalid.
+message UpdateUserRequest {
+  uint64 user_id = 1;
+  optional uint64 expected_user_version = 2;
+  optional string name = 3;
+  optional string address = 4;
+  optional string phone = 5;
+  google.protobuf.FieldMask field_mask = 6;
+  optional string country_code = 7;
+}
+
+message UpdateUserResponse {
+  User user = 1;
+  bool changed = 2;
+}
+
+message ChangeUserStatusRequest {
+  uint64 user_id = 1;
+  optional string status = 2;
+  string reason = 3;
+  optional uint64 expected_user_version = 4;
+}
+
+message ChangeUserStatusResponse {
+  uint64 user_id = 1;
+  string status = 2;
+  uint64 version = 3;
+  bool changed = 4;
+}
+
+// Historical assignment state; does not assert effective permission.
+message UserRoleAssignmentItem {
+  uint64 id = 1;
+  uint64 role_id = 2;
+  string code = 3;
+  int32 role_code = 4;
+  string name = 5;
+  string status = 6;
+  string role_status = 7;
+  uint64 application_id = 8;
+  string application_code = 9;
+  string application_status = 10;
+  bool is_system = 11;
+  optional string application_access_status = 12;
+  optional uint64 granted_by = 13;
+  google.protobuf.Timestamp granted_at = 14;
+  optional uint64 revoked_by = 15;
+  google.protobuf.Timestamp revoked_at = 16;
+  optional string revoke_reason = 17;
+}
+
+message UserRoleAssignmentFilter {
+  string application_code = 1;
+  repeated string statuses = 2; // Assignment ACTIVE or REVOKED; default both.
+}
+
+message ListUserRolesRequest {
+  uint64 user_id = 1;
+  paginator.v1.PageQuery query = 2;
+  UserRoleAssignmentFilter filter = 3;
+}
+
+message ListUserRolesResponse {
+  repeated UserRoleAssignmentItem items = 1;
+  paginator.v1.PageMeta meta = 2;
+  string next_cursor = 3;
+  uint64 user_id = 4;
+  uint64 version = 5;
+}
+
+// idempotency-key is mandatory metadata, never a payload field.
+message GrantUserRolesRequest {
+  uint64 user_id = 1;
+  repeated uint64 role_ids = 2;
+  string reason = 3;
+  optional uint64 expected_user_version = 4;
+}
+
+message GrantUserRolesResponse {
+  uint64 user_id = 1;
+  repeated uint64 changed_role_ids = 2;
+  uint64 version = 3;
+  bool changed = 4;
+}
+
+message RevokeUserRolesRequest {
+  uint64 user_id = 1;
+  repeated uint64 role_ids = 2;
+  string reason = 3;
+  optional uint64 expected_user_version = 4;
+}
+
+message RevokeUserRolesResponse {
+  uint64 user_id = 1;
+  repeated uint64 changed_role_ids = 2;
+  uint64 version = 3;
+  bool changed = 4;
+}
+
+// Stored access history, independent of effective permission.
+message UserApplicationAccessItem {
+  uint64 application_id = 1;
+  string application_code = 2;
+  string name = 3;
+  string application_status = 4;
+  bool is_system = 5;
+  string status = 6; // Access ACTIVE or REVOKED.
+  optional uint64 granted_by = 7;
+  google.protobuf.Timestamp granted_at = 8;
+  optional uint64 revoked_by = 9;
+  google.protobuf.Timestamp revoked_at = 10;
+  optional string revoke_reason = 11;
+}
+
+message UserApplicationAccessFilter {
+  string application_code = 1;
+  repeated string statuses = 2; // Access ACTIVE/REVOKED; absent includes both.
+}
+
+message ListUserApplicationAccessRequest {
+  uint64 user_id = 1;
+  paginator.v1.PageQuery query = 2;
+  UserApplicationAccessFilter filter = 3;
+}
+
+message ListUserApplicationAccessResponse {
+  uint64 user_id = 1;
+  uint64 version = 2;
+  repeated UserApplicationAccessItem items = 3;
+  paginator.v1.PageMeta meta = 4;
+  string next_cursor = 5;
+}
+
+// Blank application_code includes only namespaces allowed for the verified service.
+// A nonempty code must be allowed for that service; unknown/inactive yields no permissions.
+message GetMyEffectivePermissionsRequest {
+  string application_code = 1;
+}
+
+message GetUserEffectivePermissionsRequest {
+  uint64 user_id = 1;
+  string application_code = 2;
+}
+
+message EffectivePermissionRole {
+  uint64 role_id = 1;
+  string code = 2; // String role code; never a numeric-role authorization bypass.
+}
+
+message EffectivePermission {
+  string code = 1;
+  repeated EffectivePermissionRole roles = 2; // Unique contributing ACTIVE roles, ID ascending.
+}
+
+// Descriptive ACTIVE-role union, including retained contributions for inactive accounts.
+// user_status must accompany the view. This response never grants access or restores a session.
+message GetEffectivePermissionsResponse {
+  uint64 user_id = 1;
+  string user_status = 2;
+  uint64 version = 3; // Entity version only; role changes can alter permissions without changing it.
+  repeated EffectivePermission permissions = 4; // Unique codes, lexicographically ascending.
 }
