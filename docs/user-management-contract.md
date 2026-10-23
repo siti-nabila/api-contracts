@@ -9,19 +9,19 @@ transactions belong to grpc-auth, not this contract repository.
 CreateUser/GetUser retain their existing request/response wrappers. `User` tags
 1–6 are unchanged; legacy `password` tag 4 MUST be empty in every management
 response. Safe metadata adds address(7), status(8), version(9), created_at(10),
-must_change_password(11), roles(12), and application_access(13). Phone uses legacy
+must_change_password(11), roles(12), and application_access(13), and country_code(14). Phone uses legacy
 phone_no(6). No auth_version, token, refresh token, or password hash is returned.
 Collections show ACTIVE assignments/access with ACTIVE roles/applications.
 
 CreateUser retains name(1), email(2), password(3); adds explicit optional status(4),
-address(5), phone(6). Omitted/empty status is invalid; choose PENDING or ACTIVE.
+address(5), phone(6), and optional country_code(7). Omitted/empty status is invalid; choose PENDING or ACTIVE.
 Email is trimmed/lowercased. Email/password lengths are 6–50, supplied name 3–100,
 address up to 250, phone up to 20. Creation starts version 1 with
 must_change_password=true and issues no credentials. Initial password delivery is
 external to this contract; it is never stored in replay results.
 
 UpdateUser takes positive user_id(1), present positive expected_user_version(2),
-optional name(3)/address(4)/phone(5), and field_mask(6). Only those three profile
+optional name(3)/address(4)/phone(5), field_mask(6), and optional country_code(7). Only those four profile
 paths are accepted. Mask selection and field presence must agree. Omitted fields
 are unchanged; selected empty address/phone clears the field. Selected empty name
 is invalid. Response user(1)/changed(2) contains the committed safe state.
@@ -52,3 +52,5 @@ Publication order: regenerate protobuf, test descriptors/presence/legacy wire
 compatibility/error metadata/locales, run full tests and vet, review source and
 generated diffs, then publish a reviewed commit before updating grpc-auth. No
 runtime business guarantees are inferred from descriptor tests alone.
+
+See [country-code-contract.md](country-code-contract.md) for nullable calling-code validation, clearing, legacy omission, audit and replay compatibility.

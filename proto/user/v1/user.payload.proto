@@ -23,6 +23,7 @@ message User {
   bool must_change_password = 11;
   repeated UserRoleAssignment roles = 12;
   repeated UserApplicationAccess application_access = 13;
+  string country_code = 14; // Telephone calling code, for example +62.
 }
 
 message UserResponse {
@@ -46,6 +47,10 @@ message UserData {
   repeated UserRoleAssignment roles = 11;
   repeated UserApplicationAccess application_access = 12;
   bool must_change_password = 13;
+  string country_code = 14; // Telephone calling code, for example +62.
+  // Current grants in the caller's allowed namespaces. Present entries are true;
+  // absent keys are not granted. Restricted Me has no privilege collections.
+  map<string, bool> permissions = 15;
 }
 
 // Safe assignment metadata; code is the string RBAC code, not numeric role_codes.
@@ -96,6 +101,7 @@ message CreateUserRequest {
   optional string status = 4; // Explicit PENDING or ACTIVE required.
   string address = 5;
   string phone = 6;
+  optional string country_code = 7; // Omission preserves legacy creation behavior.
 }
 
 message CreateUserResponse {
@@ -130,6 +136,7 @@ message UserListItem {
   repeated UserRoleAssignment roles = 8;
   repeated UserApplicationAccess application_access = 9;
   google.protobuf.Timestamp created_at = 10; // User creation time; sortable.
+  string country_code = 11; // Telephone calling code, for example +62.
 }
 
 message ListUsersResponse {
@@ -151,7 +158,7 @@ message UserFilter {
   string application_code = 5;
 }
 
-// Only name/address/phone are writable. Mask paths and presence must agree.
+// Only name/address/phone/country_code are writable. Mask paths and presence must agree.
 // A selected empty address/phone clears it; selected empty name is invalid.
 message UpdateUserRequest {
   uint64 user_id = 1;
@@ -160,6 +167,7 @@ message UpdateUserRequest {
   optional string address = 4;
   optional string phone = 5;
   google.protobuf.FieldMask field_mask = 6;
+  optional string country_code = 7;
 }
 
 message UpdateUserResponse {

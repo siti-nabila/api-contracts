@@ -40,6 +40,7 @@ type User struct {
 	MustChangePassword bool                     `protobuf:"varint,11,opt,name=must_change_password,json=mustChangePassword,proto3" json:"must_change_password,omitempty"`
 	Roles              []*UserRoleAssignment    `protobuf:"bytes,12,rep,name=roles,proto3" json:"roles,omitempty"`
 	ApplicationAccess  []*UserApplicationAccess `protobuf:"bytes,13,rep,name=application_access,json=applicationAccess,proto3" json:"application_access,omitempty"`
+	CountryCode        string                   `protobuf:"bytes,14,opt,name=country_code,json=countryCode,proto3" json:"country_code,omitempty"` // Telephone calling code, for example +62.
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -165,6 +166,13 @@ func (x *User) GetApplicationAccess() []*UserApplicationAccess {
 	return nil
 }
 
+func (x *User) GetCountryCode() string {
+	if x != nil {
+		return x.CountryCode
+	}
+	return ""
+}
+
 type UserResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -241,8 +249,12 @@ type UserData struct {
 	Roles              []*UserRoleAssignment    `protobuf:"bytes,11,rep,name=roles,proto3" json:"roles,omitempty"`
 	ApplicationAccess  []*UserApplicationAccess `protobuf:"bytes,12,rep,name=application_access,json=applicationAccess,proto3" json:"application_access,omitempty"`
 	MustChangePassword bool                     `protobuf:"varint,13,opt,name=must_change_password,json=mustChangePassword,proto3" json:"must_change_password,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	CountryCode        string                   `protobuf:"bytes,14,opt,name=country_code,json=countryCode,proto3" json:"country_code,omitempty"` // Telephone calling code, for example +62.
+	// Current grants in the caller's allowed namespaces. Present entries are true;
+	// absent keys are not granted. Restricted Me has no privilege collections.
+	Permissions   map[string]bool `protobuf:"bytes,15,rep,name=permissions,proto3" json:"permissions,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *UserData) Reset() {
@@ -364,6 +376,20 @@ func (x *UserData) GetMustChangePassword() bool {
 		return x.MustChangePassword
 	}
 	return false
+}
+
+func (x *UserData) GetCountryCode() string {
+	if x != nil {
+		return x.CountryCode
+	}
+	return ""
+}
+
+func (x *UserData) GetPermissions() map[string]bool {
+	if x != nil {
+		return x.Permissions
+	}
+	return nil
 }
 
 // Safe assignment metadata; code is the string RBAC code, not numeric role_codes.
@@ -734,6 +760,7 @@ type CreateUserRequest struct {
 	Status        *string                `protobuf:"bytes,4,opt,name=status,proto3,oneof" json:"status,omitempty"` // Explicit PENDING or ACTIVE required.
 	Address       string                 `protobuf:"bytes,5,opt,name=address,proto3" json:"address,omitempty"`
 	Phone         string                 `protobuf:"bytes,6,opt,name=phone,proto3" json:"phone,omitempty"`
+	CountryCode   *string                `protobuf:"bytes,7,opt,name=country_code,json=countryCode,proto3,oneof" json:"country_code,omitempty"` // Omission preserves legacy creation behavior.
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -806,6 +833,13 @@ func (x *CreateUserRequest) GetAddress() string {
 func (x *CreateUserRequest) GetPhone() string {
 	if x != nil {
 		return x.Phone
+	}
+	return ""
+}
+
+func (x *CreateUserRequest) GetCountryCode() string {
+	if x != nil && x.CountryCode != nil {
+		return *x.CountryCode
 	}
 	return ""
 }
@@ -1049,7 +1083,8 @@ type UserListItem struct {
 	Version           uint64                   `protobuf:"varint,7,opt,name=version,proto3" json:"version,omitempty"`
 	Roles             []*UserRoleAssignment    `protobuf:"bytes,8,rep,name=roles,proto3" json:"roles,omitempty"`
 	ApplicationAccess []*UserApplicationAccess `protobuf:"bytes,9,rep,name=application_access,json=applicationAccess,proto3" json:"application_access,omitempty"`
-	CreatedAt         *timestamppb.Timestamp   `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"` // User creation time; sortable.
+	CreatedAt         *timestamppb.Timestamp   `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`       // User creation time; sortable.
+	CountryCode       string                   `protobuf:"bytes,11,opt,name=country_code,json=countryCode,proto3" json:"country_code,omitempty"` // Telephone calling code, for example +62.
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -1152,6 +1187,13 @@ func (x *UserListItem) GetCreatedAt() *timestamppb.Timestamp {
 		return x.CreatedAt
 	}
 	return nil
+}
+
+func (x *UserListItem) GetCountryCode() string {
+	if x != nil {
+		return x.CountryCode
+	}
+	return ""
 }
 
 type ListUsersResponse struct {
@@ -1330,7 +1372,7 @@ func (x *UserFilter) GetApplicationCode() string {
 	return ""
 }
 
-// Only name/address/phone are writable. Mask paths and presence must agree.
+// Only name/address/phone/country_code are writable. Mask paths and presence must agree.
 // A selected empty address/phone clears it; selected empty name is invalid.
 type UpdateUserRequest struct {
 	state               protoimpl.MessageState `protogen:"open.v1"`
@@ -1340,6 +1382,7 @@ type UpdateUserRequest struct {
 	Address             *string                `protobuf:"bytes,4,opt,name=address,proto3,oneof" json:"address,omitempty"`
 	Phone               *string                `protobuf:"bytes,5,opt,name=phone,proto3,oneof" json:"phone,omitempty"`
 	FieldMask           *fieldmaskpb.FieldMask `protobuf:"bytes,6,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	CountryCode         *string                `protobuf:"bytes,7,opt,name=country_code,json=countryCode,proto3,oneof" json:"country_code,omitempty"`
 	unknownFields       protoimpl.UnknownFields
 	sizeCache           protoimpl.SizeCache
 }
@@ -1414,6 +1457,13 @@ func (x *UpdateUserRequest) GetFieldMask() *fieldmaskpb.FieldMask {
 		return x.FieldMask
 	}
 	return nil
+}
+
+func (x *UpdateUserRequest) GetCountryCode() string {
+	if x != nil && x.CountryCode != nil {
+		return *x.CountryCode
+	}
+	return ""
 }
 
 type UpdateUserResponse struct {
@@ -2827,7 +2877,7 @@ var File_user_v1_user_payload_proto protoreflect.FileDescriptor
 
 const file_user_v1_user_payload_proto_rawDesc = "" +
 	"\n" +
-	"\x1auser/v1/user.payload.proto\x12\auser.v1\x1a profile/v1/profile.payload.proto\x1a$paginator/v1/paginator.payload.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\"\xc4\x03\n" +
+	"\x1auser/v1/user.payload.proto\x12\auser.v1\x1a profile/v1/profile.payload.proto\x1a$paginator/v1/paginator.payload.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\"\xe7\x03\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
@@ -2843,12 +2893,13 @@ const file_user_v1_user_payload_proto_rawDesc = "" +
 	" \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x120\n" +
 	"\x14must_change_password\x18\v \x01(\bR\x12mustChangePassword\x121\n" +
 	"\x05roles\x18\f \x03(\v2\x1b.user.v1.UserRoleAssignmentR\x05roles\x12M\n" +
-	"\x12application_access\x18\r \x03(\v2\x1e.user.v1.UserApplicationAccessR\x11applicationAccess\"o\n" +
+	"\x12application_access\x18\r \x03(\v2\x1e.user.v1.UserApplicationAccessR\x11applicationAccess\x12!\n" +
+	"\fcountry_code\x18\x0e \x01(\tR\vcountryCode\"o\n" +
 	"\fUserResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x129\n" +
 	"\n" +
-	"created_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\xdb\x03\n" +
+	"created_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\x84\x05\n" +
 	"\bUserData\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12\x1a\n" +
@@ -2866,7 +2917,12 @@ const file_user_v1_user_payload_proto_rawDesc = "" +
 	" \x01(\x04R\aversion\x121\n" +
 	"\x05roles\x18\v \x03(\v2\x1b.user.v1.UserRoleAssignmentR\x05roles\x12M\n" +
 	"\x12application_access\x18\f \x03(\v2\x1e.user.v1.UserApplicationAccessR\x11applicationAccess\x120\n" +
-	"\x14must_change_password\x18\r \x01(\bR\x12mustChangePassword\"\x8e\x01\n" +
+	"\x14must_change_password\x18\r \x01(\bR\x12mustChangePassword\x12!\n" +
+	"\fcountry_code\x18\x0e \x01(\tR\vcountryCode\x12D\n" +
+	"\vpermissions\x18\x0f \x03(\v2\".user.v1.UserData.PermissionsEntryR\vpermissions\x1a>\n" +
+	"\x10PermissionsEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\bR\x05value:\x028\x01\"\x8e\x01\n" +
 	"\x12UserRoleAssignment\x12\x17\n" +
 	"\arole_id\x18\x01 \x01(\x04R\x06roleId\x12\x12\n" +
 	"\x04code\x18\x02 \x01(\tR\x04code\x12\x12\n" +
@@ -2895,15 +2951,17 @@ const file_user_v1_user_payload_proto_rawDesc = "" +
 	"session_id\x18\x05 \x01(\tR\tsessionId\x12F\n" +
 	"\x11access_expires_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\x0faccessExpiresAt\x12H\n" +
 	"\x12session_expires_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\x10sessionExpiresAt\x120\n" +
-	"\x14must_change_password\x18\b \x01(\bR\x12mustChangePassword\"\xb1\x01\n" +
+	"\x14must_change_password\x18\b \x01(\bR\x12mustChangePassword\"\xea\x01\n" +
 	"\x11CreateUserRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12\x1a\n" +
 	"\bpassword\x18\x03 \x01(\tR\bpassword\x12\x1b\n" +
 	"\x06status\x18\x04 \x01(\tH\x00R\x06status\x88\x01\x01\x12\x18\n" +
 	"\aaddress\x18\x05 \x01(\tR\aaddress\x12\x14\n" +
-	"\x05phone\x18\x06 \x01(\tR\x05phoneB\t\n" +
-	"\a_status\"7\n" +
+	"\x05phone\x18\x06 \x01(\tR\x05phone\x12&\n" +
+	"\fcountry_code\x18\a \x01(\tH\x01R\vcountryCode\x88\x01\x01B\t\n" +
+	"\a_statusB\x0f\n" +
+	"\r_country_code\"7\n" +
 	"\x12CreateUserResponse\x12!\n" +
 	"\x04user\x18\x01 \x01(\v2\r.user.v1.UserR\x04user\" \n" +
 	"\x0eGetUserRequest\x12\x0e\n" +
@@ -2914,7 +2972,7 @@ const file_user_v1_user_payload_proto_rawDesc = "" +
 	"\x03res\x18\x01 \x01(\tR\x03res\"n\n" +
 	"\x10ListUsersRequest\x12-\n" +
 	"\x05query\x18\x01 \x01(\v2\x17.paginator.v1.PageQueryR\x05query\x12+\n" +
-	"\x06filter\x18\x02 \x01(\v2\x13.user.v1.UserFilterR\x06filter\"\xe7\x02\n" +
+	"\x06filter\x18\x02 \x01(\v2\x13.user.v1.UserFilterR\x06filter\"\x8a\x03\n" +
 	"\fUserListItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12\x12\n" +
@@ -2927,7 +2985,8 @@ const file_user_v1_user_payload_proto_rawDesc = "" +
 	"\x12application_access\x18\t \x03(\v2\x1e.user.v1.UserApplicationAccessR\x11applicationAccess\x129\n" +
 	"\n" +
 	"created_at\x18\n" +
-	" \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\xf8\x01\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12!\n" +
+	"\fcountry_code\x18\v \x01(\tR\vcountryCode\"\xf8\x01\n" +
 	"\x11ListUsersResponse\x12+\n" +
 	"\x05items\x18\x01 \x03(\v2\x15.user.v1.UserListItemR\x05items\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x05R\x05total\x12\x12\n" +
@@ -2947,7 +3006,7 @@ const file_user_v1_user_payload_proto_rawDesc = "" +
 	"\n" +
 	"role_codes\x18\x03 \x03(\x04R\troleCodes\x12\x1a\n" +
 	"\bstatuses\x18\x04 \x03(\tR\bstatuses\x12)\n" +
-	"\x10application_code\x18\x05 \x01(\tR\x0fapplicationCode\"\xac\x02\n" +
+	"\x10application_code\x18\x05 \x01(\tR\x0fapplicationCode\"\xe5\x02\n" +
 	"\x11UpdateUserRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\x04R\x06userId\x127\n" +
 	"\x15expected_user_version\x18\x02 \x01(\x04H\x00R\x13expectedUserVersion\x88\x01\x01\x12\x17\n" +
@@ -2955,12 +3014,14 @@ const file_user_v1_user_payload_proto_rawDesc = "" +
 	"\aaddress\x18\x04 \x01(\tH\x02R\aaddress\x88\x01\x01\x12\x19\n" +
 	"\x05phone\x18\x05 \x01(\tH\x03R\x05phone\x88\x01\x01\x129\n" +
 	"\n" +
-	"field_mask\x18\x06 \x01(\v2\x1a.google.protobuf.FieldMaskR\tfieldMaskB\x18\n" +
+	"field_mask\x18\x06 \x01(\v2\x1a.google.protobuf.FieldMaskR\tfieldMask\x12&\n" +
+	"\fcountry_code\x18\a \x01(\tH\x04R\vcountryCode\x88\x01\x01B\x18\n" +
 	"\x16_expected_user_versionB\a\n" +
 	"\x05_nameB\n" +
 	"\n" +
 	"\b_addressB\b\n" +
-	"\x06_phone\"Q\n" +
+	"\x06_phoneB\x0f\n" +
+	"\r_country_code\"Q\n" +
 	"\x12UpdateUserResponse\x12!\n" +
 	"\x04user\x18\x01 \x01(\v2\r.user.v1.UserR\x04user\x12\x18\n" +
 	"\achanged\x18\x02 \x01(\bR\achanged\"\xc5\x01\n" +
@@ -3104,7 +3165,7 @@ func file_user_v1_user_payload_proto_rawDescGZIP() []byte {
 	return file_user_v1_user_payload_proto_rawDescData
 }
 
-var file_user_v1_user_payload_proto_msgTypes = make([]protoimpl.MessageInfo, 38)
+var file_user_v1_user_payload_proto_msgTypes = make([]protoimpl.MessageInfo, 39)
 var file_user_v1_user_payload_proto_goTypes = []any{
 	(*User)(nil),                               // 0: user.v1.User
 	(*UserResponse)(nil),                       // 1: user.v1.UserResponse
@@ -3144,55 +3205,57 @@ var file_user_v1_user_payload_proto_goTypes = []any{
 	(*EffectivePermissionRole)(nil),            // 35: user.v1.EffectivePermissionRole
 	(*EffectivePermission)(nil),                // 36: user.v1.EffectivePermission
 	(*GetEffectivePermissionsResponse)(nil),    // 37: user.v1.GetEffectivePermissionsResponse
-	(*timestamppb.Timestamp)(nil),              // 38: google.protobuf.Timestamp
-	(*v1.Profile)(nil),                         // 39: profile.v1.Profile
-	(*v11.PageQuery)(nil),                      // 40: paginator.v1.PageQuery
-	(*fieldmaskpb.FieldMask)(nil),              // 41: google.protobuf.FieldMask
-	(*v11.PageMeta)(nil),                       // 42: paginator.v1.PageMeta
+	nil,                                        // 38: user.v1.UserData.PermissionsEntry
+	(*timestamppb.Timestamp)(nil),              // 39: google.protobuf.Timestamp
+	(*v1.Profile)(nil),                         // 40: profile.v1.Profile
+	(*v11.PageQuery)(nil),                      // 41: paginator.v1.PageQuery
+	(*fieldmaskpb.FieldMask)(nil),              // 42: google.protobuf.FieldMask
+	(*v11.PageMeta)(nil),                       // 43: paginator.v1.PageMeta
 }
 var file_user_v1_user_payload_proto_depIdxs = []int32{
-	38, // 0: user.v1.User.created_at:type_name -> google.protobuf.Timestamp
+	39, // 0: user.v1.User.created_at:type_name -> google.protobuf.Timestamp
 	3,  // 1: user.v1.User.roles:type_name -> user.v1.UserRoleAssignment
 	4,  // 2: user.v1.User.application_access:type_name -> user.v1.UserApplicationAccess
-	38, // 3: user.v1.UserResponse.created_at:type_name -> google.protobuf.Timestamp
-	38, // 4: user.v1.UserData.created_at:type_name -> google.protobuf.Timestamp
+	39, // 3: user.v1.UserResponse.created_at:type_name -> google.protobuf.Timestamp
+	39, // 4: user.v1.UserData.created_at:type_name -> google.protobuf.Timestamp
 	3,  // 5: user.v1.UserData.roles:type_name -> user.v1.UserRoleAssignment
 	4,  // 6: user.v1.UserData.application_access:type_name -> user.v1.UserApplicationAccess
-	1,  // 7: user.v1.UserDataOld.user:type_name -> user.v1.UserResponse
-	39, // 8: user.v1.UserDataOld.profile:type_name -> profile.v1.Profile
-	38, // 9: user.v1.UserTokenResponse.access_expires_at:type_name -> google.protobuf.Timestamp
-	38, // 10: user.v1.UserTokenResponse.session_expires_at:type_name -> google.protobuf.Timestamp
-	0,  // 11: user.v1.CreateUserResponse.user:type_name -> user.v1.User
-	0,  // 12: user.v1.GetUserResponse.user:type_name -> user.v1.User
-	40, // 13: user.v1.ListUsersRequest.query:type_name -> paginator.v1.PageQuery
-	16, // 14: user.v1.ListUsersRequest.filter:type_name -> user.v1.UserFilter
-	3,  // 15: user.v1.UserListItem.roles:type_name -> user.v1.UserRoleAssignment
-	4,  // 16: user.v1.UserListItem.application_access:type_name -> user.v1.UserApplicationAccess
-	38, // 17: user.v1.UserListItem.created_at:type_name -> google.protobuf.Timestamp
-	14, // 18: user.v1.ListUsersResponse.items:type_name -> user.v1.UserListItem
-	38, // 19: user.v1.UserFilter.created_from:type_name -> google.protobuf.Timestamp
-	38, // 20: user.v1.UserFilter.created_to:type_name -> google.protobuf.Timestamp
-	41, // 21: user.v1.UpdateUserRequest.field_mask:type_name -> google.protobuf.FieldMask
-	0,  // 22: user.v1.UpdateUserResponse.user:type_name -> user.v1.User
-	38, // 23: user.v1.UserRoleAssignmentItem.granted_at:type_name -> google.protobuf.Timestamp
-	38, // 24: user.v1.UserRoleAssignmentItem.revoked_at:type_name -> google.protobuf.Timestamp
-	40, // 25: user.v1.ListUserRolesRequest.query:type_name -> paginator.v1.PageQuery
-	22, // 26: user.v1.ListUserRolesRequest.filter:type_name -> user.v1.UserRoleAssignmentFilter
-	21, // 27: user.v1.ListUserRolesResponse.items:type_name -> user.v1.UserRoleAssignmentItem
-	42, // 28: user.v1.ListUserRolesResponse.meta:type_name -> paginator.v1.PageMeta
-	38, // 29: user.v1.UserApplicationAccessItem.granted_at:type_name -> google.protobuf.Timestamp
-	38, // 30: user.v1.UserApplicationAccessItem.revoked_at:type_name -> google.protobuf.Timestamp
-	40, // 31: user.v1.ListUserApplicationAccessRequest.query:type_name -> paginator.v1.PageQuery
-	30, // 32: user.v1.ListUserApplicationAccessRequest.filter:type_name -> user.v1.UserApplicationAccessFilter
-	29, // 33: user.v1.ListUserApplicationAccessResponse.items:type_name -> user.v1.UserApplicationAccessItem
-	42, // 34: user.v1.ListUserApplicationAccessResponse.meta:type_name -> paginator.v1.PageMeta
-	35, // 35: user.v1.EffectivePermission.roles:type_name -> user.v1.EffectivePermissionRole
-	36, // 36: user.v1.GetEffectivePermissionsResponse.permissions:type_name -> user.v1.EffectivePermission
-	37, // [37:37] is the sub-list for method output_type
-	37, // [37:37] is the sub-list for method input_type
-	37, // [37:37] is the sub-list for extension type_name
-	37, // [37:37] is the sub-list for extension extendee
-	0,  // [0:37] is the sub-list for field type_name
+	38, // 7: user.v1.UserData.permissions:type_name -> user.v1.UserData.PermissionsEntry
+	1,  // 8: user.v1.UserDataOld.user:type_name -> user.v1.UserResponse
+	40, // 9: user.v1.UserDataOld.profile:type_name -> profile.v1.Profile
+	39, // 10: user.v1.UserTokenResponse.access_expires_at:type_name -> google.protobuf.Timestamp
+	39, // 11: user.v1.UserTokenResponse.session_expires_at:type_name -> google.protobuf.Timestamp
+	0,  // 12: user.v1.CreateUserResponse.user:type_name -> user.v1.User
+	0,  // 13: user.v1.GetUserResponse.user:type_name -> user.v1.User
+	41, // 14: user.v1.ListUsersRequest.query:type_name -> paginator.v1.PageQuery
+	16, // 15: user.v1.ListUsersRequest.filter:type_name -> user.v1.UserFilter
+	3,  // 16: user.v1.UserListItem.roles:type_name -> user.v1.UserRoleAssignment
+	4,  // 17: user.v1.UserListItem.application_access:type_name -> user.v1.UserApplicationAccess
+	39, // 18: user.v1.UserListItem.created_at:type_name -> google.protobuf.Timestamp
+	14, // 19: user.v1.ListUsersResponse.items:type_name -> user.v1.UserListItem
+	39, // 20: user.v1.UserFilter.created_from:type_name -> google.protobuf.Timestamp
+	39, // 21: user.v1.UserFilter.created_to:type_name -> google.protobuf.Timestamp
+	42, // 22: user.v1.UpdateUserRequest.field_mask:type_name -> google.protobuf.FieldMask
+	0,  // 23: user.v1.UpdateUserResponse.user:type_name -> user.v1.User
+	39, // 24: user.v1.UserRoleAssignmentItem.granted_at:type_name -> google.protobuf.Timestamp
+	39, // 25: user.v1.UserRoleAssignmentItem.revoked_at:type_name -> google.protobuf.Timestamp
+	41, // 26: user.v1.ListUserRolesRequest.query:type_name -> paginator.v1.PageQuery
+	22, // 27: user.v1.ListUserRolesRequest.filter:type_name -> user.v1.UserRoleAssignmentFilter
+	21, // 28: user.v1.ListUserRolesResponse.items:type_name -> user.v1.UserRoleAssignmentItem
+	43, // 29: user.v1.ListUserRolesResponse.meta:type_name -> paginator.v1.PageMeta
+	39, // 30: user.v1.UserApplicationAccessItem.granted_at:type_name -> google.protobuf.Timestamp
+	39, // 31: user.v1.UserApplicationAccessItem.revoked_at:type_name -> google.protobuf.Timestamp
+	41, // 32: user.v1.ListUserApplicationAccessRequest.query:type_name -> paginator.v1.PageQuery
+	30, // 33: user.v1.ListUserApplicationAccessRequest.filter:type_name -> user.v1.UserApplicationAccessFilter
+	29, // 34: user.v1.ListUserApplicationAccessResponse.items:type_name -> user.v1.UserApplicationAccessItem
+	43, // 35: user.v1.ListUserApplicationAccessResponse.meta:type_name -> paginator.v1.PageMeta
+	35, // 36: user.v1.EffectivePermission.roles:type_name -> user.v1.EffectivePermissionRole
+	36, // 37: user.v1.GetEffectivePermissionsResponse.permissions:type_name -> user.v1.EffectivePermission
+	38, // [38:38] is the sub-list for method output_type
+	38, // [38:38] is the sub-list for method input_type
+	38, // [38:38] is the sub-list for extension type_name
+	38, // [38:38] is the sub-list for extension extendee
+	0,  // [0:38] is the sub-list for field type_name
 }
 
 func init() { file_user_v1_user_payload_proto_init() }
@@ -3213,7 +3276,7 @@ func file_user_v1_user_payload_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_v1_user_payload_proto_rawDesc), len(file_user_v1_user_payload_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   38,
+			NumMessages:   39,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

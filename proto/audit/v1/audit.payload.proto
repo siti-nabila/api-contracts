@@ -34,6 +34,7 @@ message AuditSnapshot {
   string session_id = 10;
   string reason_code = 11;
   bool no_op = 12;
+  optional string country_code = 13; // Telephone calling code in profile snapshots.
 }
 
 message AuditLogItem {

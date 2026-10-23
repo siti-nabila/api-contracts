@@ -6,6 +6,10 @@ import (
 	"testing"
 )
 
+func TestCountryCodeContract(t *testing.T) { testutils.Run(t, test_scenarios.CountryCode()) }
+
+func TestMeAccessContract(t *testing.T) { testutils.Run(t, test_scenarios.MeAccess()) }
+
 func TestSessionContract(t *testing.T) {
 	testutils.Run(t, test_scenarios.All())
 }

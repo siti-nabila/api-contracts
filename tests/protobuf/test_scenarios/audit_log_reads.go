@@ -45,7 +45,7 @@ func auditBaseline(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if !proto.Equal(old, protodesc.ToFileDescriptorProto(f)) {
+		if !proto.Equal(old, beforeCountryCode(protodesc.ToFileDescriptorProto(f))) {
 			t.Error("existing descriptor changed", path)
 		}
 		for _, s := range old.Service {
@@ -76,7 +76,7 @@ func auditFields(t *testing.T) {
 	}
 	for name, fields := range map[string]string{
 		"AuditLogFilter":        "actor_user_id:uint64? actor_service:string action:string target_type:string target_id:string occurred_from:google.protobuf.Timestamp occurred_before:google.protobuf.Timestamp",
-		"AuditSnapshot":         "version:int64 status:string name:string? description:string? address:string? phone:string? role_ids:uint64* permission_codes:string* application_id:uint64 session_id:string reason_code:string no_op:bool",
+		"AuditSnapshot":         "version:int64 status:string name:string? description:string? address:string? phone:string? role_ids:uint64* permission_codes:string* application_id:uint64 session_id:string reason_code:string no_op:bool country_code:string?",
 		"AuditLogItem":          "id:uint64 actor_user_id:uint64? actor_service:string? action:string target_type:string target_id:string safe_before:audit.v1.AuditSnapshot safe_after:audit.v1.AuditSnapshot reason:string? request_id:string? trace_id:string? occurred_at:google.protobuf.Timestamp",
 		"ListAuditLogsRequest":  "query:paginator.v1.PageQuery filter:audit.v1.AuditLogFilter",
 		"ListAuditLogsResponse": "items:audit.v1.AuditLogItem* meta:paginator.v1.PageMeta next_cursor:string",
@@ -90,7 +90,7 @@ func auditFields(t *testing.T) {
 			assertRoleField(t, d, i, v)
 		}
 	}
-	for name, fields := range map[string][]string{"AuditLogFilter": {"actor_user_id"}, "AuditLogItem": {"actor_user_id", "actor_service", "reason", "request_id", "trace_id"}, "AuditSnapshot": {"name", "description", "address", "phone"}} {
+	for name, fields := range map[string][]string{"AuditLogFilter": {"actor_user_id"}, "AuditLogItem": {"actor_user_id", "actor_service", "reason", "request_id", "trace_id"}, "AuditSnapshot": {"name", "description", "address", "phone", "country_code"}} {
 		d := auditv1.File_audit_v1_audit_payload_proto.Messages().ByName(protoreflect.Name(name))
 		for _, name := range fields {
 			if !d.Fields().ByName(protoreflect.Name(name)).HasOptionalKeyword() {

@@ -43,7 +43,7 @@ func evaluationBaseline(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if !proto.Equal(old, protodesc.ToFileDescriptorProto(current)) {
+		if !proto.Equal(old, beforeCountryCode(protodesc.ToFileDescriptorProto(current))) {
 			t.Error("existing descriptor changed", path)
 		}
 		for _, s := range old.Service {

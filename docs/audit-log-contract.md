@@ -35,6 +35,7 @@ All prior36 methods/eight services and descriptors remain unchanged; adding Audi
 | AuditSnapshot | session_id | 10 | string |
 | AuditSnapshot | reason_code | 11 | string |
 | AuditSnapshot | no_op | 12 | bool |
+| AuditSnapshot | country_code | 13 | optional string |
 | AuditLogItem | id | 1 | uint64 |
 | AuditLogItem | actor_user_id | 2 | optional uint64 |
 | AuditLogItem | actor_service | 3 | optional string |

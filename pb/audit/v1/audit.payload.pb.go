@@ -133,6 +133,7 @@ type AuditSnapshot struct {
 	SessionId       string                 `protobuf:"bytes,10,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	ReasonCode      string                 `protobuf:"bytes,11,opt,name=reason_code,json=reasonCode,proto3" json:"reason_code,omitempty"`
 	NoOp            bool                   `protobuf:"varint,12,opt,name=no_op,json=noOp,proto3" json:"no_op,omitempty"`
+	CountryCode     *string                `protobuf:"bytes,13,opt,name=country_code,json=countryCode,proto3,oneof" json:"country_code,omitempty"` // Telephone calling code in profile snapshots.
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -249,6 +250,13 @@ func (x *AuditSnapshot) GetNoOp() bool {
 		return x.NoOp
 	}
 	return false
+}
+
+func (x *AuditSnapshot) GetCountryCode() string {
+	if x != nil && x.CountryCode != nil {
+		return *x.CountryCode
+	}
+	return ""
 }
 
 type AuditLogItem struct {
@@ -514,7 +522,7 @@ const file_audit_v1_audit_payload_proto_rawDesc = "" +
 	"\ttarget_id\x18\x05 \x01(\tR\btargetId\x12?\n" +
 	"\roccurred_from\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\foccurredFrom\x12C\n" +
 	"\x0foccurred_before\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\x0eoccurredBeforeB\x10\n" +
-	"\x0e_actor_user_id\"\xac\x03\n" +
+	"\x0e_actor_user_id\"\xe5\x03\n" +
 	"\rAuditSnapshot\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\x03R\aversion\x12\x16\n" +
 	"\x06status\x18\x02 \x01(\tR\x06status\x12\x17\n" +
@@ -530,12 +538,14 @@ const file_audit_v1_audit_payload_proto_rawDesc = "" +
 	" \x01(\tR\tsessionId\x12\x1f\n" +
 	"\vreason_code\x18\v \x01(\tR\n" +
 	"reasonCode\x12\x13\n" +
-	"\x05no_op\x18\f \x01(\bR\x04noOpB\a\n" +
+	"\x05no_op\x18\f \x01(\bR\x04noOp\x12&\n" +
+	"\fcountry_code\x18\r \x01(\tH\x04R\vcountryCode\x88\x01\x01B\a\n" +
 	"\x05_nameB\x0e\n" +
 	"\f_descriptionB\n" +
 	"\n" +
 	"\b_addressB\b\n" +
-	"\x06_phone\"\xa2\x04\n" +
+	"\x06_phoneB\x0f\n" +
+	"\r_country_code\"\xa2\x04\n" +
 	"\fAuditLogItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12'\n" +
 	"\ractor_user_id\x18\x02 \x01(\x04H\x00R\vactorUserId\x88\x01\x01\x12(\n" +

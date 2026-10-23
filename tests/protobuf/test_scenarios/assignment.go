@@ -29,6 +29,7 @@ func Assignment() []testutils.Scenario {
 // Compare complete old messages and individual old methods, permitting additive
 // top-level messages/methods only. No legacy field or option can disappear.
 func assignmentBaselineContains(old, now *descriptorpb.FileDescriptorProto) bool {
+	now = beforeCountryCode(now)
 	if old.GetName() != now.GetName() || old.GetPackage() != now.GetPackage() || old.GetSyntax() != now.GetSyntax() || !proto.Equal(old.Options, now.Options) {
 		return false
 	}
