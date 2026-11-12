@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package auth.v1;
+
+option go_package = "github.com/siti-nabila/api-contracts/pb/auth/v1;authv1";
+
+message RefreshSessionRequest {
+  // Required opaque credential. Identity comes from its stored digest binding.
+  // Does not require a valid access JWT. Never automatically retry rotation.
+  string refresh_token = 1;
+}
+
+message LogoutRequest {
+  // Exactly one credential mode: authorization Bearer metadata with this field
+  // absent, OR this field present and nonempty without authorization metadata.
+  // Presence with an empty value is invalid, not an access-mode fallback.
+  // Prefer valid access; after expiry use the latest unconsumed refresh.
+  // Consumed refresh is rejected. Latest revoked unconsumed refresh may prove
+  // repeat Logout ownership until expiry, for changed=false only.
+  optional string refresh_token = 1;
+}
+
+message LogoutResponse {
+  // False only when still-valid proof establishes an already revoked owner.
+  bool changed = 1;
+}
+
+message ChangePasswordRequest {
+  // Both required, using existing password bounds 6-50. Owner is the principal.
+  string current_password = 1;
+  string new_password = 2;
+}
+
+message ChangePasswordResponse {
+  bool changed = 1;
+  // All sessions are revoked; no replacement credentials are returned.
+  bool login_required = 2;
+}

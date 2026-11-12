@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package role.v1;
+
+option go_package = "github.com/siti-nabila/api-contracts/pb/role/v1;rolev1";
+
+import "role/v1/role.payload.proto";
+
+// TLS, verified IAM/method-allowed service and ACTIVE unrestricted access/session
+// required. Authority is rechecked in the read snapshot or under mutation locks.
+service RoleService {
+  // iam.role.read; all public scalars sortable, query-bound composite cursor.
+  rpc ListRoles(ListRolesRequest) returns (ListRolesResponse);
+  // iam.role.read; authority precedes existence disclosure, including system roles.
+  rpc GetRole(GetRoleRequest) returns (GetRoleResponse);
+  // iam.role.create; required idempotency-key metadata.
+  rpc CreateRole(CreateRoleRequest) returns (CreateRoleResponse);
+  // iam.role.update; optional idempotency-key metadata.
+  rpc UpdateRole(UpdateRoleRequest) returns (UpdateRoleResponse);
+  // iam.role.update; required idempotency-key metadata.
+  rpc ChangeRoleStatus(ChangeRoleStatusRequest) returns (ChangeRoleStatusResponse);
+  // iam.role.permission.update; required idempotency-key metadata.
+  rpc ReplaceRolePermissions(ReplaceRolePermissionsRequest) returns (ReplaceRolePermissionsResponse);
+}

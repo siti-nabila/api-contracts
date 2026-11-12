@@ -80,8 +80,14 @@ func legacyDescriptors(t *testing.T) {
 			}
 			for _, svc := range old.GetService() {
 				got := current.Services().ByName(protoreflect.Name(svc.GetName()))
-				if got == nil || !proto.Equal(svc, protodesc.ToServiceDescriptorProto(got)) {
-					t.Fatalf("RPC signature/inventory changed: %s", svc.GetName())
+				if got == nil {
+					t.Fatalf("legacy service removed: %s", svc.GetName())
+				}
+				for _, method := range svc.GetMethod() {
+					current := got.Methods().ByName(protoreflect.Name(method.GetName()))
+					if current == nil || !proto.Equal(method, protodesc.ToMethodDescriptorProto(current)) {
+						t.Fatalf("legacy RPC signature changed: %s/%s", svc.GetName(), method.GetName())
+					}
 				}
 			}
 		})

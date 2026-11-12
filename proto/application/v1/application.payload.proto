@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package application.v1;
+
+option go_package = "github.com/siti-nabila/api-contracts/pb/application/v1;applicationv1";
+
+import "paginator/v1/paginator.payload.proto";
+
+message ApplicationItem {
+  uint64 id = 1;
+  string code = 2;
+  string name = 3;
+  string status = 4; // ACTIVE or DISABLED.
+  bool is_system = 5;
+}
+
+message ApplicationFilter {
+  repeated string statuses = 1; // OR; absent includes all statuses.
+}
+
+message ListApplicationsRequest {
+  paginator.v1.PageQuery query = 1;
+  ApplicationFilter filter = 2;
+}
+
+message ListApplicationsResponse {
+  repeated ApplicationItem items = 1;
+  paginator.v1.PageMeta meta = 2;
+  string next_cursor = 3;
+}
+
+// Both mutations require idempotency-key metadata and current AND permissions.
+message GrantApplicationAccessRequest {
+  uint64 user_id = 1;
+  string application_code = 2;
+  repeated uint64 role_ids = 3; // 1-20 submitted entries; additive selected set.
+  string reason = 4;
+  optional uint64 expected_user_version = 5;
+}
+
+message RevokeApplicationAccessRequest {
+  uint64 user_id = 1;
+  string application_code = 2;
+  string reason = 3;
+  optional uint64 expected_user_version = 4;
+}
+
+message GrantApplicationAccessResponse {
+  uint64 user_id = 1;
+  uint64 application_id = 2;
+  optional string access_status = 3;
+  repeated uint64 changed_role_ids = 4;
+  uint64 version = 5;
+  bool changed = 6; // Access-only changes can have empty changed_role_ids.
+}
+
+message RevokeApplicationAccessResponse {
+  uint64 user_id = 1;
+  uint64 application_id = 2;
+  optional string access_status = 3; // Absent means no stored access pair.
+  repeated uint64 changed_role_ids = 4; // All actual revocations; no 20-role cap.
+  uint64 version = 5;
+  bool changed = 6;
+}

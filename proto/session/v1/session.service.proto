@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package session.v1;
+
+option go_package = "github.com/siti-nabila/api-contracts/pb/session/v1;sessionv1";
+
+import "session/v1/session.payload.proto";
+import "google/protobuf/empty.proto";
+
+// All methods require TLS, allowed service credential, active access/session and
+// an unrestricted user. Self methods derive owner from the verified principal.
+service SessionService {
+  rpc ListMySessions(ListMySessionsRequest) returns (ListSessionsResponse);
+  rpc RevokeMySession(RevokeMySessionRequest) returns (RevokeSessionResponse);
+  rpc RevokeAllMySessions(google.protobuf.Empty) returns (RevokeAllMySessionsResponse);
+  // Exact current permission iam.session.read, including for an empty page.
+  rpc ListUserSessions(ListUserSessionsRequest) returns (ListSessionsResponse);
+  // Exact current iam.session.revoke and required idempotency-key metadata.
+  rpc RevokeUserSession(RevokeUserSessionRequest) returns (RevokeSessionResponse);
+  // Same permission/key; replay after current authority, before version check.
+  rpc RevokeAllUserSessions(RevokeAllUserSessionsRequest) returns (RevokeAllUserSessionsResponse);
+}

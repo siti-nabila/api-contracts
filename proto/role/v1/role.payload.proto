@@ -1,0 +1,118 @@
+syntax = "proto3";
+
+package role.v1;
+
+option go_package = "github.com/siti-nabila/api-contracts/pb/role/v1;rolev1";
+
+import "paginator/v1/paginator.payload.proto";
+import "permission/v1/permission.payload.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/field_mask.proto";
+
+// Safe metadata only. Numeric role_code is distinct from the immutable code.
+message RoleSummary {
+  uint64 id = 1;
+  string code = 2;
+  string name = 3;
+  optional string description = 4; // NULL remains absent.
+  uint64 application_id = 5;
+  string application_code = 6;
+  string status = 7; // ACTIVE or DISABLED.
+  bool is_system = 8;
+  uint64 version = 9; // Entity version, never user auth_version.
+  int32 role_code = 10;
+  google.protobuf.Timestamp created_at = 11; // NULL remains absent.
+  google.protobuf.Timestamp updated_at = 12; // NULL remains absent.
+  // Distinct existing users with ACTIVE assignments, regardless of account,
+  // role, application or application-access state. REVOKED does not count.
+  uint64 affected_user_count = 13;
+}
+
+message RoleFilter {
+  string application_code = 1;
+  repeated string statuses = 2; // ACTIVE/DISABLED OR; categories combine AND.
+}
+
+message ListRolesRequest {
+  paginator.v1.PageQuery query = 1;
+  RoleFilter filter = 2;
+}
+
+message ListRolesResponse {
+  repeated RoleSummary items = 1;
+  paginator.v1.PageMeta meta = 2;
+  string next_cursor = 3;
+}
+
+message GetRoleRequest {
+  uint64 role_id = 1; // Positive PostgreSQL INTEGER-compatible target ID.
+}
+
+message GetRoleResponse {
+  RoleSummary role = 1;
+  repeated permission.v1.PermissionItem permissions = 2;
+}
+
+message CreateRoleRequest {
+  string application_code = 1; // Existing ACTIVE nonsystem business app.
+  string code = 2; // Immutable canonical application.role, at most 100 chars.
+  string name = 3; // Trimmed 1-50 chars.
+  optional string description = 4; // At most 100 chars; empty clears to NULL.
+  repeated string permission_codes = 5; // Same-app registered set; empty allowed.
+  // Required idempotency-key is metadata. ACTIVE/is_system=false/version=1 and
+  // positive numeric role_code are server/database assigned, never caller input.
+}
+
+message CreateRoleResponse {
+  RoleSummary role = 1;
+  repeated permission.v1.PermissionItem permissions = 2;
+}
+
+message UpdateRoleRequest {
+  uint64 role_id = 1;
+  optional uint64 expected_role_version = 2; // Required positive int64 range.
+  optional string name = 3;
+  optional string description = 4; // Selected empty clears NULL; omitted unchanged.
+  // Required nonempty, unique name/description paths matching field presence.
+  google.protobuf.FieldMask field_mask = 5;
+  // Optional idempotency-key metadata; system/IAM roles are always protected.
+}
+
+message UpdateRoleResponse {
+  RoleSummary role = 1;
+  bool changed = 2;
+}
+
+message ChangeRoleStatusRequest {
+  uint64 role_id = 1;
+  optional string status = 2; // Required ACTIVE or DISABLED.
+  string reason = 3; // Trimmed 3-500 chars, audit only.
+  optional uint64 expected_role_version = 4; // Required positive int64 range.
+  // Required idempotency-key metadata. No user/session/assignment writes.
+}
+
+message ChangeRoleStatusResponse {
+  uint64 role_id = 1;
+  string status = 2;
+  uint64 version = 3;
+  bool changed = 4;
+}
+
+message PermissionSet {
+  repeated string codes = 1;
+}
+
+message ReplaceRolePermissionsRequest {
+  uint64 role_id = 1;
+  // Required intent: absent invalid; present empty clears all mappings.
+  PermissionSet permissions = 2;
+  string reason = 3; // Trimmed 3-500 chars, audit only.
+  optional uint64 expected_role_version = 4; // Required positive int64 range.
+  // Required idempotency-key metadata. Same-app registered final set, deduped.
+}
+
+message ReplaceRolePermissionsResponse {
+  RoleSummary role = 1;
+  repeated permission.v1.PermissionItem permissions = 2;
+  bool changed = 3;
+}

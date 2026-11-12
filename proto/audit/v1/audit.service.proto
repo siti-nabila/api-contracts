@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package audit.v1;
+
+option go_package = "github.com/siti-nabila/api-contracts/pb/audit/v1;auditv1";
+
+import "audit/v1/audit.payload.proto";
+
+// TLS, an exact-method/IAM-allowed service, a current unrestricted user/session
+// and exact iam.audit.read are required. Actor filters select history only.
+service AuditService {
+  rpc ListAuditLogs(ListAuditLogsRequest) returns (ListAuditLogsResponse);
+}

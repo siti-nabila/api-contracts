@@ -1,4 +1,10 @@
 errors:
+  version_conflict:
+    code: VC
+    http_status: 409
+    en: User version has changed. Reload and retry.
+    id: Versi pengguna telah berubah. Muat ulang dan coba kembali.
+
   resource_busy:
     code: RB
     http_status: 409
@@ -10,3 +16,33 @@ errors:
     http_status: 409
     en: Idempotency key was already used with a different request.
     id: Kunci idempotensi sudah digunakan untuk permintaan yang berbeda.
+
+  invalid_status_transition:
+    code: IST
+    http_status: 409
+    en: User status transition is not allowed.
+    id: Perubahan status pengguna tidak diizinkan.
+
+  self_inactivation_forbidden:
+    code: SIF
+    http_status: 403
+    en: You cannot suspend or deactivate your own account.
+    id: Anda tidak dapat menangguhkan atau menonaktifkan akun sendiri.
+
+  last_admin_required:
+    code: LAR
+    http_status: 409
+    en: At least one active platform administrator is required.
+    id: Minimal satu administrator platform aktif harus tersedia.
+
+  grant_target_inactive:
+    code: GTI
+    http_status: 409
+    en: Grant target must be an active user.
+    id: Target pemberian role harus pengguna aktif.
+
+  self_admin_role_revoke_forbidden:
+    code: SARF
+    http_status: 403
+    en: You cannot revoke your own platform administrator role.
+    id: Anda tidak dapat mencabut role administrator platform sendiri.

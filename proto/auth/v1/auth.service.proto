@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package auth.v1;
+
+option go_package = "github.com/siti-nabila/api-contracts/pb/auth/v1;authv1";
+
+import "auth/v1/auth.payload.proto";
+import "user/v1/user.payload.proto";
+
+// Every method requires TLS and a verified method-allowed x-service-token.
+service AuthService {
+  // Refresh proof, not access JWT. Restricted users are denied. Strict single-use
+  // rotation; proven consumed reuse commits revocation before authentication denial.
+  // Reuses Login credential fields; registration-only fields remain empty.
+  rpc RefreshSession(RefreshSessionRequest) returns (user.v1.UserTokenResponse);
+  // Restricted users allowed. Exactly one valid access or refresh credential.
+  rpc Logout(LogoutRequest) returns (LogoutResponse);
+  // Active self access/session + current password. Restricted users allowed.
+  rpc ChangePassword(ChangePasswordRequest) returns (ChangePasswordResponse);
+}

@@ -10,3 +10,7 @@ import (
 func TestGRPCError(t *testing.T) {
 	testutils.Run(t, test_scenarios.All())
 }
+
+func TestLifecycleErrors(t *testing.T) { testutils.Run(t, test_scenarios.LifecycleErrors()) }
+
+func TestRoleErrors(t *testing.T) { testutils.Run(t, test_scenarios.RoleErrors()) }

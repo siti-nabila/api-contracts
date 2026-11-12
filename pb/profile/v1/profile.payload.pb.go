@@ -29,6 +29,7 @@ type Profile struct {
 	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
 	Address       string                 `protobuf:"bytes,4,opt,name=address,proto3" json:"address,omitempty"`
 	Phone         string                 `protobuf:"bytes,5,opt,name=phone,proto3" json:"phone,omitempty"`
+	CountryCode   string                 `protobuf:"bytes,6,opt,name=country_code,json=countryCode,proto3" json:"country_code,omitempty"` // Telephone calling code, for example +62.
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -98,14 +99,23 @@ func (x *Profile) GetPhone() string {
 	return ""
 }
 
+func (x *Profile) GetCountryCode() string {
+	if x != nil {
+		return x.CountryCode
+	}
+	return ""
+}
+
 type ProfileRequest struct {
 	state   protoimpl.MessageState `protogen:"open.v1"`
 	Name    string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Address string                 `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
 	Phone   string                 `protobuf:"bytes,3,opt,name=phone,proto3" json:"phone,omitempty"`
 	// Absent: legacy full replacement. Present: only selected allowed fields.
-	// Paths are name/address/phone; selected empty values follow field validation.
+	// Paths are name/address/phone/country_code; selected values follow validation.
+	// Without a mask, an omitted country_code preserves its existing value.
 	FieldMask     *fieldmaskpb.FieldMask `protobuf:"bytes,4,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	CountryCode   *string                `protobuf:"bytes,5,opt,name=country_code,json=countryCode,proto3,oneof" json:"country_code,omitempty"` // Telephone calling code; presence is preserved.
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -166,6 +176,13 @@ func (x *ProfileRequest) GetFieldMask() *fieldmaskpb.FieldMask {
 		return x.FieldMask
 	}
 	return nil
+}
+
+func (x *ProfileRequest) GetCountryCode() string {
+	if x != nil && x.CountryCode != nil {
+		return *x.CountryCode
+	}
+	return ""
 }
 
 type ProfileResponse struct {
@@ -233,19 +250,22 @@ var File_profile_v1_profile_payload_proto protoreflect.FileDescriptor
 const file_profile_v1_profile_payload_proto_rawDesc = "" +
 	"\n" +
 	" profile/v1/profile.payload.proto\x12\n" +
-	"profile.v1\x1a google/protobuf/field_mask.proto\"v\n" +
+	"profile.v1\x1a google/protobuf/field_mask.proto\"\x99\x01\n" +
 	"\aProfile\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\x04R\x06userId\x12\x12\n" +
 	"\x04name\x18\x03 \x01(\tR\x04name\x12\x18\n" +
 	"\aaddress\x18\x04 \x01(\tR\aaddress\x12\x14\n" +
-	"\x05phone\x18\x05 \x01(\tR\x05phone\"\x8f\x01\n" +
+	"\x05phone\x18\x05 \x01(\tR\x05phone\x12!\n" +
+	"\fcountry_code\x18\x06 \x01(\tR\vcountryCode\"\xc8\x01\n" +
 	"\x0eProfileRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x18\n" +
 	"\aaddress\x18\x02 \x01(\tR\aaddress\x12\x14\n" +
 	"\x05phone\x18\x03 \x01(\tR\x05phone\x129\n" +
 	"\n" +
-	"field_mask\x18\x04 \x01(\v2\x1a.google.protobuf.FieldMaskR\tfieldMask\"t\n" +
+	"field_mask\x18\x04 \x01(\v2\x1a.google.protobuf.FieldMaskR\tfieldMask\x12&\n" +
+	"\fcountry_code\x18\x05 \x01(\tH\x00R\vcountryCode\x88\x01\x01B\x0f\n" +
+	"\r_country_code\"t\n" +
 	"\x0fProfileResponse\x12-\n" +
 	"\aprofile\x18\x01 \x01(\v2\x13.profile.v1.ProfileR\aprofile\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\x04R\aversion\x12\x18\n" +
@@ -285,6 +305,7 @@ func file_profile_v1_profile_payload_proto_init() {
 	if File_profile_v1_profile_payload_proto != nil {
 		return
 	}
+	file_profile_v1_profile_payload_proto_msgTypes[1].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

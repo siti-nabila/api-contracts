@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package permission.v1;
+
+option go_package = "github.com/siti-nabila/api-contracts/pb/permission/v1;permissionv1";
+
+import "paginator/v1/paginator.payload.proto";
+
+// Registered catalog metadata; no implicit permission grant or status field.
+message PermissionItem {
+  uint64 id = 1;
+  uint64 application_id = 2;
+  string application_code = 3;
+  string code = 4;
+  string description = 5;
+}
+
+message ListPermissionsRequest {
+  paginator.v1.PageQuery query = 1;
+  string application_code = 2;
+}
+
+message ListPermissionsResponse {
+  repeated PermissionItem items = 1;
+  paginator.v1.PageMeta meta = 2;
+  string next_cursor = 3;
+}
